@@ -289,6 +289,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         double xCoord = odometryPose.getTranslation().getX();
         double yCoord = odometryPose.getTranslation().getY();
         double theta = odometryPose.getRotation().getDegrees();
+
+        SmartDashboard.putString("POSE", getState().Pose.toString());
+        SmartDashboard.putString("AB-POSE", AutoBuilder.getCurrentPose().toString());
         
         SmartDashboard.putNumber("xCoord", xCoord);
         SmartDashboard.putNumber("yCoord", yCoord);

@@ -7,12 +7,14 @@ package frc.robot;
 import static edu.wpi.first.units.Units.*;
 
 import java.util.List;
+import java.util.Set;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.IdealStartingState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.Waypoint;
@@ -25,6 +27,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -89,7 +92,8 @@ public class RobotContainer {
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
                 drive.withVelocityX(joystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(joystick.getLeftX() * MaxSpeed *0) // Drive left with negative X (left)
+                    .withVelocityY(joystick.getLeftX() * MaxSpeed
+                    ) // Drive left with negative X (left)
                     .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
         );
@@ -117,7 +121,30 @@ public class RobotContainer {
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
-        joystick.x().onTrue(AutoBuilder.followPath(toRedHangPath));
+        joystick.x().onTrue(
+            new DeferredCommand(() -> {
+            // 1. Get current pose at the moment of the press
+            Pose2d currentPose = drivetrain.getState().Pose;
+
+            // 2. Generate waypoints using the actual current pose
+            List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
+                currentPose,
+                new Pose2d(1.5, 4.0, Rotation2d.fromDegrees(0))
+            );
+
+            // 3. Create the path object
+            PathPlannerPath path = new PathPlannerPath(
+            waypoints,
+            constraints,
+            null, 
+            new GoalEndState(0.0, Rotation2d.fromDegrees(0))
+        );
+        // 4. Return the command to follow THIS specific path
+        return AutoBuilder.followPath(path);
+        }, 
+        Set.of(drivetrain)
+        ) // Require the drivetrain
+        );
     }
 
     
@@ -129,16 +156,16 @@ public class RobotContainer {
     // WAYPOINTS ARE BASED ON DRIVERSTATION TEAM COLOR
     List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
         drivetrain.getState().Pose,
-        new Pose2d(1.5, 4.0, Rotation2d.fromDegrees(180)) //15, 4
+        new Pose2d(1.5, 4.0, Rotation2d.fromDegrees(0)) //15, 4
     );
 
-    PathConstraints constraints = new PathConstraints(1.0/6.0, 1.0/6.0, 2 * Math.PI, 4 * Math.PI); // The constraints for this path.
+    PathConstraints constraints = new PathConstraints(1.0/6.0, 1.0/6.0, Math.PI/3 , Math.PI/6); // The constraints for this path.
 
-    PathPlannerPath toRedHangPath = new PathPlannerPath(
+    PathPlannerPath toHangPath = new PathPlannerPath(
         waypoints,
         constraints,
         null, // The ideal starting state, this is only relevant for pre-planned paths, so can be null for on-the-fly paths.
-        new GoalEndState(0.0, Rotation2d.fromDegrees(-90)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
+        new GoalEndState(0.0, Rotation2d.fromDegrees(0)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
     );
 
     // path.preventFlipping = false;
