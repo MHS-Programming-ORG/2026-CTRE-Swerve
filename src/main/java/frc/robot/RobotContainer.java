@@ -47,7 +47,7 @@ public class RobotContainer {
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
-    public final ArduCam camera = new ArduCam();
+    public final ArduCam camera = new ArduCam(drivetrain);
     public final PIDController pid = new PIDController(0.1, 0.0, 0.0);
 
     SendableChooser<Command> autoChooser;
@@ -100,6 +100,8 @@ public class RobotContainer {
                     .withRotationalRate(camera.cameraHasTargets() ? pid.calculate(-camera.getYaw(), 0)*0.1 : -joystick.getRightX() * MaxAngularRate * 0.1) // Drive counterclockwise with negative X (left)
             )
         );
+
+        joystick.b().whileTrue(new InstantCommand(() ->  camera.updatePoseWithVision(drivetrain)));
 
         
 
