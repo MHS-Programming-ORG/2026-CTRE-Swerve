@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -14,6 +15,10 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.Waypoint;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -284,10 +289,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         double xCoord = odometryPose.getTranslation().getX();
         double yCoord = odometryPose.getTranslation().getY();
         double theta = odometryPose.getRotation().getDegrees();
-        System.out.println(xCoord);
-        SmartDashboard.putNumber("xTrans", xCoord);
-        SmartDashboard.putNumber("yTrans", yCoord);
-        SmartDashboard.putNumber("angle", theta);
+        
+        SmartDashboard.putNumber("xCoord", xCoord);
+        SmartDashboard.putNumber("yCoord", yCoord);
+        SmartDashboard.putNumber("heading", theta);
 
     }
 

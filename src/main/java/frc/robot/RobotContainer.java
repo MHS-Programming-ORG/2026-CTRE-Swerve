@@ -6,13 +6,20 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.List;
+
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.Waypoint;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -23,7 +30,6 @@ import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-import frc.robot.commands.TrackingCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
@@ -72,6 +78,8 @@ public class RobotContainer {
         
     }
 
+    
+
     private void configureBindings() {
         
         
@@ -86,18 +94,11 @@ public class RobotContainer {
             )
         );
 
-        // joystick.a().whileTrue(new TrackingCommand(drivetrain, drive, camera, 
-        // joystick.getLeftY() * MaxSpeed,
-        // joystick.getLeftX() * MaxSpeed, 
-        // -joystick.getRightX() * MaxAngularRate)
-        // );
-
-
         joystick.a().whileTrue(
              drivetrain.applyRequest(() ->
                 drive.withVelocityX(joystick.getLeftY() * MaxSpeed*0.1) // Drive forward with negative Y (forward)
                     .withVelocityY(joystick.getLeftX() * MaxSpeed*0.1) // Drive left with negative X (left)
-                    .withRotationalRate(camera.cameraHasTargets() ? pid.calculate(-camera.getYaw(), 0)*0.1 : -joystick.getRightX() * MaxAngularRate * 0.1) // Drive counterclockwise with negative X (left)
+                    .withRotationalRate(camera.cameraHasTargets() ? pid.calculate(-camera.getYaw(), 0) : -joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
         );
 
@@ -112,23 +113,37 @@ public class RobotContainer {
             drivetrain.applyRequest(() -> idle).ignoringDisable(true)
         );
 
-        // joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
-        // joystick.b().whileTrue(drivetrain.applyRequest(() ->
-        //     point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
-        // ));
-
-        // Run SysId routines when holding back/start and X/Y.
-        // Note that each routine should be run exactly once in a single log.
-        // joystick.back().and(joystick.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
-        // joystick.back().and(joystick.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
-        // joystick.start().and(joystick.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
-        // joystick.start().and(joystick.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
-
-        // Reset the field-centric heading on left bumper press.
         joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         drivetrain.registerTelemetry(logger::telemeterize);
+
+        joystick.x().onTrue(AutoBuilder.followPath(toRedHangPath));
     }
+
+    
+    ////////////////////////////////////
+    ///       ON-THE-FLY PATHS       ///
+    /// ////////////////////////////////
+    
+
+    // WAYPOINTS ARE BASED ON DRIVERSTATION TEAM COLOR
+    List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
+        drivetrain.getState().Pose,
+        new Pose2d(1.5, 4.0, Rotation2d.fromDegrees(180)) //15, 4
+    );
+
+    PathConstraints constraints = new PathConstraints(1.0/6.0, 1.0/6.0, 2 * Math.PI, 4 * Math.PI); // The constraints for this path.
+
+    PathPlannerPath toRedHangPath = new PathPlannerPath(
+        waypoints,
+        constraints,
+        null, // The ideal starting state, this is only relevant for pre-planned paths, so can be null for on-the-fly paths.
+        new GoalEndState(0.0, Rotation2d.fromDegrees(-90)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
+    );
+
+    // path.preventFlipping = false;
+
+    
 
     public Command getAutonomousCommand() {
         return autoChooser.getSelected();

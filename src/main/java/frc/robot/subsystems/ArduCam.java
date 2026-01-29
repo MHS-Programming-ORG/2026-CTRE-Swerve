@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.PoseEstimator;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
@@ -41,7 +40,7 @@ public class ArduCam extends SubsystemBase{
     public static final AprilTagFieldLayout kTagLayout =
                 AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
 
-    // // https://docs.photonvision.org/en/latest/docs/apriltag-pipelines/coordinate-systems.html#coordinate-systems
+    // https://docs.photonvision.org/en/latest/docs/apriltag-pipelines/coordinate-systems.html#coordinate-systems
     public static final Transform3d kRobotToCam =
                 new Transform3d(new Translation3d(0.365, 0.004, 0.0), new Rotation3d(0, 0, 0));
 
@@ -76,7 +75,7 @@ public class ArduCam extends SubsystemBase{
             double estX = estimate.estimatedPose.getMeasureX().baseUnitMagnitude();
             double estY = estimate.estimatedPose.getMeasureY().baseUnitMagnitude();
             double estZ = estimate.estimatedPose.getMeasureZ().baseUnitMagnitude();
-            double estTheta = estimate.estimatedPose.getRotation().getAngle() * (Math.PI / 180);
+            double estTheta = estimate.estimatedPose.getRotation().getAngle() * (180/Math.PI);
 
             SmartDashboard.putNumber("estimatedX", estX);
             SmartDashboard.putNumber("estimatedY", estY);
