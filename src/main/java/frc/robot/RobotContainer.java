@@ -56,7 +56,7 @@ public class RobotContainer {
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
-    public final ArduCam camera = new ArduCam(drivetrain);
+    public final ArduCam camera = new ArduCam();
     public final PIDController pid = new PIDController(0.1, 0.0, 0.0);
 
     SendableChooser<Command> autoChooser;
@@ -106,8 +106,7 @@ public class RobotContainer {
             )
         );
 
-        joystick.b().whileTrue(new InstantCommand(() ->  camera.updatePoseWithVision(drivetrain)));
-
+        joystick.b().whileTrue(new InstantCommand(() -> drivetrain.addVisionMeasurement(camera.getEstimatedPose(), camera.getTimestampSeconds())));
         
 
         // Idle while the robot is disabled. This ensures the configured

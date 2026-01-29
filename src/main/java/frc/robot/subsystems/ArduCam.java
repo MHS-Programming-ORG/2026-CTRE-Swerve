@@ -8,6 +8,7 @@ import org.photonvision.estimation.VisionEstimation;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -24,11 +25,11 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 public class ArduCam extends SubsystemBase{
 
-    private CommandSwerveDrivetrain swerve;
 
-    public ArduCam(CommandSwerveDrivetrain swerve)
+
+    public ArduCam()
     {
-        this.swerve = swerve;
+        
     }
 
     // http://photonvision.local:5800/
@@ -56,8 +57,12 @@ public class ArduCam extends SubsystemBase{
         return hasResult;
     }
 
-    public void updatePoseWithVision(CommandSwerveDrivetrain swerve){
-        swerve.addVisionMeasurement(estimate.estimatedPose.toPose2d(), estimate.timestampSeconds);
+    public Pose2d getEstimatedPose(){
+        return estimate.estimatedPose.toPose2d();
+    }
+
+    public double getTimestampSeconds(){
+        return estimate.timestampSeconds;
     }
 
     @Override
@@ -82,7 +87,6 @@ public class ArduCam extends SubsystemBase{
             SmartDashboard.putNumber("estimatedZ", estZ);
             SmartDashboard.putNumber("estimatedAngle", estTheta);
 
-            updatePoseWithVision(swerve);
         }
         
  
