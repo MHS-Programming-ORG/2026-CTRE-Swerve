@@ -17,12 +17,15 @@ import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.IdealStartingState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.PathPoint;
 import com.pathplanner.lib.path.Waypoint;
+import com.pathplanner.lib.trajectory.PathPlannerTrajectory;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -85,14 +88,13 @@ public class RobotContainer {
 
     private void configureBindings() {
         
-        
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                drive.withVelocityX(joystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(joystick.getLeftX() * MaxSpeed
+                drive.withVelocityX(joystick.getLeftY() * MaxSpeed*0.25) // Drive forward with negative Y (forward)
+                    .withVelocityY(joystick.getLeftX() * MaxSpeed*0.25
                     ) // Drive left with negative X (left)
                     .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
@@ -105,10 +107,7 @@ public class RobotContainer {
                     .withRotationalRate(camera.cameraHasTargets() ? pid.calculate(-camera.getYaw(), 0) : -joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
         );
-
-        joystick.b().whileTrue(new InstantCommand(() -> drivetrain.addVisionMeasurement(camera.getEstimatedPose(), camera.getTimestampSeconds())));
         
-
         // Idle while the robot is disabled. This ensures the configured
         // neutral mode is applied to the drive motors while disabled.
         final var idle = new SwerveRequest.Idle();
@@ -120,32 +119,33 @@ public class RobotContainer {
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
+  
+    joystick.b().onTrue(
+        AutoBuilder.pathfindToPose(
+        new Pose2d(16, 3.4, Rotation2d.fromDegrees(180)), 
+        constraints,
+        0.0 // Goal end velocity
+    ));
+
+        joystick.y().onTrue(
+        AutoBuilder.pathfindToPose(
+        new Pose2d(15.0, 1.0, Rotation2d.fromDegrees(180)), 
+        constraints, 
+        0.0 // Goal end velocity
+    ));
+        
         joystick.x().onTrue(
-            new DeferredCommand(() -> {
-            // 1. Get current pose at the moment of the press
-            Pose2d currentPose = drivetrain.getState().Pose;
+        AutoBuilder.pathfindToPose(
+        new Pose2d(12.5, 1.0, Rotation2d.fromDegrees(180)), 
+        constraints, 
+        0.0 // Goal end velocity
+    ));
 
-            // 2. Generate waypoints using the actual current pose
-            List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
-                currentPose,
-                new Pose2d(1.5, 4.0, Rotation2d.fromDegrees(0))
-            );
+        
+    
 
-            // 3. Create the path object
-            PathPlannerPath path = new PathPlannerPath(
-            waypoints,
-            constraints,
-            null, 
-            new GoalEndState(0.0, Rotation2d.fromDegrees(0))
-        );
-        // 4. Return the command to follow THIS specific path
-        return AutoBuilder.followPath(path);
-        }, 
-        Set.of(drivetrain)
-        ) // Require the drivetrain
-        );
     }
-
+    
     
     ////////////////////////////////////
     ///       ON-THE-FLY PATHS       ///
@@ -153,23 +153,19 @@ public class RobotContainer {
     
 
     // WAYPOINTS ARE BASED ON DRIVERSTATION TEAM COLOR
-    List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
-        drivetrain.getState().Pose,
-        new Pose2d(1.5, 4.0, Rotation2d.fromDegrees(0)) //15, 4
-    );
-
+    
     PathConstraints constraints = new PathConstraints(1.0/6.0, 1.0/6.0, Math.PI/3 , Math.PI/6); // The constraints for this path.
 
-    PathPlannerPath toHangPath = new PathPlannerPath(
-        waypoints,
-        constraints,
-        null, // The ideal starting state, this is only relevant for pre-planned paths, so can be null for on-the-fly paths.
-        new GoalEndState(0.0, Rotation2d.fromDegrees(0)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
-    );
-
-    // path.preventFlipping = false;
-
+    ////////////////////////////////////
+    ///        GET SUBSYSTEMS        ///
+    ////////////////////////////////////
     
+    public CommandSwerveDrivetrain getSwerveSubsystem(){
+        return drivetrain;
+    }
+    public ArduCam getCamera(){
+        return camera;
+    }
 
     public Command getAutonomousCommand() {
         return autoChooser.getSelected();
