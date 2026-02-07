@@ -358,4 +358,15 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public Optional<Pose2d> samplePoseAt(double timestampSeconds) {
         return super.samplePoseAt(Utils.fpgaToCurrentTime(timestampSeconds));
     }
+
+    public Pose2d getPose2d(){
+        return getState().Pose;
+    }
+
+    public double calculateAngle(double targetX, double targetY){
+        double xDifference = targetX - getState().Pose.getX();
+        double yDifference = targetY - getState().Pose.getY();
+
+        return Math.atan2(yDifference, xDifference);
+    }
 }

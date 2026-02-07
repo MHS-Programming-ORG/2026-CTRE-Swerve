@@ -25,13 +25,6 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 public class ArduCam extends SubsystemBase{
 
-
-
-    public ArduCam()
-    {
-        
-    }
-
     // http://photonvision.local:5800/
     PhotonCamera camera = new PhotonCamera("Arducam_OV9782_USB_Camera");
     PhotonTrackedTarget target = camera.getLatestResult().getBestTarget();

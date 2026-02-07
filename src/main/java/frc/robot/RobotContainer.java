@@ -26,6 +26,8 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -100,11 +102,27 @@ public class RobotContainer {
             )
         );
 
+        // joystick.a().whileTrue(
+        //      drivetrain.applyRequest(() ->
+        //         drive.withVelocityX(joystick.getLeftY() * MaxSpeed*0.1) // Drive forward with negative Y (forward)
+        //             .withVelocityY(joystick.getLeftX() * MaxSpeed*0.1) // Drive left with negative X (left)
+        //             .withRotationalRate(camera.cameraHasTargets() ? pid.calculate(-camera.getYaw(), 0) : -joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
+        //     )
+        // );
+
+        double hubPoseX = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red ? 11.920:4.630;
+        double hubPoseY = 4.040;
+
         joystick.a().whileTrue(
              drivetrain.applyRequest(() ->
                 drive.withVelocityX(joystick.getLeftY() * MaxSpeed*0.1) // Drive forward with negative Y (forward)
                     .withVelocityY(joystick.getLeftX() * MaxSpeed*0.1) // Drive left with negative X (left)
-                    .withRotationalRate(camera.cameraHasTargets() ? pid.calculate(-camera.getYaw(), 0) : -joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
+                    .withRotationalRate(pid.calculate(
+                        drivetrain.getPose2d().getRotation().getRadians(),
+                        drivetrain.calculateAngle(
+                            hubPoseX,
+                            hubPoseY
+                        ))) // Drive counterclockwise with negative X (left)
             )
         );
         
