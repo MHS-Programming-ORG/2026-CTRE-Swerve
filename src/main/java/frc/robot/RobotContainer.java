@@ -110,8 +110,9 @@ public class RobotContainer {
         //     )
         // );
 
+        // IN METERES
         double hubPoseX = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red ? 11.920:4.630;
-        double hubPoseY = 4.040;
+        double hubPoseY = 4.040; 
 
         joystick.a().whileTrue(
              drivetrain.applyRequest(() ->
