@@ -42,6 +42,7 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 import frc.robot.subsystems.ArduCam;
+import frc.robot.subsystems.ArduCams;
 
 
 public class RobotContainer {
@@ -52,16 +53,14 @@ public class RobotContainer {
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
             .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
-    private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
-    private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private final CommandXboxController joystick = new CommandXboxController(0);
-
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
     public final ArduCam camera = new ArduCam();
+    public final ArduCams cameras = new ArduCams();
     public final PIDController pid = new PIDController(0.1, 0.0, 0.0);
 
     SendableChooser<Command> autoChooser;
@@ -96,8 +95,7 @@ public class RobotContainer {
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
                 drive.withVelocityX(joystick.getLeftY() * MaxSpeed*0.25) // Drive forward with negative Y (forward)
-                    .withVelocityY(joystick.getLeftX() * MaxSpeed*0.25
-                    ) // Drive left with negative X (left)
+                    .withVelocityY(joystick.getLeftX() * MaxSpeed*0.25) // Drive left with negative X (left)
                     .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
         );
@@ -182,8 +180,8 @@ public class RobotContainer {
     public CommandSwerveDrivetrain getSwerveSubsystem(){
         return drivetrain;
     }
-    public ArduCam getCamera(){
-        return camera;
+    public ArduCams getCamera(){
+        return cameras;
     }
 
     public Command getAutonomousCommand() {
