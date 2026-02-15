@@ -288,7 +288,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         
         double xCoord = odometryPose.getTranslation().getX();
         double yCoord = odometryPose.getTranslation().getY();
-        double theta = odometryPose.getRotation().getDegrees();
+        double theta = odometryPose.getRotation().getRadians();
 
         SmartDashboard.putString("POSE", getState().Pose.toString());
         SmartDashboard.putString("AB-POSE", AutoBuilder.getCurrentPose().toString());
@@ -296,6 +296,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         SmartDashboard.putNumber("xCoord", xCoord);
         SmartDashboard.putNumber("yCoord", yCoord);
         SmartDashboard.putNumber("heading", theta);
+
+        SmartDashboard.putNumber("xDifference", xDifference);
+        SmartDashboard.putNumber("yDifference", yDifference);
+        SmartDashboard.putNumber("angleDifference", angleDifference);
 
     }
 
@@ -363,10 +367,14 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return getState().Pose;
     }
 
+    double xDifference;
+    double yDifference;
+    double angleDifference;
     public double calculateAngle(double targetX, double targetY){
-        double xDifference = targetX - getState().Pose.getX();
-        double yDifference = targetY - getState().Pose.getY();
-
-        return Math.atan2(yDifference, xDifference);
+        xDifference = targetX - getState().Pose.getX();
+        yDifference = targetY - getState().Pose.getY();
+        angleDifference = Math.atan2(yDifference, xDifference);
+        
+        return angleDifference;
     }
 }

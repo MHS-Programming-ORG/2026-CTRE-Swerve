@@ -117,30 +117,30 @@ public class ArduCams extends SubsystemBase{
             SmartDashboard.putNumber("estimatedAngle", estTheta);
     }
 
-    @Override
-    public void periodic() {
-        PhotonPipelineResult result1 = camera1.getLatestResult();
-        PhotonPipelineResult result2 = camera2.getLatestResult();
-        camera1HasResult = result1.hasTargets();
-        camera2HasResult = result2.hasTargets();
+    // @Override
+    // public void periodic() {
+    //     PhotonPipelineResult result1 = camera1.getLatestResult();
+    //     PhotonPipelineResult result2 = camera2.getLatestResult();
+    //     camera1HasResult = result1.hasTargets();
+    //     camera2HasResult = result2.hasTargets();
 
-        getEstimates(photonEstimator1, result1);
-        getEstimates(photonEstimator2, result2);
+    //     getEstimates(photonEstimator1, result1);
+    //     getEstimates(photonEstimator2, result2);
         
-        getResults(target1, result1);
-        getResults(target2, result2);
+    //     getResults(target1, result1);
+    //     getResults(target2, result2);
 
 
 
-        SmartDashboard.putBoolean(
-            "NT Connected",
-            NetworkTableInstance.getDefault().isConnected()
-        );
+    //     SmartDashboard.putBoolean(
+    //         "NT Connected",
+    //         NetworkTableInstance.getDefault().isConnected()
+    //     );
 
-        SmartDashboard.putBoolean("Camera1 Has Result", camera1HasResult);
-        SmartDashboard.putBoolean("Camera2 Has Result", camera2HasResult);
+    //     SmartDashboard.putBoolean("Camera1 Has Result", camera1HasResult);
+    //     SmartDashboard.putBoolean("Camera2 Has Result", camera2HasResult);
 
 
         
-    }
+    // }
 }

@@ -43,12 +43,12 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         m_timeAndJoystickReplay.update();
         CommandScheduler.getInstance().run(); 
-        if(m_robotContainer.camera.cameraHasTargets()){
-            m_robotContainer.drivetrain.addVisionMeasurement(
-            m_robotContainer.camera.getEstimatedPose(),
-            m_robotContainer.camera.getTimestampSeconds()
-        );
-        }
+        // if(m_robotContainer.camera.cameraHasTargets()){
+        //     m_robotContainer.drivetrain.addVisionMeasurement(
+        //     m_robotContainer.camera.getEstimatedPose(),
+        //     m_robotContainer.camera.getTimestampSeconds()
+        // );
+        // }
         
     }
 
