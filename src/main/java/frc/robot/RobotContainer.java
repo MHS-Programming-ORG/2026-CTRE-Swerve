@@ -73,6 +73,7 @@ public class RobotContainer {
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
+        pid.enableContinuousInput(-Math.PI, Math.PI);
         configureBindings();
     }
 
@@ -94,8 +95,8 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                drive.withVelocityX(joystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+                drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
+                    .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
                     .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
         );
@@ -109,8 +110,10 @@ public class RobotContainer {
         // );
 
         // IN METERES
-        double hubPoseX = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red ? 11.920:4.630;
-        double hubPoseY = 4.040; 
+        double hubPoseX = 0;
+        //DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red ? 11.920:4.630;
+        double hubPoseY = 0;
+        //4.040; 
 
         joystick.a().whileTrue(
              drivetrain.applyRequest(() ->
@@ -138,7 +141,7 @@ public class RobotContainer {
 
   
     joystick.b().onTrue(
-        AutoBuilder.pathfindToPose(
+        AutoBuilder.pathfindToPose( // used to test after DriveF2Meters on red side
         new Pose2d(16, 3.4, Rotation2d.fromDegrees(180)), 
         constraints,
         0.0 // Goal end velocity
