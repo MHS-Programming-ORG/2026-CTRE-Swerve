@@ -4,11 +4,18 @@
 
 package frc.robot;
 
+import java.util.Optional;
+
+import org.photonvision.EstimatedRobotPose;
+
 import com.ctre.phoenix6.HootAutoReplay;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.ArduCams;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
+
 import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.configs.AudioConfigs;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -43,12 +50,24 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         m_timeAndJoystickReplay.update();
         CommandScheduler.getInstance().run(); 
-        // if(m_robotContainer.camera.cameraHasTargets()){
-        //     m_robotContainer.drivetrain.addVisionMeasurement(
-        //     m_robotContainer.camera.getEstimatedPose(),
-        //     m_robotContainer.camera.getTimestampSeconds()
-        // );
-        // }
+        ArduCams cameras = m_robotContainer.getCameras();
+        CommandSwerveDrivetrain swerve = m_robotContainer.getSwerveSubsystem();
+
+        Optional<EstimatedRobotPose> cam1Estimate = cameras.getEstimatedPoseCam1();
+        Optional<EstimatedRobotPose> cam2Estimate = cameras.getEstimatedPoseCam2();
+
+        if (cam1Estimate.isPresent()){
+            swerve.addVisionMeasurement(
+                cam1Estimate.get().estimatedPose.toPose2d(), 
+                cam1Estimate.get().timestampSeconds);
+        }
+
+        if (cam2Estimate.isPresent()){
+            swerve.addVisionMeasurement(
+                cam2Estimate.get().estimatedPose.toPose2d(), 
+                cam2Estimate.get().timestampSeconds);
+        }
+
         
     }
 

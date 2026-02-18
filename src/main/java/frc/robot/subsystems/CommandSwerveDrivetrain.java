@@ -370,7 +370,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     double xDifference;
     double yDifference;
     double angleDifference;
-    public double calculateAngle(double targetX, double targetY){
+
+    public double calculateAngle(double targetX, double targetY){ //FIXME robotic
         xDifference = targetX - getState().Pose.getX();
         yDifference = targetY - getState().Pose.getY();
         angleDifference = Math.atan2(yDifference, xDifference);

@@ -42,7 +42,7 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 // import frc.robot.subsystems.ArduCam;
-// import frc.robot.subsystems.ArduCams;
+import frc.robot.subsystems.ArduCams;
 
 
 public class RobotContainer {
@@ -60,7 +60,7 @@ public class RobotContainer {
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
     // public final ArduCam camera = new ArduCam();
-    // public final ArduCams cameras = new ArduCams();
+    public final ArduCams cameras = new ArduCams();
     public final PIDController pid = new PIDController(5, 0.0, 0.0);
 
     SendableChooser<Command> autoChooser;
@@ -183,9 +183,9 @@ public class RobotContainer {
     public CommandSwerveDrivetrain getSwerveSubsystem(){
         return drivetrain;
     }
-    // public ArduCams getCamera(){
-    //     return cameras;
-    // }
+    public ArduCams getCameras(){
+        return cameras;
+    }
 
     public Command getAutonomousCommand() {
         return autoChooser.getSelected();

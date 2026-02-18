@@ -28,8 +28,6 @@ public class ArduCams extends SubsystemBase{
     // http://photonvision.local:5800/
     PhotonCamera camera1 = new PhotonCamera("BlueSaber1"); // BlueSaber1
     PhotonCamera camera2 = new PhotonCamera("BlueSaber2");
-    boolean camera1HasResult = false;
-    boolean camera2HasResult = false;
     PhotonPoseEstimator photonPoseEstimator1;
     PhotonPoseEstimator photonPoseEstimator2;
     PhotonTrackedTarget target1 = camera1.getLatestResult().getBestTarget();
@@ -56,91 +54,40 @@ public class ArduCams extends SubsystemBase{
      PhotonPoseEstimator photonEstimator1 = new PhotonPoseEstimator(kTagLayout, kRobotToCam1);
      PhotonPoseEstimator photonEstimator2 = new PhotonPoseEstimator(kTagLayout, kRobotToCam2);
 
-
-    public boolean cameraHasTargets(PhotonCamera camera){
-        if(camera.equals(camera1)){
-            return camera1HasResult;
-        }else{
-            return camera2HasResult;
-        }
-        
+    public Optional<EstimatedRobotPose> getEstimatedPose(PhotonPoseEstimator estimator, PhotonCamera camera){
+    PhotonPipelineResult result = camera.getLatestResult();
+    if(!result.hasTargets()){
+        return Optional.empty();
+    }
+    return estimator.estimateCoprocMultiTagPose(result);
     }
 
-    public Pose2d getEstimatedPose(){
-        return estimate.estimatedPose.toPose2d();
+    public Optional<EstimatedRobotPose> getEstimatedPoseCam1(){
+        return getEstimatedPose(photonEstimator1, camera1);
     }
 
-    public double getTimestampSeconds(){
-        return estimate.timestampSeconds;
-    }
-
-    public void getResults(PhotonTrackedTarget target, PhotonPipelineResult result){
-        if (result.hasTargets()) {
-            target = result.getBestTarget();
-            int targetID = target.getFiducialId();
-            //double poseAmbiguity = target.getPoseAmbiguity();
-            Transform3d bestCameraToTarget = target.getBestCameraToTarget();
-            double yaw = target.getYaw();
-            double pitch = target.getPitch();
-            double skew = target.getSkew();
-            
-            SmartDashboard.putNumber("yaw", yaw);
-            SmartDashboard.putNumber("pitch", pitch);
-            SmartDashboard.putNumber("skew", skew);
-            
-            SmartDashboard.putNumber("Target X", bestCameraToTarget.getX());
-            SmartDashboard.putNumber("Target Y", bestCameraToTarget.getY());
-            SmartDashboard.putNumber("Target Z", bestCameraToTarget.getZ());
-        }
-    }
-    
-    public void getEstimates(PhotonPoseEstimator estimator, PhotonPipelineResult result){
-        Optional<EstimatedRobotPose> visionEst = estimator.estimateCoprocMultiTagPose(result);
-
-        if (visionEst.isEmpty() && result.hasTargets()){
-            visionEst = estimator.estimateLowestAmbiguityPose(result);
-        }
-
-        if (visionEst.isPresent()) {
-        }
-            SmartDashboard.putString("visionEst", result.toString());
-            estimate = visionEst.get();
-
-            double estX = estimate.estimatedPose.getMeasureX().baseUnitMagnitude();
-            double estY = estimate.estimatedPose.getMeasureY().baseUnitMagnitude();
-            double estZ = estimate.estimatedPose.getMeasureZ().baseUnitMagnitude();
-            double estTheta = estimate.estimatedPose.getRotation().getAngle() * (180/Math.PI);
-
-            SmartDashboard.putNumber("estimatedX", estX);
-            SmartDashboard.putNumber("estimatedY", estY);
-            SmartDashboard.putNumber("estimatedZ", estZ);
-            SmartDashboard.putNumber("estimatedAngle", estTheta);
+    public Optional<EstimatedRobotPose> getEstimatedPoseCam2(){
+        return getEstimatedPose(photonEstimator2, camera2);
     }
 
     // @Override
-    // public void periodic() {
-    //     PhotonPipelineResult result1 = camera1.getLatestResult();
-    //     PhotonPipelineResult result2 = camera2.getLatestResult();
-    //     camera1HasResult = result1.hasTargets();
-    //     camera2HasResult = result2.hasTargets();
+    public void periodic() {
 
-    //     getEstimates(photonEstimator1, result1);
-    //     getEstimates(photonEstimator2, result2);
+        if (getEstimatedPoseCam1().isPresent()){
+            EstimatedRobotPose pose1 = getEstimatedPoseCam1().get();
+            SmartDashboard.putNumber("Camera1EstX", pose1.estimatedPose.getX());
+            SmartDashboard.putNumber("Camera1EstY", pose1.estimatedPose.getY());
+            SmartDashboard.putNumber("Camera1EstZ", pose1.estimatedPose.getZ());
+        }
         
-    //     getResults(target1, result1);
-    //     getResults(target2, result2);
-
-
-
-    //     SmartDashboard.putBoolean(
-    //         "NT Connected",
-    //         NetworkTableInstance.getDefault().isConnected()
-    //     );
-
-    //     SmartDashboard.putBoolean("Camera1 Has Result", camera1HasResult);
-    //     SmartDashboard.putBoolean("Camera2 Has Result", camera2HasResult);
-
-
+        if (getEstimatedPoseCam2().isPresent()){
+            EstimatedRobotPose pose2 = getEstimatedPoseCam2().get();
+            SmartDashboard.putNumber("Camera2EstX", pose2.estimatedPose.getX());
+            SmartDashboard.putNumber("Camera2EstY", pose2.estimatedPose.getY());
+            SmartDashboard.putNumber("Camera2EstZ", pose2.estimatedPose.getZ());
+        } else{
+            
+        }
         
-    // }
+    }
 }
