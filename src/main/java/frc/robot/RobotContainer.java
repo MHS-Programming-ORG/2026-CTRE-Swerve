@@ -142,7 +142,7 @@ public class RobotContainer {
   
     joystick.b().onTrue(
         AutoBuilder.pathfindToPose( // used to test after DriveF2Meters on red side
-        new Pose2d(16, 3.4, Rotation2d.fromDegrees(180)), 
+        new Pose2d(13.7, 5.0, Rotation2d.fromDegrees(180)), 
         constraints,
         0.0 // Goal end velocity
     ));

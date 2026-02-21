@@ -41,7 +41,7 @@ public class ArduCams extends SubsystemBase{
                 new Transform3d(new Translation3d(0.365, 0.004, 0.0), new Rotation3d(0, 0, 0));
 
     public final Transform3d kRobotToCam2 = 
-                new Transform3d(new Translation3d(0.0, 0.0, 0.0), new Rotation3d(0, 0, 0));
+                new Transform3d(new Translation3d(-0.343, 0.309, 0.0), new Rotation3d(0, 0, Math.PI));
 
 
     public ArduCams(){
@@ -72,21 +72,19 @@ public class ArduCams extends SubsystemBase{
 
     // @Override
     public void periodic() {
-
+        
+        EstimatedRobotPose pose1 = getEstimatedPoseCam1().get();
         if (getEstimatedPoseCam1().isPresent()){
-            EstimatedRobotPose pose1 = getEstimatedPoseCam1().get();
             SmartDashboard.putNumber("Camera1EstX", pose1.estimatedPose.getX());
             SmartDashboard.putNumber("Camera1EstY", pose1.estimatedPose.getY());
-            SmartDashboard.putNumber("Camera1EstZ", pose1.estimatedPose.getZ());
-        }
+            SmartDashboard.putNumber("Camera1EstRotation", pose1.estimatedPose.getRotation().getAngle());
+        } 
         
+        EstimatedRobotPose pose2 = getEstimatedPoseCam2().get();
         if (getEstimatedPoseCam2().isPresent()){
-            EstimatedRobotPose pose2 = getEstimatedPoseCam2().get();
             SmartDashboard.putNumber("Camera2EstX", pose2.estimatedPose.getX());
             SmartDashboard.putNumber("Camera2EstY", pose2.estimatedPose.getY());
-            SmartDashboard.putNumber("Camera2EstZ", pose2.estimatedPose.getZ());
-        } else{
-            
+            SmartDashboard.putNumber("Camera2EstRotation", pose2.estimatedPose.getRotation().getAngle());
         }
         
     }
