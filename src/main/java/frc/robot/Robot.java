@@ -50,6 +50,7 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         m_timeAndJoystickReplay.update();
         CommandScheduler.getInstance().run(); 
+        
         ArduCams cameras = m_robotContainer.getCameras();
         CommandSwerveDrivetrain swerve = m_robotContainer.getSwerveSubsystem();
 

@@ -38,6 +38,7 @@ import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
@@ -52,7 +53,12 @@ public class RobotContainer {
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
             .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
+            .withDriveRequestType(DriveRequestType.Velocity); // Use velocity control for drive motors
+
+    private final SwerveRequest.FieldCentricFacingAngle driveFacing = new SwerveRequest.FieldCentricFacingAngle()
+    .withHeadingPID(5,0,0)// Placeholder
+    .withDeadband(MaxSpeed * 0.1)
+    .withRotationalDeadband(0); // Let the PID handle the small movements
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
@@ -66,6 +72,7 @@ public class RobotContainer {
     SendableChooser<Command> autoChooser;
 
     // double turnOuput = pid.calculate(camera.getYaw(), 0);
+
 
     public RobotContainer() {
         registerNamedCommands();
@@ -127,6 +134,13 @@ public class RobotContainer {
                         ))) // Drive counterclockwise with negative X (left)
             )
         );
+
+        joystick.a().whileTrue(
+            drivetrain.applyRequest(() -> 
+                driveFacing
+                .withVelocityX(joystick.getLeftY() * MaxSpeed)
+                .withVelocityY(joystick.getRightY() * MaxSpeed)
+                .withTargetDirection(Rotation2d.fromRadians(drivetrain.calculateAngle(hubPoseX, hubPoseY)))));
         
         // Idle while the robot is disabled. This ensures the configured
         // neutral mode is applied to the drive motors while disabled.
@@ -135,7 +149,7 @@ public class RobotContainer {
             drivetrain.applyRequest(() -> idle).ignoringDisable(true)
         );
 
-        joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+        joystick.b().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
@@ -161,8 +175,7 @@ public class RobotContainer {
         0.0 // Goal end velocity
     ));
 
-        
-    
+
 
     }
     

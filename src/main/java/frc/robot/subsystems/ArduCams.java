@@ -26,8 +26,8 @@ import edu.wpi.first.math.estimator.PoseEstimator;
 public class ArduCams extends SubsystemBase{
 
     // http://photonvision.local:5800/
-    PhotonCamera camera1 = new PhotonCamera("BlueSaber1"); // BlueSaber1
-    PhotonCamera camera2 = new PhotonCamera("BlueSaber2");
+    PhotonCamera camera1 = new PhotonCamera("BlueSaber2"); // BlueSaber1
+    PhotonCamera camera2 = new PhotonCamera("BlueSaber1");
     PhotonPoseEstimator photonPoseEstimator1;
     PhotonPoseEstimator photonPoseEstimator2;
     PhotonTrackedTarget target1 = camera1.getLatestResult().getBestTarget();
@@ -56,10 +56,12 @@ public class ArduCams extends SubsystemBase{
 
     public Optional<EstimatedRobotPose> getEstimatedPose(PhotonPoseEstimator estimator, PhotonCamera camera){
     PhotonPipelineResult result = camera.getLatestResult();
-    if(!result.hasTargets()){
-        return Optional.empty();
+    if(result.targets.size() >= 2){
+        return estimator.estimateCoprocMultiTagPose(result);
+    } else if (result.targets.size() == 1){
+        return estimator.estimateLowestAmbiguityPose(result);
     }
-    return estimator.estimateCoprocMultiTagPose(result);
+    return Optional.empty();
     }
 
     public Optional<EstimatedRobotPose> getEstimatedPoseCam1(){
@@ -73,15 +75,16 @@ public class ArduCams extends SubsystemBase{
     // @Override
     public void periodic() {
         
-        EstimatedRobotPose pose1 = getEstimatedPoseCam1().get();
+        
         if (getEstimatedPoseCam1().isPresent()){
+            EstimatedRobotPose pose1 = getEstimatedPoseCam1().get();
             SmartDashboard.putNumber("Camera1EstX", pose1.estimatedPose.getX());
             SmartDashboard.putNumber("Camera1EstY", pose1.estimatedPose.getY());
             SmartDashboard.putNumber("Camera1EstRotation", pose1.estimatedPose.getRotation().getAngle());
         } 
         
-        EstimatedRobotPose pose2 = getEstimatedPoseCam2().get();
         if (getEstimatedPoseCam2().isPresent()){
+            EstimatedRobotPose pose2 = getEstimatedPoseCam2().get();
             SmartDashboard.putNumber("Camera2EstX", pose2.estimatedPose.getX());
             SmartDashboard.putNumber("Camera2EstY", pose2.estimatedPose.getY());
             SmartDashboard.putNumber("Camera2EstRotation", pose2.estimatedPose.getRotation().getAngle());
