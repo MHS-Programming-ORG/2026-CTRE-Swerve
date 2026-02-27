@@ -75,16 +75,15 @@ public class ArduCams extends SubsystemBase{
     // @Override
     public void periodic() {
         
-        
+        EstimatedRobotPose pose1 = getEstimatedPoseCam1().get();
         if (getEstimatedPoseCam1().isPresent()){
-            EstimatedRobotPose pose1 = getEstimatedPoseCam1().get();
             SmartDashboard.putNumber("Camera1EstX", pose1.estimatedPose.getX());
             SmartDashboard.putNumber("Camera1EstY", pose1.estimatedPose.getY());
             SmartDashboard.putNumber("Camera1EstRotation", pose1.estimatedPose.getRotation().getAngle());
         } 
         
+        EstimatedRobotPose pose2 = getEstimatedPoseCam2().get();
         if (getEstimatedPoseCam2().isPresent()){
-            EstimatedRobotPose pose2 = getEstimatedPoseCam2().get();
             SmartDashboard.putNumber("Camera2EstX", pose2.estimatedPose.getX());
             SmartDashboard.putNumber("Camera2EstY", pose2.estimatedPose.getY());
             SmartDashboard.putNumber("Camera2EstRotation", pose2.estimatedPose.getRotation().getAngle());

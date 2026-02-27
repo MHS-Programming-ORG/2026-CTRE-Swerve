@@ -38,10 +38,8 @@ import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
-
 // import frc.robot.subsystems.ArduCam;
 import frc.robot.subsystems.ArduCams;
 
@@ -53,7 +51,7 @@ public class RobotContainer {
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
             .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
-            .withDriveRequestType(DriveRequestType.Velocity); // Use velocity control for drive motors
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use velocity control for drive motors
 
     private final SwerveRequest.FieldCentricFacingAngle driveFacing = new SwerveRequest.FieldCentricFacingAngle()
     .withHeadingPID(5,0,0)// Placeholder
@@ -107,6 +105,13 @@ public class RobotContainer {
                     .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
         );
+
+        // joystick.a().whileTrue(new RossShootCommand(shooterSubsystem, conveyorSubsystem, 1.5, 50, 50, 0.4));
+
+        // joystick.rightBumper().whileTrue(new InstantCommand(() -> intakeSubsystem.setSpeed(0.45))); // 0.45
+        // joystick.rightBumper().whileFalse(new InstantCommand(() -> intakeSubsystem.setSpeed(0)));
+        // joystick.leftBumper().whileTrue(new InstantCommand(() -> intakeSubsystem.setSpeed(-0.45))); //-0.45
+        // joystick.leftBumper().whileFalse(new InstantCommand(() -> intakeSubsystem.setSpeed(0)));
 
         // joystick.a().whileTrue(
         //      drivetrain.applyRequest(() ->

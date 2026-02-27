@@ -26,8 +26,11 @@ public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
 
     private final RobotContainer m_robotContainer;
+    
+    final CommandSwerveDrivetrain swerve;
+    final ArduCams cameras;
+   
     /* 
-
     private final TalonFX fx1 = new TalonFX(1);
     private final TalonFX fx2 = new TalonFX(2);
     private final TalonFX fx3 = new TalonFX(3);
@@ -44,6 +47,8 @@ public class Robot extends TimedRobot {
 
     public Robot() {
         m_robotContainer = new RobotContainer();
+        cameras = m_robotContainer.getCameras();
+        swerve = m_robotContainer.getSwerveSubsystem();
     }
 
     @Override
@@ -51,9 +56,6 @@ public class Robot extends TimedRobot {
         m_timeAndJoystickReplay.update();
         CommandScheduler.getInstance().run(); 
         
-        ArduCams cameras = m_robotContainer.getCameras();
-        CommandSwerveDrivetrain swerve = m_robotContainer.getSwerveSubsystem();
-
         Optional<EstimatedRobotPose> cam1Estimate = cameras.getEstimatedPoseCam1();
         Optional<EstimatedRobotPose> cam2Estimate = cameras.getEstimatedPoseCam2();
 
