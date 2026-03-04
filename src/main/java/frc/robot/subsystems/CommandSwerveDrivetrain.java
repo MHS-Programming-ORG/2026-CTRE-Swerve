@@ -301,6 +301,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         SmartDashboard.putNumber("yDifference", yDifference);
         SmartDashboard.putNumber("angleDifference", angleDifference);
 
+        SmartDashboard.putString("Module States",  getState().ModuleStates.toString());
+
     }
 
     private void startSimThread() {

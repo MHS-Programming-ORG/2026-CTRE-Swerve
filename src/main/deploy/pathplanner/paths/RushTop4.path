@@ -3,32 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.0,
-        "y": 7.0
+        "x": 7.7,
+        "y": 1.8
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.1716979278668305,
-        "y": 7.0
+        "x": 5.970311111111112,
+        "y": 2.7877111111111104
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "RushTop3End"
     },
     {
       "anchor": {
-        "x": 2.0,
-        "y": 7.0
+        "x": 2.4818000000000002,
+        "y": 2.680522222222221
       },
       "prevControl": {
-        "x": 2.5847010831619186,
-        "y": 7.0
+        "x": 3.310077777777778,
+        "y": 1.8522444444444432
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.3261410788381846,
+      "rotationDegrees": 180.0
+    },
+    {
+      "waypointRelativePos": 0.7195020746887859,
+      "rotationDegrees": 180.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -42,13 +51,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -142.43140797117258
   },
   "reversed": false,
-  "folder": null,
+  "folder": "RushTopPaths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -90.3529453134578
   },
   "useDefaultConstraints": true
 }

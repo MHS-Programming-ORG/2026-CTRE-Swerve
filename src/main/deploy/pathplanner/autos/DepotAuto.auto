@@ -7,7 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Drive2MetersF"
+            "pathName": "Depot1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Depot2"
           }
         }
       ]

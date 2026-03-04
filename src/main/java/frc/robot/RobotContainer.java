@@ -106,13 +106,6 @@ public class RobotContainer {
             )
         );
 
-        // joystick.a().whileTrue(new RossShootCommand(shooterSubsystem, conveyorSubsystem, 1.5, 50, 50, 0.4));
-
-        // joystick.rightBumper().whileTrue(new InstantCommand(() -> intakeSubsystem.setSpeed(0.45))); // 0.45
-        // joystick.rightBumper().whileFalse(new InstantCommand(() -> intakeSubsystem.setSpeed(0)));
-        // joystick.leftBumper().whileTrue(new InstantCommand(() -> intakeSubsystem.setSpeed(-0.45))); //-0.45
-        // joystick.leftBumper().whileFalse(new InstantCommand(() -> intakeSubsystem.setSpeed(0)));
-
         // joystick.a().whileTrue(
         //      drivetrain.applyRequest(() ->
         //         drive.withVelocityX(joystick.getLeftY() * MaxSpeed*0.1) // Drive forward with negative Y (forward)
@@ -159,26 +152,26 @@ public class RobotContainer {
         drivetrain.registerTelemetry(logger::telemeterize);
 
   
-    joystick.b().onTrue(
-        AutoBuilder.pathfindToPose( // used to test after DriveF2Meters on red side
-        new Pose2d(13.7, 5.0, Rotation2d.fromDegrees(180)), 
-        constraints,
-        0.0 // Goal end velocity
-    ));
+    // joystick.b().onTrue(
+    //     AutoBuilder.pathfindToPose( // used to test after DriveF2Meters on red side
+    //     new Pose2d(13.7, 5.0, Rotation2d.fromDegrees(180)), 
+    //     constraints,
+    //     0.0 // Goal end velocity
+    // ));
 
-        joystick.y().onTrue(
-        AutoBuilder.pathfindToPose(
-        new Pose2d(15.0, 1.0, Rotation2d.fromDegrees(180)), 
-        constraints, 
-        0.0 // Goal end velocity
-    ));
+    //     joystick.y().onTrue(
+    //     AutoBuilder.pathfindToPose(
+    //     new Pose2d(15.0, 1.0, Rotation2d.fromDegrees(180)), 
+    //     constraints, 
+    //     0.0 // Goal end velocity
+    // ));
         
-        joystick.x().onTrue(
-        AutoBuilder.pathfindToPose(
-        new Pose2d(12.5, 1.0, Rotation2d.fromDegrees(180)), 
-        constraints, 
-        0.0 // Goal end velocity
-    ));
+    //     joystick.x().onTrue(
+    //     AutoBuilder.pathfindToPose(
+    //     new Pose2d(12.5, 1.0, Rotation2d.fromDegrees(180)), 
+    //     constraints, 
+    //     0.0 // Goal end velocity
+    // ));
 
 
 
@@ -201,7 +194,9 @@ public class RobotContainer {
     public CommandSwerveDrivetrain getSwerveSubsystem(){
         return drivetrain;
     }
+
     public ArduCams getCameras(){
+        
         return cameras;
     }
 
