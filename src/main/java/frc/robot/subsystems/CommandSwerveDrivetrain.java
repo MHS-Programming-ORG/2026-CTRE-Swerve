@@ -27,6 +27,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
@@ -205,7 +206,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         configureAutoBuilder();
     }
 
-        public void configureAutoBuilder(){
+    private final Field2d field = new Field2d();
+    public void configureAutoBuilder(){
+        SmartDashboard.putData("Field", field);
         RobotConfig config;
     try {
         config = RobotConfig.fromGUISettings();
@@ -263,7 +266,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return m_sysIdRoutineToApply.dynamic(direction);
     }
 
-    
+
     @Override
     public void periodic() {
         /*
@@ -300,9 +303,12 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         SmartDashboard.putNumber("xDifference", xDifference);
         SmartDashboard.putNumber("yDifference", yDifference);
         SmartDashboard.putNumber("angleDifference", angleDifference);
+        SmartDashboard.putNumber("distanceDifference", distance);
 
         SmartDashboard.putString("Module States",  getState().ModuleStates.toString());
 
+
+        field.setRobotPose(odometryPose);
     }
 
     private void startSimThread() {
@@ -372,12 +378,20 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     double xDifference;
     double yDifference;
     double angleDifference;
-
+    double distance;
     public double calculateAngle(double targetX, double targetY){ //FIXME robotic
         xDifference = targetX - getState().Pose.getX();
         yDifference = targetY - getState().Pose.getY();
         angleDifference = Math.atan2(yDifference, xDifference);
         
         return angleDifference;
+    }
+
+    public double calculateDistance(double targetX, double targetY){
+        xDifference = targetX - getState().Pose.getX();
+        yDifference = targetY - getState().Pose.getY();
+        double distance = Math.sqrt(Math.pow(xDifference, 2) + Math.pow(yDifference, 2));
+
+        return distance;
     }
 }

@@ -34,16 +34,18 @@ public class ArduCams extends SubsystemBase{
     PhotonTrackedTarget target2 = camera2.getLatestResult().getBestTarget();
     private double getx = 0;
     
-    public final AprilTagFieldLayout kTagLayout =
+    public final AprilTagFieldLayout kTagLayout = 
                 AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
     
                 // https://docs.photonvision.org/en/latest/docs/apriltag-pipelines/coordinate-systems.html#coordinate-systems
     public final Transform3d kRobotToCam1 =
-                new Transform3d(new Translation3d(0.365, 0.004, 0.0), new Rotation3d(0, 0, 0));
+                new Transform3d(new Translation3d(-0.343, 0.309, 0.0), new Rotation3d(0, 0, 20*Math.PI/180));
 
     public final Transform3d kRobotToCam2 = 
-                new Transform3d(new Translation3d(-0.343, 0.309, 0.0), new Rotation3d(0, 0, Math.PI));
+                new Transform3d(new Translation3d(0.0, 0.0, 0.0), new Rotation3d(0, 0, 0));
 
+    PhotonPoseEstimator photonEstimator1;
+    PhotonPoseEstimator photonEstimator2;
 
     public ArduCams(){
         photonEstimator1 = new PhotonPoseEstimator(kTagLayout, kRobotToCam1);
@@ -52,8 +54,7 @@ public class ArduCams extends SubsystemBase{
     
     EstimatedRobotPose estimate;
 
-    PhotonPoseEstimator photonEstimator1 = new PhotonPoseEstimator(kTagLayout, kRobotToCam1);
-    PhotonPoseEstimator photonEstimator2 = new PhotonPoseEstimator(kTagLayout, kRobotToCam2);
+   
 
     public Optional<EstimatedRobotPose> getEstimatedPose(PhotonPoseEstimator estimator, PhotonCamera camera){
     PhotonPipelineResult result = camera.getLatestResult();
@@ -100,6 +101,8 @@ public class ArduCams extends SubsystemBase{
 
     // @Override
     public void periodic() {
+
+
         /* 
         
         if (getEstimatedPoseCam1().isPresent()){

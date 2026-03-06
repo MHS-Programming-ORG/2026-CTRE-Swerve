@@ -38,6 +38,7 @@ import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.RossShootCommand;
 import frc.robot.commands.IntakePivotCommands.AgitatePivotCommand;
@@ -131,10 +132,10 @@ public class RobotContainer {
         // );
 
         // IN METERES
-        double hubPoseX = 0;
-        //DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red ? 11.920:4.630;
-        double hubPoseY = 0;
-        //4.040; 
+        //double hubPoseX = 0;
+        double hubPoseX = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red ? 11.920:4.630;
+        //double hubPoseY = 0;
+        double hubPoseY = 4.040; 
 
         // joystick.a().whileTrue(
         //      drivetrain.applyRequest(() ->
@@ -149,12 +150,12 @@ public class RobotContainer {
         //     )
         // );
 
-        // joystick.a().whileTrue(
-        //     drivetrain.applyRequest(() -> 
-        //         driveFacing
-        //         .withVelocityX(joystick.getLeftY() * MaxSpeed)
-        //         .withVelocityY(joystick.getRightY() * MaxSpeed)
-        //         .withTargetDirection(Rotation2d.fromRadians(drivetrain.calculateAngle(hubPoseX, hubPoseY)))));
+        joystick.a().whileTrue(
+            drivetrain.applyRequest(() -> 
+                driveFacing
+                .withVelocityX(joystick.getLeftY() * MaxSpeed)
+                .withVelocityY(joystick.getRightY() * MaxSpeed)
+                .withTargetDirection(Rotation2d.fromRadians(drivetrain.calculateAngle(hubPoseX, hubPoseY)))));
         
         // Idle while the robot is disabled. This ensures the configured
         // neutral mode is applied to the drive motors while disabled.
@@ -196,14 +197,16 @@ public class RobotContainer {
     
     joystick.rightBumper().whileTrue( new runIntakeCommand(m_intakeSubsystem, m_intakePivot));
 
-    joystick.leftBumper().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, m_intakePivot, 2, 55, 0.4));
+    joystick.leftBumper().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 2, 55, 0.4));
+    // joystick.leftBumper().whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
+    joystick.leftBumper().whileTrue(new MoveToPositionMagicCommand(m_intakePivot, 0, 0.1)); //"agitate" is 10.5
     joystick.leftBumper().whileTrue(new InstantCommand(() -> m_intakeSubsystem.setSpeed(-0.45)));
     joystick.leftBumper().whileFalse(new InstantCommand(() -> m_intakeSubsystem.setSpeed(0.0)));
 
     // joystick.x().onTrue(new InstantCommand(() -> cameras.driveModeOn()));
     // joystick.y().onTrue(new InstantCommand(() -> cameras.driveModeOff()));
 
-    joystick.y().whileTrue(new MoveToPositionMagicCommand(m_intakePivot, 0, 0.1));
+    joystick.y().onTrue(new MoveToPositionMagicCommand(m_intakePivot, 0, 0.1));
 
     }
     
