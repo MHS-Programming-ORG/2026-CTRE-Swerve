@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.ArduCams;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.PivotSubsystem;
 
 import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.configs.AudioConfigs;
@@ -29,6 +30,7 @@ public class Robot extends TimedRobot {
     
     final CommandSwerveDrivetrain swerve;
     final ArduCams cameras;
+    final PivotSubsystem pivot;
    
     /* 
     private final TalonFX fx1 = new TalonFX(1);
@@ -49,6 +51,7 @@ public class Robot extends TimedRobot {
         m_robotContainer = new RobotContainer();
         cameras = m_robotContainer.getCameras();
         swerve = m_robotContainer.getSwerveSubsystem();
+        pivot = m_robotContainer.getPivotSubsystem();
     }
 
     @Override
@@ -88,7 +91,9 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void disabledInit() {}
+    public void disabledInit() {
+        pivot.setSetPoint(0);
+    }
 
     @Override
     public void disabledPeriodic() {}

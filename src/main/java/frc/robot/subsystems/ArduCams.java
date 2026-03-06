@@ -32,6 +32,7 @@ public class ArduCams extends SubsystemBase{
     PhotonPoseEstimator photonPoseEstimator2;
     PhotonTrackedTarget target1 = camera1.getLatestResult().getBestTarget();
     PhotonTrackedTarget target2 = camera2.getLatestResult().getBestTarget();
+    private double getx = 0;
     
     public final AprilTagFieldLayout kTagLayout =
                 AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
@@ -51,8 +52,8 @@ public class ArduCams extends SubsystemBase{
     
     EstimatedRobotPose estimate;
 
-     PhotonPoseEstimator photonEstimator1 = new PhotonPoseEstimator(kTagLayout, kRobotToCam1);
-     PhotonPoseEstimator photonEstimator2 = new PhotonPoseEstimator(kTagLayout, kRobotToCam2);
+    PhotonPoseEstimator photonEstimator1 = new PhotonPoseEstimator(kTagLayout, kRobotToCam1);
+    PhotonPoseEstimator photonEstimator2 = new PhotonPoseEstimator(kTagLayout, kRobotToCam2);
 
     public Optional<EstimatedRobotPose> getEstimatedPose(PhotonPoseEstimator estimator, PhotonCamera camera){
     PhotonPipelineResult result = camera.getLatestResult();
@@ -72,9 +73,34 @@ public class ArduCams extends SubsystemBase{
         return getEstimatedPose(photonEstimator2, camera2);
     }
 
+    public void driveModeOn(){
+        camera1.setDriverMode(true);
+        camera2.setDriverMode(true);
+    }
+
+    public void driveModeOff(){
+        camera1.setDriverMode(false);
+        camera2.setDriverMode(false);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////
+    public double getX(){
+        PhotonPipelineResult result = camera1.getLatestResult();
+        double y = result.hasTargets()?result.getBestTarget().getBestCameraToTarget().getX():0;
+        if(y != 0){getx = y;}
+        return getx;
+       // return y;
+    }
+
+    public boolean cameraVisable(){
+        return camera1.getLatestResult().hasTargets();
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////
+
+
     // @Override
     public void periodic() {
-        
+        /* 
         
         if (getEstimatedPoseCam1().isPresent()){
             EstimatedRobotPose pose1 = getEstimatedPoseCam1().get();
@@ -90,6 +116,6 @@ public class ArduCams extends SubsystemBase{
             SmartDashboard.putNumber("Camera2EstY", pose2.estimatedPose.getY());
             SmartDashboard.putNumber("Camera2EstRotation", pose2.estimatedPose.getRotation().getAngle());
         }
-        
+        */
     }
 }

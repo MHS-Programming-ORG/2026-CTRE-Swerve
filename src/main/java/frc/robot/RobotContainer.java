@@ -35,11 +35,20 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.commands.RossShootCommand;
+import frc.robot.commands.IntakePivotCommands.AgitatePivotCommand;
+import frc.robot.commands.IntakePivotCommands.MoveToPositionMagicCommand;
+import frc.robot.commands.IntakeRollerCommands.runIntakeCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.ConveyorSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.PivotSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 // import frc.robot.subsystems.ArduCam;
 import frc.robot.subsystems.ArduCams;
 
@@ -63,9 +72,16 @@ public class RobotContainer {
     private final CommandXboxController joystick = new CommandXboxController(0);
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
-    // public final ArduCam camera = new ArduCam();
+    // public final ArduCam camera = new ArduCam();  
     public final ArduCams cameras = new ArduCams();
     public final PIDController pid = new PIDController(5, 0.0, 0.0);
+
+    private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem(20);
+    private final PivotSubsystem m_intakePivot = new PivotSubsystem(19, 0);
+    private final ConveyorSubsystem m_ConveyorSubsystem = new ConveyorSubsystem(18);
+    private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem(cameras, 15, 16, 17);
+
+  
 
     SendableChooser<Command> autoChooser;
 
@@ -120,25 +136,25 @@ public class RobotContainer {
         double hubPoseY = 0;
         //4.040; 
 
-        joystick.a().whileTrue(
-             drivetrain.applyRequest(() ->
-                drive.withVelocityX(joystick.getLeftY() * MaxSpeed*0.1) // Drive forward with negative Y (forward)
-                    .withVelocityY(joystick.getLeftX() * MaxSpeed*0.1) // Drive left with negative X (left)
-                    .withRotationalRate(pid.calculate(
-                        drivetrain.getPose2d().getRotation().getRadians(),
-                        drivetrain.calculateAngle(
-                            hubPoseX,
-                            hubPoseY
-                        ))) // Drive counterclockwise with negative X (left)
-            )
-        );
+        // joystick.a().whileTrue(
+        //      drivetrain.applyRequest(() ->
+        //         drive.withVelocityX(joystick.getLeftY() * MaxSpeed*0.1) // Drive forward with negative Y (forward)
+        //             .withVelocityY(joystick.getLeftX() * MaxSpeed*0.1) // Drive left with negative X (left)
+        //             .withRotationalRate(pid.calculate(
+        //                 drivetrain.getPose2d().getRotation().getRadians(),
+        //                 drivetrain.calculateAngle(
+        //                     hubPoseX,
+        //                     hubPoseY
+        //                 ))) // Drive counterclockwise with negative X (left)
+        //     )
+        // );
 
-        joystick.a().whileTrue(
-            drivetrain.applyRequest(() -> 
-                driveFacing
-                .withVelocityX(joystick.getLeftY() * MaxSpeed)
-                .withVelocityY(joystick.getRightY() * MaxSpeed)
-                .withTargetDirection(Rotation2d.fromRadians(drivetrain.calculateAngle(hubPoseX, hubPoseY)))));
+        // joystick.a().whileTrue(
+        //     drivetrain.applyRequest(() -> 
+        //         driveFacing
+        //         .withVelocityX(joystick.getLeftY() * MaxSpeed)
+        //         .withVelocityY(joystick.getRightY() * MaxSpeed)
+        //         .withTargetDirection(Rotation2d.fromRadians(drivetrain.calculateAngle(hubPoseX, hubPoseY)))));
         
         // Idle while the robot is disabled. This ensures the configured
         // neutral mode is applied to the drive motors while disabled.
@@ -174,6 +190,20 @@ public class RobotContainer {
     // ));
 
 
+    ////////////////////////////////////
+    ///           OPERATOR           ///
+    /// ////////////////////////////////
+    
+    joystick.rightBumper().whileTrue( new runIntakeCommand(m_intakeSubsystem, m_intakePivot));
+
+    joystick.leftBumper().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, m_intakePivot, 2, 55, 0.4));
+    joystick.leftBumper().whileTrue(new InstantCommand(() -> m_intakeSubsystem.setSpeed(-0.45)));
+    joystick.leftBumper().whileFalse(new InstantCommand(() -> m_intakeSubsystem.setSpeed(0.0)));
+
+    // joystick.x().onTrue(new InstantCommand(() -> cameras.driveModeOn()));
+    // joystick.y().onTrue(new InstantCommand(() -> cameras.driveModeOff()));
+
+    joystick.y().whileTrue(new MoveToPositionMagicCommand(m_intakePivot, 0, 0.1));
 
     }
     
@@ -198,6 +228,10 @@ public class RobotContainer {
     public ArduCams getCameras(){
         
         return cameras;
+    }
+
+    public PivotSubsystem getPivotSubsystem(){
+        return m_intakePivot;
     }
 
     public Command getAutonomousCommand() {
