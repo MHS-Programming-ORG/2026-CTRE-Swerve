@@ -4,6 +4,8 @@
 
 package frc.robot.commands.IntakePivotCommands;
 
+import org.ejml.equation.IntegerSequence.Range;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.PivotSubsystem;
@@ -26,10 +28,11 @@ public class AgitatePivotCommand extends Command {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() { 
-    MovingInOrOut = true;
+    MovingInOrOut = false;
     timer.start();
 
   }
@@ -37,25 +40,25 @@ public class AgitatePivotCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    pivot.setSetPoint(10.5);
-    if(timer.get() > 2) {
-      pivot.setSetPoint(15);
+    // pivot.setSetPoint(10.5);
+    // if(timer.get() > 2) {
+    //   pivot.setSetPoint(15);
+    // }
+    // timer.stop();
+    // intake.setSpeed(-0.55);
+    double currentPos = pivot.getPivotEncoder();
+
+    if (MovingInOrOut && currentPos >= pivotIn + 0.2) {
+        MovingInOrOut = false;
+    } else if (!MovingInOrOut && currentPos <= pivotOut - 0.2) {
+        MovingInOrOut = true;
     }
-    timer.stop();
-    intake.setSpeed(-0.55);
-    // double currentPos = pivot.getPivotEncoder();
 
-    // if (MovingInOrOut && currentPos >= pivotOut) {
-    //     MovingInOrOut = false;
-    // } else if (!MovingInOrOut && currentPos <= pivotIn) {
-    //     MovingInOrOut = true;
-    // }
-
-    // if (MovingInOrOut) {
-    //     pivot.setSetPoint(pivotOut);
-    // } else {
-    //     pivot.setSetPoint(pivotIn);
-    // }
+    if (MovingInOrOut) {
+        pivot.setSetPoint(pivotOut);
+    } else {
+        pivot.setSetPoint(pivotIn);
+    }
   }
 
   // Called once the command ends or is interrupted.

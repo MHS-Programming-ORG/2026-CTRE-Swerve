@@ -25,13 +25,13 @@ PivotSubsystem Pivot;
   
   @Override
   public void initialize() {
-    Pivot.setSetPoint(21.5);
+    Pivot.setSetPoint(22);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Intake.setSpeed(-0.45);
+    Intake.setSpeed(-0.55);
   }
 
   // Called once the command ends or is interrupted.

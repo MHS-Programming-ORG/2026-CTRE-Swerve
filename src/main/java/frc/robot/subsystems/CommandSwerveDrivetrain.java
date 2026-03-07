@@ -392,7 +392,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public double calculateDistance(double targetX, double targetY){
         xDifference = targetX - getState().Pose.getX();
         yDifference = targetY - getState().Pose.getY();
-        double distance = Math.sqrt(Math.pow(xDifference, 2) + Math.pow(yDifference, 2));
+        distance = Math.sqrt(Math.pow(xDifference, 2) + Math.pow(yDifference, 2));
 
         return distance;
     }

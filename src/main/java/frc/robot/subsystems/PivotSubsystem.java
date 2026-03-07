@@ -46,7 +46,7 @@ public class PivotSubsystem extends SubsystemBase {
     limit = new SoftwareLimitSwitchConfigs();
     limit.ForwardSoftLimitEnable = true;
     limit.ReverseSoftLimitEnable = true;
-    limit.ForwardSoftLimitThreshold = 21;
+    limit.ForwardSoftLimitThreshold = 22;
     limit.ReverseSoftLimitThreshold = 0;
     
     setPoint = 0;
@@ -63,8 +63,8 @@ public class PivotSubsystem extends SubsystemBase {
     configs.withCurrentLimits(new CurrentLimitsConfigs().withStatorCurrentLimit(0).withStatorCurrentLimitEnable(false));
     configs.withCurrentLimits(new CurrentLimitsConfigs().withSupplyCurrentLimit(0).withSupplyCurrentLimitEnable(false));
 
-    magic.MotionMagicAcceleration = 18;
-    magic.MotionMagicCruiseVelocity = 9;
+    magic.MotionMagicAcceleration = 70;
+    magic.MotionMagicCruiseVelocity = 35;
     magic.MotionMagicExpo_kA = 0.10000000149011612;
     magic.MotionMagicExpo_kV = 0.11999999731779099;
 
@@ -77,7 +77,7 @@ public class PivotSubsystem extends SubsystemBase {
     setPoint = newSetPoint;
   }
 
-  public double getPivotEncoder() {
+  public double getPivotEncoder() { 
     return pivotMotor.getPosition().getValueAsDouble();
   }
 
