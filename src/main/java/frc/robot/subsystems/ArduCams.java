@@ -39,7 +39,7 @@ public class ArduCams extends SubsystemBase{
     
                 // https://docs.photonvision.org/en/latest/docs/apriltag-pipelines/coordinate-systems.html#coordinate-systems
     public final Transform3d kRobotToCam1 =
-                new Transform3d(new Translation3d(-0.343, 0.309, 0.0), new Rotation3d(0, 0, 20*Math.PI/180));
+                new Transform3d(new Translation3d(-0.343, 0.309, 0.0), new Rotation3d(0, -20*Math.PI/180, Math.PI));
 
     public final Transform3d kRobotToCam2 = 
                 new Transform3d(new Translation3d(0.0, 0.0, 0.0), new Rotation3d(0, 0, 0));

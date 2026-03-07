@@ -153,8 +153,8 @@ public class RobotContainer {
         joystick.a().whileTrue(
             drivetrain.applyRequest(() -> 
                 driveFacing
-                .withVelocityX(joystick.getLeftY() * MaxSpeed)
-                .withVelocityY(joystick.getRightY() * MaxSpeed)
+                .withVelocityX(-joystick.getLeftY() * MaxSpeed)
+                .withVelocityY(-joystick.getLeftX() * MaxSpeed)
                 .withTargetDirection(Rotation2d.fromRadians(drivetrain.calculateAngle(hubPoseX, hubPoseY)))));
         
         // Idle while the robot is disabled. This ensures the configured
@@ -194,12 +194,12 @@ public class RobotContainer {
     ////////////////////////////////////
     ///           OPERATOR           ///
     /// ////////////////////////////////
-    
+    //drivetrain.calculateDistance(hubPoseX, hubPoseY)
     joystick.rightBumper().whileTrue( new runIntakeCommand(m_intakeSubsystem, m_intakePivot));
 
     joystick.leftBumper().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 2, 55, 0.4));
     // joystick.leftBumper().whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
-    joystick.leftBumper().whileTrue(new MoveToPositionMagicCommand(m_intakePivot, 0, 0.1)); //"agitate" is 10.5
+    joystick.leftBumper().whileTrue(new MoveToPositionMagicCommand(m_intakePivot, 21, 0.1)); //"agitate" is 10.5
     joystick.leftBumper().whileTrue(new InstantCommand(() -> m_intakeSubsystem.setSpeed(-0.45)));
     joystick.leftBumper().whileFalse(new InstantCommand(() -> m_intakeSubsystem.setSpeed(0.0)));
 

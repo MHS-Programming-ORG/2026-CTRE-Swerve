@@ -383,6 +383,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         xDifference = targetX - getState().Pose.getX();
         yDifference = targetY - getState().Pose.getY();
         angleDifference = Math.atan2(yDifference, xDifference);
+        SmartDashboard.putNumber("TargetX", targetX);
+        SmartDashboard.putNumber("TargetY", targetY);
         
         return angleDifference;
     }
