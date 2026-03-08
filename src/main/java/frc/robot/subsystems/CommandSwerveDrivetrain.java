@@ -49,6 +49,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private static final double kSimLoopPeriod = 0.004; // 4 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
+    private double xCord;
+    private double yCord;
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
@@ -289,15 +291,15 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
         Pose2d odometryPose = getState().Pose;
         
-        double xCoord = odometryPose.getTranslation().getX();
-        double yCoord = odometryPose.getTranslation().getY();
+        xCord = odometryPose.getTranslation().getX();
+        yCord = odometryPose.getTranslation().getY();
         double theta = odometryPose.getRotation().getRadians();
 
         SmartDashboard.putString("POSE", getState().Pose.toString());
         SmartDashboard.putString("AB-POSE", AutoBuilder.getCurrentPose().toString());
         
-        SmartDashboard.putNumber("xCoord", xCoord);
-        SmartDashboard.putNumber("yCoord", yCoord);
+        SmartDashboard.putNumber("xCoord", xCord);
+        SmartDashboard.putNumber("yCoord", yCord);
         SmartDashboard.putNumber("heading", theta);
 
         SmartDashboard.putNumber("xDifference", xDifference);
@@ -389,10 +391,16 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return angleDifference;
     }
 
+    //4.000y  12.517 x  
+///4.224604812730592    14.380353450781476
     public double calculateDistance(double targetX, double targetY){
-        xDifference = targetX - getState().Pose.getX();
-        yDifference = targetY - getState().Pose.getY();
-        distance = Math.sqrt(Math.pow(xDifference, 2) + Math.pow(yDifference, 2));
+        xDifference = 12.517 - (xCord-0.3429);
+        yDifference = 4.040 - (yCord);
+        distance = Math.sqrt(Math.pow(Math.abs(xDifference), 2) + Math.pow(Math.abs(yDifference), 2));
+        SmartDashboard.putNumber("XWHYYYYY", xDifference);
+        SmartDashboard.putNumber("YWHYYYYY", yDifference);
+        SmartDashboard.putNumber("poseeexe", xCord);
+        SmartDashboard.putNumber("pposeeeey", yCord);
 
         return distance;
     }

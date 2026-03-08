@@ -22,10 +22,13 @@ import com.pathplanner.lib.path.Waypoint;
 import com.pathplanner.lib.trajectory.PathPlannerTrajectory;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.CameraServerJNI;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -40,6 +43,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.commands.RossIdleCommand;
 import frc.robot.commands.RossShootCommand;
 import frc.robot.commands.IntakePivotCommands.AgitatePivotCommand;
 import frc.robot.commands.IntakePivotCommands.MoveToPositionMagicCommand;
@@ -95,6 +99,9 @@ public class RobotContainer {
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
+        CameraServer.startAutomaticCapture();
+        
+
         pid.enableContinuousInput(-Math.PI, Math.PI);
         configureBindings();
     }
@@ -111,7 +118,7 @@ public class RobotContainer {
     
 
     private void configureBindings() {
-        
+        shooterSubsystem.setDefaultCommand(new RossIdleCommand(shooterSubsystem, 20));
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
@@ -132,8 +139,8 @@ public class RobotContainer {
         // );
 
         // IN METERES
-        //double hubPoseX = 0;
-        double hubPoseX = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red ? 11.920:4.630;
+        //double hubPoseX = 0;//DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Blue ? (11.920+0.5969):
+        double hubPoseX = (11.920+0.5969);
         //double hubPoseY = 0;
         double hubPoseY = 4.040; 
 
@@ -194,10 +201,9 @@ public class RobotContainer {
     ////////////////////////////////////
     ///           OPERATOR           ///
     /// ////////////////////////////////
-    //drivetrain.calculateDistance(hubPoseX, hubPoseY)
-    joystick.rightBumper().whileTrue( new runIntakeCommand(m_intakeSubsystem, m_intakePivot));
+    joystick.rightBumper().whileTrue(new runIntakeCommand(m_intakeSubsystem, m_intakePivot, m_ConveyorSubsystem, shooterSubsystem));
 
-    joystick.leftBumper().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 2, 55, 0.4));
+    joystick.leftBumper().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 2, 55, 0.5, drivetrain.calculateDistance(hubPoseX, hubPoseY)));
     // joystick.leftBumper().whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
     joystick.leftBumper().whileTrue(new MoveToPositionMagicCommand(m_intakePivot, 21, 0.1)); //"agitate" is 10.5
     joystick.leftBumper().whileTrue(new InstantCommand(() -> m_intakeSubsystem.setSpeed(-0.45)));
@@ -205,8 +211,10 @@ public class RobotContainer {
 
     // joystick.x().onTrue(new InstantCommand(() -> cameras.driveModeOn()));
     // joystick.y().onTrue(new InstantCommand(() -> cameras.driveModeOff()));
+    joystick.rightTrigger().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 2, 55, 0.5, 2.1336));
 
     joystick.y().onTrue(new MoveToPositionMagicCommand(m_intakePivot, 0, 0.1));
+    joystick.x().whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
 
     }
     

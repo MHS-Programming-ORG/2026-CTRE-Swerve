@@ -27,6 +27,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private ArduCams camera = new ArduCams();
   private TalonFX shooterMotor1, shooterMotor2, kickerMotor;
   private final VelocityVoltage velocityRequest = new VelocityVoltage(0);
+  private double distance;
 
   public ShooterSubsystem(ArduCams camera, int shooterPort1, int shooterPort2, int kickerPort) {
     shooterCalcV2 = new ShooterCalcV2();
@@ -107,10 +108,16 @@ public class ShooterSubsystem extends SubsystemBase {
   // Kicker Vel > Shooter Vel == Higher Y
   // Kicker Vel < Shooter Vel == Lower Y
   // Kicker Vel = Shooter Vel == Equal Y
-  public void shooterShoot(){
+  public void shooterShoot(double distance){
     //if(){
-      setShooterVelocity(shooterCalcV2.getRPSForDistance(camera.getX()));
+      this.distance = distance;
+      SmartDashboard.putNumber("CoordiantePositon", distance);
+      setShooterVelocity(shooterCalcV2.getRPSForDistance(camera.getX(distance)));
     //}
+  }
+
+  public double getShooterShoot(double xDist){
+    return shooterCalcV2.getRPSForDistance(xDist);
   }
 
   @Override
@@ -122,10 +129,10 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("[Shooter] Velocity RPS 2", getShooterVelocity2());
     SmartDashboard.putNumber("[S] Current ", shooterMotor1.getStatorCurrent().getValueAsDouble());
     SmartDashboard.putNumber("[Shooter] Kicker", kickerMotor.getVelocity().getValueAsDouble());
-    SmartDashboard.putNumber("ArduCam", camera.getX());
+    SmartDashboard.putNumber("ArduCam", camera.getX(0));
     SmartDashboard.putNumber("Rotor RPS",shooterMotor1.getRotorVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Mechanism RPS",shooterMotor1.getVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Velocity Error", shooterMotor1.getClosedLoopError().getValueAsDouble());
-    SmartDashboard.putNumber("RPS", shooterCalcV2.getRPSForDistance(camera.getX()));
+    SmartDashboard.putNumber("RPS", shooterCalcV2.getRPSForDistance(camera.getX(distance)));
   }
 }

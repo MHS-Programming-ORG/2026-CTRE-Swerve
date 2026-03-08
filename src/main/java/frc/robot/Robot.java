@@ -22,6 +22,9 @@ import com.ctre.phoenix6.configs.AudioConfigs;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.configs.AudioConfigs;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.CameraServerJNI;
+
 
 public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
@@ -52,6 +55,10 @@ public class Robot extends TimedRobot {
         cameras = m_robotContainer.getCameras();
         swerve = m_robotContainer.getSwerveSubsystem();
         pivot = m_robotContainer.getPivotSubsystem();
+
+        // CameraServer.startAutomaticCapture();
+        // CameraServerJNI.setSourceResolution(0, 1920, 1080);
+        // CameraServerJNI.setSourceFPS(0, 10);
     }
 
     @Override

@@ -16,6 +16,8 @@ import edu.wpi.first.math.geometry.Transform2d; // <--- If this yellow line goes
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
@@ -35,7 +37,7 @@ public class ArduCams extends SubsystemBase{
     private double getx = 0;
     
     public final AprilTagFieldLayout kTagLayout = 
-                AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
+                AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
     
                 // https://docs.photonvision.org/en/latest/docs/apriltag-pipelines/coordinate-systems.html#coordinate-systems
     public final Transform3d kRobotToCam1 =
@@ -84,13 +86,17 @@ public class ArduCams extends SubsystemBase{
         camera2.setDriverMode(false);
     }
 
+    double hubPoseX = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red ? 11.920:4.630;
+    //double hubPoseY = 0;
+    double hubPoseY = 4.040;
+
     ////////////////////////////////////////////////////////////////////////////////////////
-    public double getX(){
+    public double getX(double distance){
         PhotonPipelineResult result = camera1.getLatestResult();
         double y = result.hasTargets()?result.getBestTarget().getBestCameraToTarget().getX():0;
-        if(y != 0){getx = y;}
+        if(y != 0){getx = y;}else{getx = distance;} // set distance to your fixed RPS when april tag is undetected]]]]]]]]]]]
+        SmartDashboard.putBoolean("UsingCamera", y != 0);
         return getx;
-       // return y;
     }
 
     public boolean cameraVisable(){
@@ -103,22 +109,22 @@ public class ArduCams extends SubsystemBase{
     public void periodic() {
 
 
-        /* 
         
-        if (getEstimatedPoseCam1().isPresent()){
-            EstimatedRobotPose pose1 = getEstimatedPoseCam1().get();
-            SmartDashboard.putNumber("Camera1EstX", pose1.estimatedPose.getX());
-            SmartDashboard.putNumber("Camera1EstY", pose1.estimatedPose.getY());
-            SmartDashboard.putNumber("Camera1EstRotation", pose1.estimatedPose.getRotation().getAngle());
-        } 
+        
+        // if (getEstimatedPoseCam1().isPresent()){
+        //     EstimatedRobotPose pose1 = getEstimatedPoseCam1().get();
+        //     SmartDashboard.putNumber("Camera1EstX", pose1.estimatedPose.getX());
+        //     SmartDashboard.putNumber("Camera1EstY", pose1.estimatedPose.getY());
+        //     SmartDashboard.putNumber("Camera1EstRotation", pose1.estimatedPose.getRotation().getAngle());
+        // } 
         
        
-        if (getEstimatedPoseCam2().isPresent()){
-             EstimatedRobotPose pose2 = getEstimatedPoseCam2().get();
-            SmartDashboard.putNumber("Camera2EstX", pose2.estimatedPose.getX());
-            SmartDashboard.putNumber("Camera2EstY", pose2.estimatedPose.getY());
-            SmartDashboard.putNumber("Camera2EstRotation", pose2.estimatedPose.getRotation().getAngle());
-        }
-        */
+        // if (getEstimatedPoseCam2().isPresent()){
+        //      EstimatedRobotPose pose2 = getEstimatedPoseCam2().get();
+        //     SmartDashboard.putNumber("Camera2EstX", pose2.estimatedPose.getX());
+        //     SmartDashboard.putNumber("Camera2EstY", pose2.estimatedPose.getY());
+        //     SmartDashboard.putNumber("Camera2EstRotation", pose2.estimatedPose.getRotation().getAngle());
+        // }
+        
     }
 }

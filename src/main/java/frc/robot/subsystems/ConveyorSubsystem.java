@@ -1,4 +1,6 @@
 package frc.robot.subsystems;
+import static edu.wpi.first.units.Units.Amps;
+
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.hardware.TalonFX;
 
@@ -12,8 +14,9 @@ public class ConveyorSubsystem extends SubsystemBase {
     public ConveyorSubsystem(int newConveyorID) {
         conveyorMotor = new TalonFX(newConveyorID);
         configs = new TalonFXConfiguration();
-        configs.withCurrentLimits(new CurrentLimitsConfigs().withStatorCurrentLimit(0).withStatorCurrentLimitEnable(false));
-        configs.withCurrentLimits(new CurrentLimitsConfigs().withSupplyCurrentLimit(0).withSupplyCurrentLimitEnable(false));
+        configs.withCurrentLimits(new CurrentLimitsConfigs()
+        .withSupplyCurrentLimit(Amps.of(15))
+        .withSupplyCurrentLimitEnable(true));
         conveyorMotor.getConfigurator().apply(configs);
     }
     public void setConveyorSpeed(double speed){

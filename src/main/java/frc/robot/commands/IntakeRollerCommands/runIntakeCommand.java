@@ -5,21 +5,28 @@
 package frc.robot.commands.IntakeRollerCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.ConveyorSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.commands.IntakePivotCommands.MoveToPositionMagicCommand;
 import frc.robot.subsystems.PivotSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class runIntakeCommand extends Command {
 IntakeSubsystem Intake;
 PivotSubsystem Pivot;
-  public runIntakeCommand(IntakeSubsystem newintakeSubsystem, PivotSubsystem newPivotSubsystem)
+ConveyorSubsystem conveyor;
+ShooterSubsystem shooter;
+  public runIntakeCommand(IntakeSubsystem newintakeSubsystem, PivotSubsystem newPivotSubsystem, ConveyorSubsystem newConveyorSubsystem, ShooterSubsystem shooter)
   {
     Intake = newintakeSubsystem;
     Pivot = newPivotSubsystem;
+    conveyor = newConveyorSubsystem;
+    this.shooter = shooter;
     addRequirements(Intake);
     addRequirements(Pivot);
-
+    addRequirements(conveyor);
+    addRequirements(shooter);
   }
 
   
@@ -31,14 +38,17 @@ PivotSubsystem Pivot;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Intake.setSpeed(-0.55);
+    Intake.setSpeed(-0.7);
+    conveyor.setConveyorSpeed(0.25);
+    shooter.setKickerVelocity(-25);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
      Intake.setSpeed(0);
-  
+     conveyor.setConveyorSpeed(0);
+     shooter.stopKickerMotor();
   }
 
   // Returns true when the command should end.
