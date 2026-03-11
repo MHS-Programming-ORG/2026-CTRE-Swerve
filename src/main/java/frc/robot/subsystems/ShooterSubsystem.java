@@ -13,6 +13,9 @@ import com.ctre.phoenix6.swerve.SwerveDrivetrain;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
+
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VelocityVoltage;
@@ -108,11 +111,11 @@ public class ShooterSubsystem extends SubsystemBase {
   // Kicker Vel > Shooter Vel == Higher Y
   // Kicker Vel < Shooter Vel == Lower Y
   // Kicker Vel = Shooter Vel == Equal Y
-  public void shooterShoot(double distance){
+  public void shooterShoot(DoubleSupplier distance){
     //if(){
-      this.distance = distance;
-      SmartDashboard.putNumber("CoordiantePositon", distance);
-      setShooterVelocity(shooterCalcV2.getRPSForDistance(camera.getX(distance)));
+      this.distance = distance.getAsDouble();
+      SmartDashboard.putNumber("CoordiantePositon", this.distance);
+      setShooterVelocity(shooterCalcV2.getRPSForDistance(camera.getX(this.distance)));
     //}
   }
 
@@ -129,7 +132,7 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("[Shooter] Velocity RPS 2", getShooterVelocity2());
     SmartDashboard.putNumber("[S] Current ", shooterMotor1.getStatorCurrent().getValueAsDouble());
     SmartDashboard.putNumber("[Shooter] Kicker", kickerMotor.getVelocity().getValueAsDouble());
-    SmartDashboard.putNumber("ArduCam", camera.getX(0));
+    SmartDashboard.putNumber("ArduCam", camera.getX(0.0));
     SmartDashboard.putNumber("Rotor RPS",shooterMotor1.getRotorVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Mechanism RPS",shooterMotor1.getVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Velocity Error", shooterMotor1.getClosedLoopError().getValueAsDouble());

@@ -128,6 +128,7 @@ public class Robot extends TimedRobot {
         if (m_autonomousCommand != null) {
             CommandScheduler.getInstance().cancel(m_autonomousCommand);
         }
+        pivot.setSetPoint(0);
     }
 
     @Override

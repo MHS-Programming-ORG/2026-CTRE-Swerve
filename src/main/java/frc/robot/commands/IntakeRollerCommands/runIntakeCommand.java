@@ -16,17 +16,14 @@ public class runIntakeCommand extends Command {
 IntakeSubsystem Intake;
 PivotSubsystem Pivot;
 ConveyorSubsystem conveyor;
-ShooterSubsystem shooter;
-  public runIntakeCommand(IntakeSubsystem newintakeSubsystem, PivotSubsystem newPivotSubsystem, ConveyorSubsystem newConveyorSubsystem, ShooterSubsystem shooter)
+  public runIntakeCommand(IntakeSubsystem newintakeSubsystem, PivotSubsystem newPivotSubsystem, ConveyorSubsystem newConveyorSubsystem)
   {
     Intake = newintakeSubsystem;
     Pivot = newPivotSubsystem;
     conveyor = newConveyorSubsystem;
-    this.shooter = shooter;
     addRequirements(Intake);
     addRequirements(Pivot);
     addRequirements(conveyor);
-    addRequirements(shooter);
   }
 
   
@@ -40,7 +37,6 @@ ShooterSubsystem shooter;
   public void execute() {
     Intake.setSpeed(-0.7);
     conveyor.setConveyorSpeed(0.25);
-    shooter.setKickerVelocity(-25);
   }
 
   // Called once the command ends or is interrupted.
@@ -48,7 +44,6 @@ ShooterSubsystem shooter;
   public void end(boolean interrupted) {
      Intake.setSpeed(0);
      conveyor.setConveyorSpeed(0);
-     shooter.stopKickerMotor();
   }
 
   // Returns true when the command should end.

@@ -291,8 +291,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
         Pose2d odometryPose = getState().Pose;
         
-        xCord = odometryPose.getTranslation().getX();
-        yCord = odometryPose.getTranslation().getY();
+        xCord = odometryPose.getX();
+        yCord = odometryPose.getY();
         double theta = odometryPose.getRotation().getRadians();
 
         SmartDashboard.putString("POSE", getState().Pose.toString());
@@ -394,14 +394,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     //4.000y  12.517 x  
 ///4.224604812730592    14.380353450781476
     public double calculateDistance(double targetX, double targetY){
-        xDifference = 12.517 - (xCord-0.3429);
-        yDifference = 4.040 - (yCord);
+        xDifference = targetX - (xCord-0.3429);
+        yDifference = targetY - (yCord);
         distance = Math.sqrt(Math.pow(Math.abs(xDifference), 2) + Math.pow(Math.abs(yDifference), 2));
-        SmartDashboard.putNumber("XWHYYYYY", xDifference);
-        SmartDashboard.putNumber("YWHYYYYY", yDifference);
-        SmartDashboard.putNumber("poseeexe", xCord);
-        SmartDashboard.putNumber("pposeeeey", yCord);
-
         return distance;
     }
 }

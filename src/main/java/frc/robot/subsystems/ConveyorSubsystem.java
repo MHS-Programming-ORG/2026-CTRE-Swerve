@@ -15,7 +15,7 @@ public class ConveyorSubsystem extends SubsystemBase {
         conveyorMotor = new TalonFX(newConveyorID);
         configs = new TalonFXConfiguration();
         configs.withCurrentLimits(new CurrentLimitsConfigs()
-        .withSupplyCurrentLimit(Amps.of(15))
+        .withSupplyCurrentLimit(Amps.of(10))
         .withSupplyCurrentLimitEnable(true));
         conveyorMotor.getConfigurator().apply(configs);
     }

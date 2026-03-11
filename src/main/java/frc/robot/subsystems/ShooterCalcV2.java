@@ -13,7 +13,9 @@ public class ShooterCalcV2 {
         {52, (12 * 8) * INCH_TO_METER},
         {52, (12 * 9) * INCH_TO_METER},
         {55, (12 * 10) * INCH_TO_METER},
-        {55, (12 * 11) * INCH_TO_METER}, //These are caution  NOT ACCURATE just a guess
+        {58, (12 * 11) * INCH_TO_METER}, //These are caution  NOT ACCURATE just a guess
+        {60, (12 * 12) * INCH_TO_METER},
+        {80, (12 * 15) * INCH_TO_METER},
     };
 
     public double getRPSForDistance(double targetDistanceMeters) {

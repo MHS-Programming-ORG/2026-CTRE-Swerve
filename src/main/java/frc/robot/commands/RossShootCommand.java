@@ -4,15 +4,19 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ConveyorSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
+
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj.Timer;
 
 public class RossShootCommand extends Command {
   private ShooterSubsystem shooterSub;
   private ConveyorSubsystem conveyorSub;
-  private double kickerDelay, kickerVel, conveyorVel, distance;
+  private double kickerDelay, kickerVel, conveyorVel;
+  private DoubleSupplier distance;
   private Timer timer;
 
-  public RossShootCommand(ShooterSubsystem shooterSub, ConveyorSubsystem conveyorSub, double kickerDelay, double kickerVel, double conveyorVel, double distance) {
+  public RossShootCommand(ShooterSubsystem shooterSub, ConveyorSubsystem conveyorSub, double kickerDelay, double kickerVel, double conveyorVel,  DoubleSupplier distance) {
     this.shooterSub = shooterSub;
     addRequirements(shooterSub);
 
@@ -45,7 +49,7 @@ public class RossShootCommand extends Command {
     //MathUtil.isNear(shooterVel, shooterSub.getShooterVelocity(), 6)
     if (timer.get() >= kickerDelay) {
       conveyorSub.setConveyorSpeed(conveyorVel);
-    }
+    } 
   }
 
   @Override

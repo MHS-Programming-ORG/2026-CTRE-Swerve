@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
@@ -91,9 +92,21 @@ public class ArduCams extends SubsystemBase{
     double hubPoseY = 4.040;
 
     ////////////////////////////////////////////////////////////////////////////////////////
-    public double getX(double distance){
+    public double getX(Double distance){
         PhotonPipelineResult result = camera1.getLatestResult();
-        double y = result.hasTargets()?result.getBestTarget().getBestCameraToTarget().getX():0;
+        double y = 0;
+        if(result.hasTargets()){
+            for(var target : result.getTargets()){
+                int id = target.getFiducialId();
+
+                if(id == 9 || id == 10 || id == 25 || id == 26){
+                    y = target.getBestCameraToTarget().getX();
+                    break; // stop once we find a valid tag
+                }
+            }
+        }
+
+        //double y = result.hasTargets()?result.getBestTarget().getBestCameraToTarget().getX():0;
         if(y != 0){getx = y;}else{getx = distance;} // set distance to your fixed RPS when april tag is undetected]]]]]]]]]]]
         SmartDashboard.putBoolean("UsingCamera", y != 0);
         return getx;

@@ -107,8 +107,8 @@ public class PivotSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Pivot Encoders", getPivotEncoder());
-    SmartDashboard.putNumber("Setpoint", setPoint);
+    SmartDashboard.putNumber("Intake-Pivot Encoders", getPivotEncoder());
+    SmartDashboard.putNumber("Intake-Pivot Setpoint", setPoint);
     SmartDashboard.putBoolean("Pivot Limit Switch", isPressed());
 
     if(isPressed()) {
