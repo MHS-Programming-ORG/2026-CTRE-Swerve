@@ -3,53 +3,48 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.49393333333333334,
-        "y": 7.289644444444445
+        "x": 3.027488888888889,
+        "y": 2.096
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.4939333333333334,
-        "y": 6.576633383113523
+        "x": 4.02748888888889,
+        "y": 2.096
       },
       "isLocked": false,
-      "linkedName": "Depot1End"
+      "linkedName": "OutpostBump0End"
     },
     {
       "anchor": {
-        "x": 0.6361911554921535,
-        "y": 5.0
+        "x": 6.213922222222224,
+        "y": 2.095855555555554
       },
       "prevControl": {
-        "x": 0.38619115549215355,
-        "y": 5.0
+        "x": 5.2139222222222275,
+        "y": 2.095855555555554
       },
       "nextControl": {
-        "x": 0.8861911554921535,
-        "y": 5.0
+        "x": 6.525744444444444,
+        "y": 2.095855555555554
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.364866666666667,
-        "y": 5.0
+        "x": 6.827822222222222,
+        "y": 1.160388888888889
       },
       "prevControl": {
-        "x": 1.2250998587538584,
-        "y": 5.0
+        "x": 7.054977777777779,
+        "y": 1.4673388888888885
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "OutpostBump1End"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.9168443496802103,
-      "rotationDegrees": -90.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -63,13 +58,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 155.0
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "DepotPaths",
+  "folder": "OutpostBumpRush",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

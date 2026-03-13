@@ -94,9 +94,9 @@ public class RobotContainer {
     // double turnOuput = pid.calculate(camera.getYaw(), 0);
     
     //double hubPoseX = (11.920+0.5969);
-    double hubPoseX = DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Blue ? (11.920+0.5969) : (4.635-0.5969);
+    //double hubPoseX = DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Blue ? (11.920+0.5969) : (4.635-0.5969);
     //double hubPoseY = 0;
-    double hubPoseY = 4.040; 
+    //double hubPoseY = 4.040; 
 
 
     public RobotContainer() {
@@ -113,15 +113,17 @@ public class RobotContainer {
     }
 
      public void registerNamedCommands(){
-        NamedCommands.registerCommand("Intake", new runIntakeCommand(m_intakeSubsystem, m_intakePivot, m_ConveyorSubsystem));
-        NamedCommands.registerCommand("Shoot", new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 2, 55, 0.5, () -> drivetrain.calculateDistance(hubPoseX, hubPoseY)));
+        NamedCommands.registerCommand("Intake", new runIntakeCommand(m_intakeSubsystem, m_intakePivot, m_ConveyorSubsystem, shooterSubsystem));
+        NamedCommands.registerCommand("IntakePivotDown", new MoveToPositionMagicCommand(m_intakePivot, 22, 0.3));
+        NamedCommands.registerCommand("IntakePivotTuck", new MoveToPositionMagicCommand(m_intakePivot, 0, 0.3));
+        NamedCommands.registerCommand("Shoot", new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 3, 55, 0.5, () -> drivetrain.calculateDistance(), () -> drivetrain.getAngle()));
         NamedCommands.registerCommand("Agitate", new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
         
-    //     NamedCommands.registerCommand("Override Rotation", new InstantCommand(() -> 
-    //     PPHolonomicDriveController.overrideRotationFeedback(() -> {
-    //     return camera.cameraHasTargets() ? pid.calculate(camera.getYaw(), 0) : 0;
-    //     }))
-    //     );
+        NamedCommands.registerCommand("Override Rotation", new InstantCommand(() -> 
+        PPHolonomicDriveController.overrideRotationFeedback(() -> {
+        return pid.calculate(drivetrain.getPose2d().getRotation().getDegrees(), drivetrain.calculateAngle());
+        }))
+        );
     
         
      }
@@ -129,7 +131,7 @@ public class RobotContainer {
     
 
     private void configureBindings() {
-        // shooterSubsystem.setDefaultCommand(new RossIdleCommand(shooterSubsystem, 20));
+        shooterSubsystem.setDefaultCommand(new RossIdleCommand(shooterSubsystem, 20));
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
@@ -170,7 +172,7 @@ public class RobotContainer {
                 driveFacing
                 .withVelocityX(-joystick.getLeftY() * MaxSpeed)
                 .withVelocityY(-joystick.getLeftX() * MaxSpeed)
-                .withTargetDirection(Rotation2d.fromRadians(drivetrain.calculateAngle(hubPoseX, hubPoseY)))));
+                .withTargetDirection(Rotation2d.fromRadians(drivetrain.calculateAngle()))));
         
         // Idle while the robot is disabled. This ensures the configured
         // neutral mode is applied to the drive motors while disabled.
@@ -211,15 +213,15 @@ public class RobotContainer {
     /// ////////////////////////////////
     /// 
     // Shooting with Agitate
-    joystick.rightBumper().whileTrue(new runIntakeCommand(m_intakeSubsystem, m_intakePivot, m_ConveyorSubsystem));
+    joystick.rightBumper().whileTrue(new runIntakeCommand(m_intakeSubsystem, m_intakePivot, m_ConveyorSubsystem, shooterSubsystem));
     joystick.rightBumper().whileFalse(new InstantCommand(() -> m_intakeSubsystem.setSpeed(0)));
     
     //Intaking with the Conveyor
-    joystick.leftBumper().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 2, 55, 0.5, () -> drivetrain.calculateDistance(hubPoseX, hubPoseY)));
+    joystick.leftBumper().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 3, 55, 0.5, () -> drivetrain.calculateDistance(), () -> drivetrain.getAngle()));
     joystick.leftBumper().whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
     
     //Passing
-    joystick.leftTrigger().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 2, 55, 0.5, () -> 3.9624));
+    joystick.leftTrigger().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 3, 55, 0.5, () -> 3.9624, () -> drivetrain.getAngle()));
     // joystick.leftBumper().whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem)); 
     
 

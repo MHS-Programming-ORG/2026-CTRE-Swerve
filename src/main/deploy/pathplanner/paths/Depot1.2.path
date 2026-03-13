@@ -3,54 +3,47 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.49393333333333334,
-        "y": 7.289644444444445
+        "x": 0.5231666666666668,
+        "y": 6.7536999999999985
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.4939333333333334,
-        "y": 6.576633383113523
+        "x": 0.5231666666666668,
+        "y": 6.130055555555554
       },
       "isLocked": false,
-      "linkedName": "Depot1End"
+      "linkedName": "Depot1.1End"
     },
     {
       "anchor": {
-        "x": 0.6361911554921535,
-        "y": 5.0
+        "x": 0.5329111111111113,
+        "y": 4.950977777777777
       },
       "prevControl": {
-        "x": 0.38619115549215355,
-        "y": 5.0
-      },
-      "nextControl": {
-        "x": 0.8861911554921535,
-        "y": 5.0
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 2.364866666666667,
-        "y": 5.0
-      },
-      "prevControl": {
-        "x": 1.2250998587538584,
-        "y": 5.0
+        "x": 0.5329111111111114,
+        "y": 5.9643999999999995
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Depot1.2End"
     }
   ],
-  "rotationTargets": [
+  "rotationTargets": [],
+  "constraintZones": [
     {
-      "waypointRelativePos": 0.9168443496802103,
-      "rotationDegrees": -90.0
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 0.5,
+        "maxAcceleration": 1.5,
+        "maxAngularVelocity": 180.0,
+        "maxAngularAcceleration": 360.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
     }
   ],
-  "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -63,7 +56,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 155.0
+    "rotation": -90.0
   },
   "reversed": false,
   "folder": "DepotPaths",

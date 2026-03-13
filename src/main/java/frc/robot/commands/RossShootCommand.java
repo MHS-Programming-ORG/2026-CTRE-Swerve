@@ -7,16 +7,17 @@ import frc.robot.subsystems.PivotSubsystem;
 
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.Timer;
 
 public class RossShootCommand extends Command {
   private ShooterSubsystem shooterSub;
   private ConveyorSubsystem conveyorSub;
   private double kickerDelay, kickerVel, conveyorVel;
-  private DoubleSupplier distance;
+  private DoubleSupplier distance, angle;
   private Timer timer;
 
-  public RossShootCommand(ShooterSubsystem shooterSub, ConveyorSubsystem conveyorSub, double kickerDelay, double kickerVel, double conveyorVel,  DoubleSupplier distance) {
+  public RossShootCommand(ShooterSubsystem shooterSub, ConveyorSubsystem conveyorSub, double kickerDelay, double kickerVel, double conveyorVel,  DoubleSupplier distance, DoubleSupplier angle) {
     this.shooterSub = shooterSub;
     addRequirements(shooterSub);
 
@@ -27,6 +28,7 @@ public class RossShootCommand extends Command {
     this.kickerDelay = kickerDelay;
     this.kickerVel = kickerVel;
     this.conveyorVel = conveyorVel;
+    this.angle = angle;
     this.distance = distance;
   }
 
@@ -36,7 +38,7 @@ public class RossShootCommand extends Command {
 
     // Run the shooter to let it spin up
     // shooterSub.setShooterVelocity(shooterVel);
-    shooterSub.shooterShoot(distance);
+    shooterSub.shooterShoot(distance, angle);
     shooterSub.setKickerVelocity(kickerVel);
   }
 

@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import edu.wpi.first.math.geometry.Translation2d;
 
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
 
@@ -51,6 +52,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private double m_lastSimTime;
     private double xCord;
     private double yCord;
+    private double theta;
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
@@ -293,7 +295,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         
         xCord = odometryPose.getX();
         yCord = odometryPose.getY();
-        double theta = odometryPose.getRotation().getRadians();
+        theta = odometryPose.getRotation().getRadians();
 
         SmartDashboard.putString("POSE", getState().Pose.toString());
         SmartDashboard.putString("AB-POSE", AutoBuilder.getCurrentPose().toString());
@@ -302,13 +304,15 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         SmartDashboard.putNumber("yCoord", yCord);
         SmartDashboard.putNumber("heading", theta);
 
+        SmartDashboard.putNumber("TargetX", hubPoseX);
+        SmartDashboard.putNumber("TargetY", hubPoseY);
+
         SmartDashboard.putNumber("xDifference", xDifference);
         SmartDashboard.putNumber("yDifference", yDifference);
         SmartDashboard.putNumber("angleDifference", angleDifference);
         SmartDashboard.putNumber("distanceDifference", distance);
 
         SmartDashboard.putString("Module States",  getState().ModuleStates.toString());
-
 
         field.setRobotPose(odometryPose);
     }
@@ -377,26 +381,34 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return getState().Pose;
     }
 
+    double hubPoseX = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red ? (11.920) : (4.635);
+    double hubPoseXWithOffset = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red ? (11.920+0.5969) : (4.635-0.5969);
+
+    double hubPoseY = 4.040;
+
     double xDifference;
     double yDifference;
     double angleDifference;
     double distance;
-    public double calculateAngle(double targetX, double targetY){ //FIXME robotic
-        xDifference = targetX - getState().Pose.getX();
-        yDifference = targetY - getState().Pose.getY();
+    public double calculateAngle(){ //FIXME robotic
+        xDifference = hubPoseX - getState().Pose.getX();
+        yDifference = hubPoseY - getState().Pose.getY();
         angleDifference = Math.atan2(yDifference, xDifference);
-        SmartDashboard.putNumber("TargetX", targetX);
-        SmartDashboard.putNumber("TargetY", targetY);
         
         return angleDifference;
     }
 
-    //4.000y  12.517 x  
-///4.224604812730592    14.380353450781476
-    public double calculateDistance(double targetX, double targetY){
-        xDifference = targetX - (xCord-0.3429);
-        yDifference = targetY - (yCord);
-        distance = Math.sqrt(Math.pow(Math.abs(xDifference), 2) + Math.pow(Math.abs(yDifference), 2));
-        return distance;
+    public double getAngle(){
+        return theta;
+    }
+
+    public double calculateDistance(){
+        double robotOffsetx = -0.3429 * Math.cos(theta);
+        double robotOffsety = -0.3429 * Math.sin(theta);
+        double hubX = 11.920;
+        if(DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Blue){Math.abs(robotOffsety); Math.abs(robotOffsetx); hubX = 4.635;}
+        Translation2d robot = new Translation2d(xCord, yCord);
+        Translation2d hub = new Translation2d(hubX, 4.040);
+        return robot.getDistance(hub);
     }
 }

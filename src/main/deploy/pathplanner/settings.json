@@ -3,9 +3,11 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
-    "New Folder",
+    "DepotPaths",
     "OutPostPaths",
-    "RushTopPaths"
+    "OutpostBumpRush",
+    "RushTopPaths",
+    "TrenchRun"
   ],
   "autoFolders": [
     "New Folder"

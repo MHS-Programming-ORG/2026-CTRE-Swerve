@@ -65,8 +65,7 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         m_timeAndJoystickReplay.update();
         CommandScheduler.getInstance().run(); 
-        
-        Optional<EstimatedRobotPose> cam1Estimate = cameras.getEstimatedPoseCam1();
+                Optional<EstimatedRobotPose> cam1Estimate = cameras.getEstimatedPoseCam1();
         Optional<EstimatedRobotPose> cam2Estimate = cameras.getEstimatedPoseCam2();
 
         if (cam1Estimate.isPresent()){
@@ -80,8 +79,6 @@ public class Robot extends TimedRobot {
                 cam2Estimate.get().estimatedPose.toPose2d(), 
                 cam2Estimate.get().timestampSeconds);
         }
-
-        
     }
 
     @Override
@@ -132,7 +129,8 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void teleopPeriodic() {}
+    public void teleopPeriodic() {
+    }
 
     @Override
     public void teleopExit() {}

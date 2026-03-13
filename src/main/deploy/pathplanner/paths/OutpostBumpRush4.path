@@ -3,32 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.939788888888889,
-        "y": 2.6415444444444436
+        "x": 7.7438,
+        "y": 2.4076777777777774
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.939788888888891,
-        "y": 2.6415444444444436
+        "x": 6.398184307197612,
+        "y": 2.4076777777777774
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "OutpostBump3"
     },
     {
       "anchor": {
-        "x": 4.0,
-        "y": 6.0
+        "x": 2.686433333333334,
+        "y": 2.4076777777777774
       },
       "prevControl": {
-        "x": 3.0,
-        "y": 6.0
+        "x": 3.300410665323311,
+        "y": 2.4076777777777774
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.747717842323645,
+      "rotationDegrees": 90.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -42,13 +47,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -138.715
   },
   "reversed": false,
-  "folder": null,
+  "folder": "OutpostBumpRush",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 90.0
   },
   "useDefaultConstraints": true
 }

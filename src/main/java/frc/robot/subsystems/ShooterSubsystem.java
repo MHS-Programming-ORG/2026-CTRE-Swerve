@@ -111,11 +111,12 @@ public class ShooterSubsystem extends SubsystemBase {
   // Kicker Vel > Shooter Vel == Higher Y
   // Kicker Vel < Shooter Vel == Lower Y
   // Kicker Vel = Shooter Vel == Equal Y
-  public void shooterShoot(DoubleSupplier distance){
+  public void shooterShoot(DoubleSupplier distance, DoubleSupplier angle){
     //if(){
       this.distance = distance.getAsDouble();
+      double Aangle = angle.getAsDouble();
       SmartDashboard.putNumber("CoordiantePositon", this.distance);
-      setShooterVelocity(shooterCalcV2.getRPSForDistance(camera.getX(this.distance)));
+      setShooterVelocity(shooterCalcV2.getRPSForDistance(camera.getX(this.distance, Aangle)));
     //}
   }
 
@@ -132,10 +133,10 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("[Shooter] Velocity RPS 2", getShooterVelocity2());
     SmartDashboard.putNumber("[S] Current ", shooterMotor1.getStatorCurrent().getValueAsDouble());
     SmartDashboard.putNumber("[Shooter] Kicker", kickerMotor.getVelocity().getValueAsDouble());
-    SmartDashboard.putNumber("ArduCam", camera.getX(0.0));
+    SmartDashboard.putNumber("ArduCam", camera.getX(0.0, 0.0));
     SmartDashboard.putNumber("Rotor RPS",shooterMotor1.getRotorVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Mechanism RPS",shooterMotor1.getVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Velocity Error", shooterMotor1.getClosedLoopError().getValueAsDouble());
-    SmartDashboard.putNumber("RPS", shooterCalcV2.getRPSForDistance(camera.getX(distance)));
+    SmartDashboard.putNumber("RPS", shooterCalcV2.getRPSForDistance(camera.getX(distance, 0.0)));
   }
 }
