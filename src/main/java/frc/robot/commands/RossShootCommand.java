@@ -3,10 +3,10 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ConveyorSubsystem;
-import frc.robot.subsystems.PivotSubsystem;
 
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.Timer;
 
@@ -14,10 +14,10 @@ public class RossShootCommand extends Command {
   private ShooterSubsystem shooterSub;
   private ConveyorSubsystem conveyorSub;
   private double kickerDelay, kickerVel, conveyorVel;
-  private DoubleSupplier distance, angle;
+  private DoubleSupplier distance;
   private Timer timer;
 
-  public RossShootCommand(ShooterSubsystem shooterSub, ConveyorSubsystem conveyorSub, double kickerDelay, double kickerVel, double conveyorVel,  DoubleSupplier distance, DoubleSupplier angle) {
+  public RossShootCommand(ShooterSubsystem shooterSub, ConveyorSubsystem conveyorSub, double kickerDelay, double kickerVel, double conveyorVel,  DoubleSupplier distance) {
     this.shooterSub = shooterSub;
     addRequirements(shooterSub);
 
@@ -28,7 +28,6 @@ public class RossShootCommand extends Command {
     this.kickerDelay = kickerDelay;
     this.kickerVel = kickerVel;
     this.conveyorVel = conveyorVel;
-    this.angle = angle;
     this.distance = distance;
   }
 
@@ -38,8 +37,9 @@ public class RossShootCommand extends Command {
 
     // Run the shooter to let it spin up
     // shooterSub.setShooterVelocity(shooterVel);
-    shooterSub.shooterShoot(distance, angle);
-    shooterSub.setKickerVelocity(kickerVel);
+    shooterSub.shooterShoot(distance);
+     shooterSub.setKickerVelocity(kickerVel);
+    // shooterSub.setKickerVelocity(-5);
   }
 
   @Override
@@ -49,9 +49,19 @@ public class RossShootCommand extends Command {
     // Check to see that some amount of time has passed since the command
     // has started.  At that point, start the conveyor and kicker
     //MathUtil.isNear(shooterVel, shooterSub.getShooterVelocity(), 6)
-    if (timer.get() >= kickerDelay) {
+
+    //FIXME replace with velocity check
+    // if (timer.get() > kickerDelay) {
+    //   conveyorSub.setConveyorSpeed(conveyorVel);
+    // } 
+    // if(timer.get() >= kickerDelay){
+    //   shooterSub.setKickerVelocity(kickerVel);
+    // }
+    
+    // Checks velocity of one shooter motor to see if it is greater than or equal to calculated rps from ShooterCalcV2
+    if(MathUtil.isNear(shooterSub.getShooterShoot(distance.getAsDouble()), shooterSub.getShooterVelocity(), 5)){
       conveyorSub.setConveyorSpeed(conveyorVel);
-    } 
+    }
   }
 
   @Override

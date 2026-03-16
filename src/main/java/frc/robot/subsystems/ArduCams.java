@@ -42,7 +42,7 @@ public class ArduCams extends SubsystemBase{
     
                 // https://docs.photonvision.org/en/latest/docs/apriltag-pipelines/coordinate-systems.html#coordinate-systems
     public final Transform3d kRobotToCam1 =
-                new Transform3d(new Translation3d(-0.343, 0.309, 0.0), new Rotation3d(0, -20*Math.PI/180, Math.PI));
+                new Transform3d(new Translation3d(-0.343, 0.315, 0.0), new Rotation3d(0, -20*Math.PI/180, Math.PI));
 
     public final Transform3d kRobotToCam2 = 
                 new Transform3d(new Translation3d(0.0, 0.0, 0.0), new Rotation3d(0, 0, 0));
@@ -92,7 +92,7 @@ public class ArduCams extends SubsystemBase{
     double hubPoseY = 4.040;
 
     ////////////////////////////////////////////////////////////////////////////////////////
-    public double getX(Double distance, Double angle){
+    public double getX(Double distance){
         PhotonPipelineResult result = camera1.getLatestResult();
         double y = 0;
         if(result.hasTargets()){

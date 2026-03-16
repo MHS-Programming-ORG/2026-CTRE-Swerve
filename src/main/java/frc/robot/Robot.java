@@ -24,6 +24,8 @@ import com.ctre.phoenix6.configs.AudioConfigs;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CameraServerJNI;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 
 
 public class Robot extends TimedRobot {
@@ -50,11 +52,14 @@ public class Robot extends TimedRobot {
         .withTimestampReplay()
         .withJoystickReplay();
 
+
+
     public Robot() {
         m_robotContainer = new RobotContainer();
         cameras = m_robotContainer.getCameras();
         swerve = m_robotContainer.getSwerveSubsystem();
         pivot = m_robotContainer.getPivotSubsystem();
+        
 
         // CameraServer.startAutomaticCapture();
         // CameraServerJNI.setSourceResolution(0, 1920, 1080);
@@ -71,14 +76,15 @@ public class Robot extends TimedRobot {
         if (cam1Estimate.isPresent()){
             swerve.addVisionMeasurement(
                 cam1Estimate.get().estimatedPose.toPose2d(), 
-                cam1Estimate.get().timestampSeconds);
+                cam1Estimate.get().timestampSeconds,
+                VecBuilder.fill(0.5, 0.5, 0.5)); //VecBuilder.fill(0.1,0.1,0.1)
         }
 
-        if (cam2Estimate.isPresent()){
-            swerve.addVisionMeasurement(
-                cam2Estimate.get().estimatedPose.toPose2d(), 
-                cam2Estimate.get().timestampSeconds);
-        }
+        // if (cam2Estimate.isPresent()){
+        //     swerve.addVisionMeasurement(
+        //         cam2Estimate.get().estimatedPose.toPose2d(), 
+        //         cam2Estimate.get().timestampSeconds);
+        // }
     }
 
     @Override
@@ -97,13 +103,20 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledInit() {
         pivot.setSetPoint(0);
+        pivot.setCoast();
     }
 
     @Override
-    public void disabledPeriodic() {}
+    public void disabledPeriodic() {
+        if(pivot.isPressed()){
+            pivot.resetEncoder();
+        }
+    }
 
     @Override
-    public void disabledExit() {}
+    public void disabledExit() {
+        pivot.setBrake();
+    }
 
     @Override
     public void autonomousInit() {

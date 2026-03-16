@@ -381,34 +381,111 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return getState().Pose;
     }
 
+    double passPose1X =  DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red ? (14.500) : (2.000); //blue 2.0 | red 14.5
+    double passPose1Y = 7.000;
+
+    double passPose2X = passPose1X; //blue 2.0 | red 14.5
+    double passPose2Y = 1.000;
+
     double hubPoseX = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red ? (11.920) : (4.635);
     double hubPoseXWithOffset = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red ? (11.920+0.5969) : (4.635-0.5969);
-
     double hubPoseY = 4.040;
 
     double xDifference;
     double yDifference;
     double angleDifference;
     double distance;
-    public double calculateAngle(){ //FIXME robotic
-        xDifference = hubPoseX - getState().Pose.getX();
-        yDifference = hubPoseY - getState().Pose.getY();
+    
+    private double calculateAngle(double xPose, double yPose){ //FIXME robotic
+        xDifference = xPose - getState().Pose.getX();
+        yDifference = yPose - getState().Pose.getY();
         angleDifference = Math.atan2(yDifference, xDifference);
         
         return angleDifference;
     }
 
-    public double getAngle(){
-        return theta;
+    public double calculatePassAngle(){
+        if(getState().Pose.getY() > 4.040){
+            return calculateAngle(passPose1X, passPose1Y);
+        } else{
+            return calculateAngle(passPose2X, passPose2Y);
+        }
+    }
+
+    public double calculateHubAngle(){
+        return calculateAngle(hubPoseX, hubPoseY);
     }
 
     public double calculateDistance(){
         double robotOffsetx = -0.3429 * Math.cos(theta);
         double robotOffsety = -0.3429 * Math.sin(theta);
-        double hubX = 11.920;
-        if(DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Blue){Math.abs(robotOffsety); Math.abs(robotOffsetx); hubX = 4.635;}
+        double hubX = 12.535;
+
+        if(DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Blue){Math.abs(robotOffsety); Math.abs(robotOffsetx); hubX = 4.000;}
         Translation2d robot = new Translation2d(xCord, yCord);
         Translation2d hub = new Translation2d(hubX, 4.040);
+
         return robot.getDistance(hub);
     }
 }
+
+
+
+
+
+/*
+ * [Verse 1]
+You're everything I'm thinking of
+From time to time, and dust to dust
+Whenever there's a lull between the void
+You fill the silence
+
+[Pre-Chorus]
+Languid on the couch
+Think I need to figure this one out
+I'm lost beneath your cloud
+Can I keep my two feet on the ground?
+
+[Chorus]
+Wake me, I'll love you tomorrow
+You leave me breathless and hollow
+Lately a tough pill to swallow
+But I'll try to compose
+I could be, I suppose, someone you should get to know
+I could be, I suppose, someone you should get to know
+
+[Verse 2]
+I could get lost in pillowed dreams
+Caught in a stitch of what could be
+Careful, our time's not what it seems
+So shake this one off and dance with me
+
+[Pre-Chorus]
+We're dancing through the house
+Think we need to figure this one out
+Shaking like a loose leaf from the spout
+Think we need to think on this one
+
+[Chorus]
+Wake me, I'll love you tomorrow
+You leave me breathless and hollow
+Lately a tough pill to swallow
+But I'll try to compose
+I could be, I suppose, someone you should get to know
+I could be, I suppose, someone you should get to know
+
+[Bridge]
+I could be someone you should get to know
+I could be someone you should get to know
+I could be someone you should get to know
+I could be someone you should get to know
+
+[Chorus]
+Wake me, I'll love you tomorrow
+You leave me breathless and hollow
+Lately a tough pill to swallow
+But I'll try to compose
+I could be, I suppose, someone you should get to know (I could be, I don't know, someone you should get to know)
+Oh, I could be, I suppose, someone you should get to know
+Someone you should get to know
+ */

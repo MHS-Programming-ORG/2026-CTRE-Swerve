@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 2.462311111111111,
-        "y": 5.184844444444443
+        "x": 2.0530444444444447,
+        "y": 5.623344444444444
       },
       "prevControl": {
-        "x": 3.5731777777777776,
-        "y": 6.100822222222222
+        "x": 3.163911111111111,
+        "y": 6.539322222222223
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "TrenchRun2.3End"
     }
   ],
   "rotationTargets": [],
@@ -44,7 +44,18 @@
       }
     }
   ],
-  "pointTowardsZones": [],
+  "pointTowardsZones": [
+    {
+      "fieldPosition": {
+        "x": 4.6,
+        "y": 4.04
+      },
+      "rotationOffset": 180.0,
+      "minWaypointRelativePos": 0.8,
+      "maxWaypointRelativePos": 1.0,
+      "name": "Point Towards Zone"
+    }
+  ],
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
@@ -56,7 +67,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 147.5
+    "rotation": 152.0
   },
   "reversed": false,
   "folder": "TrenchRun",

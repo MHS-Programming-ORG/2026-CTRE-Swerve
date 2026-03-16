@@ -91,6 +91,8 @@ public class RobotContainer {
 
     SendableChooser<Command> autoChooser;
 
+    Trigger conveyorRunning = new Trigger(() -> m_ConveyorSubsystem.isRunning());
+
     // double turnOuput = pid.calculate(camera.getYaw(), 0);
     
     //double hubPoseX = (11.920+0.5969);
@@ -104,6 +106,7 @@ public class RobotContainer {
 
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
+        SmartDashboard.putBoolean("Conveyor Trigger", conveyorRunning.getAsBoolean());
 
         CameraServer.startAutomaticCapture();
         
@@ -116,12 +119,12 @@ public class RobotContainer {
         NamedCommands.registerCommand("Intake", new runIntakeCommand(m_intakeSubsystem, m_intakePivot, m_ConveyorSubsystem, shooterSubsystem));
         NamedCommands.registerCommand("IntakePivotDown", new MoveToPositionMagicCommand(m_intakePivot, 22, 0.3));
         NamedCommands.registerCommand("IntakePivotTuck", new MoveToPositionMagicCommand(m_intakePivot, 0, 0.3));
-        NamedCommands.registerCommand("Shoot", new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 3, 55, 0.5, () -> drivetrain.calculateDistance(), () -> drivetrain.getAngle()));
+        NamedCommands.registerCommand("Shoot", new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 1, 55, 0.6, () -> drivetrain.calculateDistance()));
         NamedCommands.registerCommand("Agitate", new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
         
         NamedCommands.registerCommand("Override Rotation", new InstantCommand(() -> 
         PPHolonomicDriveController.overrideRotationFeedback(() -> {
-        return pid.calculate(drivetrain.getPose2d().getRotation().getDegrees(), drivetrain.calculateAngle());
+        return pid.calculate(drivetrain.getPose2d().getRotation().getDegrees(), drivetrain.calculateHubAngle());
         }))
         );
     
@@ -167,12 +170,19 @@ public class RobotContainer {
         //     )
         // );
 
+        joystick.rightTrigger().whileTrue(
+            drivetrain.applyRequest(() -> 
+                driveFacing
+                .withVelocityX(-joystick.getLeftY() * MaxSpeed)
+                .withVelocityY(-joystick.getLeftX() * MaxSpeed)
+                .withTargetDirection(Rotation2d.fromRadians(drivetrain.calculateHubAngle()))));
+
         joystick.a().whileTrue(
             drivetrain.applyRequest(() -> 
                 driveFacing
                 .withVelocityX(-joystick.getLeftY() * MaxSpeed)
                 .withVelocityY(-joystick.getLeftX() * MaxSpeed)
-                .withTargetDirection(Rotation2d.fromRadians(drivetrain.calculateAngle()))));
+                .withTargetDirection(Rotation2d.fromRadians(drivetrain.calculatePassAngle()))));
         
         // Idle while the robot is disabled. This ensures the configured
         // neutral mode is applied to the drive motors while disabled.
@@ -217,11 +227,12 @@ public class RobotContainer {
     joystick.rightBumper().whileFalse(new InstantCommand(() -> m_intakeSubsystem.setSpeed(0)));
     
     //Intaking with the Conveyor
-    joystick.leftBumper().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 3, 55, 0.5, () -> drivetrain.calculateDistance(), () -> drivetrain.getAngle()));
-    joystick.leftBumper().whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
+    joystick.leftBumper().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 1, 55, 0.5, () -> drivetrain.calculateDistance()));
+    joystick.leftBumper().and(conveyorRunning).whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
+    // joystick.leftBumper().whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
     
     //Passing
-    joystick.leftTrigger().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 3, 55, 0.5, () -> 3.9624, () -> drivetrain.getAngle()));
+    joystick.leftTrigger().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 1, 55, 0.5, () -> 3.9624));
     // joystick.leftBumper().whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem)); 
     
 

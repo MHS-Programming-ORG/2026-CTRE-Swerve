@@ -23,6 +23,10 @@ public class ConveyorSubsystem extends SubsystemBase {
         conveyorMotor.set(speed);
     }
 
+    public boolean isRunning(){
+        return conveyorMotor.get() > 0;
+    }
+
     @Override
     public void periodic() {}
 }

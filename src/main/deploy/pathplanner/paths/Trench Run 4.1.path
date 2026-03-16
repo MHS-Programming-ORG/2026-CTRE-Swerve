@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.382910128388017,
-        "y": 3.2522111269614835
+        "x": 2.2381888888888892,
+        "y": 2.777966666666666
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8469656839435724,
-        "y": 3.0086000158503725
+        "x": 1.7022444444444447,
+        "y": 2.534355555555555
       },
       "isLocked": false,
       "linkedName": "TrenchRun3End"
@@ -48,7 +48,7 @@
   "folder": "TrenchRun",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -139.145
+    "rotation": -152.0
   },
   "useDefaultConstraints": true
 }

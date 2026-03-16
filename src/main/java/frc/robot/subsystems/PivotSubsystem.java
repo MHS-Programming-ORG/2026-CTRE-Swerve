@@ -105,15 +105,19 @@ public class PivotSubsystem extends SubsystemBase {
     voltageSet = voltage;
   }
 
+  public void setCoast(){
+    pivotMotor.setNeutralMode(NeutralModeValue.Coast);
+  }
+
+  public void setBrake(){
+    pivotMotor.setNeutralMode(NeutralModeValue.Brake);
+  }
+
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Intake-Pivot Encoders", getPivotEncoder());
     SmartDashboard.putNumber("Intake-Pivot Setpoint", setPoint);
     SmartDashboard.putBoolean("Pivot Limit Switch", isPressed());
-
-    if(isPressed()) {
-      resetEncoder();
-    }  
 
     pivotMotor.setControl(request.withPosition(setPoint));
     // pivotMotor.setControl(voltageReq.withOutput(voltageSet));

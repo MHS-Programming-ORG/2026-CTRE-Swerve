@@ -11,6 +11,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 import com.ctre.phoenix6.swerve.SwerveDrivetrain;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.util.function.DoubleSupplier;
@@ -68,6 +69,7 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterMotor1.setNeutralMode(NeutralModeValue.Coast);
     shooterMotor2.setNeutralMode(NeutralModeValue.Coast);
     kickerMotor.setNeutralMode(NeutralModeValue.Coast);
+
   }
 
   public void setShooterNKickerIdle(double shooter, double kicker){
@@ -111,17 +113,16 @@ public class ShooterSubsystem extends SubsystemBase {
   // Kicker Vel > Shooter Vel == Higher Y
   // Kicker Vel < Shooter Vel == Lower Y
   // Kicker Vel = Shooter Vel == Equal Y
-  public void shooterShoot(DoubleSupplier distance, DoubleSupplier angle){
+  public void shooterShoot(DoubleSupplier distance){
     //if(){
       this.distance = distance.getAsDouble();
-      double Aangle = angle.getAsDouble();
       SmartDashboard.putNumber("CoordiantePositon", this.distance);
-      setShooterVelocity(shooterCalcV2.getRPSForDistance(camera.getX(this.distance, Aangle)));
+      setShooterVelocity(shooterCalcV2.getRPSForDistance(camera.getX(this.distance)));
     //}
   }
 
   public double getShooterShoot(double xDist){
-    return shooterCalcV2.getRPSForDistance(xDist);
+    return shooterCalcV2.getRPSForDistance((camera.getX(xDist)));
   }
 
   @Override
@@ -133,10 +134,10 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("[Shooter] Velocity RPS 2", getShooterVelocity2());
     SmartDashboard.putNumber("[S] Current ", shooterMotor1.getStatorCurrent().getValueAsDouble());
     SmartDashboard.putNumber("[Shooter] Kicker", kickerMotor.getVelocity().getValueAsDouble());
-    SmartDashboard.putNumber("ArduCam", camera.getX(0.0, 0.0));
+    SmartDashboard.putNumber("ArduCam", camera.getX(0.0));
     SmartDashboard.putNumber("Rotor RPS",shooterMotor1.getRotorVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Mechanism RPS",shooterMotor1.getVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Velocity Error", shooterMotor1.getClosedLoopError().getValueAsDouble());
-    SmartDashboard.putNumber("RPS", shooterCalcV2.getRPSForDistance(camera.getX(distance, 0.0)));
+    SmartDashboard.putNumber("RPS", shooterCalcV2.getRPSForDistance(camera.getX(distance)));
   }
 }

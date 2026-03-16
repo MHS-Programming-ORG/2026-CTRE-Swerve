@@ -4,6 +4,7 @@
   "holonomicMode": true,
   "pathFolders": [
     "DepotPaths",
+    "MiddlePaths",
     "OutPostPaths",
     "OutpostBumpRush",
     "RushTopPaths",

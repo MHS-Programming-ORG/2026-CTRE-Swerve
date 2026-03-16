@@ -7,7 +7,6 @@ package frc.robot.commands.IntakeRollerCommands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ConveyorSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.commands.IntakePivotCommands.MoveToPositionMagicCommand;
 import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
@@ -40,7 +39,7 @@ ShooterSubsystem shooter;
   public void execute() {
     Intake.setSpeed(-0.7);
     conveyor.setConveyorSpeed(0.1);
-    shooter.setKickerVelocity(-15);
+    shooter.setKickerVelocity(-20);
   }
 
   // Called once the command ends or is interrupted.
@@ -48,6 +47,7 @@ ShooterSubsystem shooter;
   public void end(boolean interrupted) {
      Intake.setSpeed(0);
      conveyor.setConveyorSpeed(0);
+     shooter.setKickerVelocity(0);
   }
 
   // Returns true when the command should end.
