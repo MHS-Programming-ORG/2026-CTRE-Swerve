@@ -5,21 +5,23 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class HubActiveCheck extends SubsystemBase {
-  public boolean hubIsActive = false;
+  public boolean hubIsActive = true;
+  public boolean didWeWin = false;
   public Timer timer = new Timer();
+
   public HubActiveCheck() {
-    
   }
 
   public void resetTimer(){
     timer.reset();
   }
 
-  public void setHubActivity(boolean weWin){
-    hubIsActive = weWin;
+  public void setHubActivity(boolean WeWin){
+    didWeWin = WeWin;
   }
 
   public void swapHubActivitiy(){
@@ -30,21 +32,39 @@ public class HubActiveCheck extends SubsystemBase {
     }
   }
 
-  boolean transition = false; 
-  boolean phase2 = false; 
-  boolean phase3 = false; 
-  boolean phase4 = false; 
+  boolean transitionPassed = false; 
+  boolean shift1Passed = false; 
+  boolean shift2Passed = false; 
+  boolean shift3Passed = false; 
+  boolean shift4Passed = false; 
 
   @Override
   public void periodic() {
     hubIsActive = true;
-    if(timer.get() >= 10 && !transition){
-      transition = true;
+    SmartDashboard.putBoolean("HubActive", hubIsActive);
+    if(timer.get() >= 10 && !transitionPassed){
+      hubIsActive = didWeWin;
+      transitionPassed = true;
     }
-    if(timer.get() >= 25 && !phase2){
+    if(timer.get() >= 35 && !shift1Passed){
       swapHubActivitiy();
-      phase2 = true;
+      shift1Passed = true;
     }
-
+    if(timer.get() >= 60 && !shift2Passed){
+      swapHubActivitiy();
+      shift2Passed = true;
+    }
+    if(timer.get() >= 85 && !shift3Passed){
+      swapHubActivitiy();
+      shift3Passed = true;
+    }
+    if(timer.get() >= 110 && !shift3Passed){
+      swapHubActivitiy();
+      shift3Passed = true;
+    }
+    if(timer.get() >= 135 && !shift4Passed){
+      hubIsActive = true;
+      shift4Passed = true;
+    }
   }
 }

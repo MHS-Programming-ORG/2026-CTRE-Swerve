@@ -98,9 +98,15 @@ public class ArduCams extends SubsystemBase{
         if(result.hasTargets()){
             for(var target : result.getTargets()){
                 int id = target.getFiducialId();
+                Transform3d trandsfomr = target.getBestCameraToTarget();
+                Rotation3d rotation3d = trandsfomr.getRotation();
+                SmartDashboard.putNumber("yy", rotation3d.getY());
+                SmartDashboard.putNumber("xx", rotation3d.getX());
+                SmartDashboard.putNumber("zz", rotation3d.getZ());
 
-                if(id == 9 || id == 10 || id == 25 || id == 26){
+                if(id > 1 && id < 27){
                     y = target.getBestCameraToTarget().getX();
+                   // y = hubMath(id, target.getBestCameraToTarget().getX(), rotation3d.getZ());
                     break; // stop once we find a valid tag
                 }
             }
@@ -112,6 +118,14 @@ public class ArduCams extends SubsystemBase{
         return getx;
     }
 
+    public double hubMath(int id, double distance, double angle){
+        double dist = distance;
+        if(id == 11 || id == 27 || id == 9 || id == 25  || id == 8 || id == 24){
+            dist = Math.sqrt(Math.pow(dist, 2)+Math.pow(14.94, 2) - 2*dist*14.94*Math.cos(angle));
+        }
+        return Math.sqrt(Math.pow(dist, 2)+Math.pow(23.5, 2) - 2*dist*23.5*Math.cos(angle));
+    }
+
     public boolean cameraVisable(){
         return camera1.getLatestResult().hasTargets();
     }
@@ -121,7 +135,16 @@ public class ArduCams extends SubsystemBase{
     // @Override
     public void periodic() {
 
-
+        
+        // if (camera1.hasTargets()) {
+        //     PhotonPipelineResult target = camera1.getLatestResult();
+        //     Rotation3d rotation = target.getRotation();
+        //     double yaw = rotation.getYaw();
+        //     double pitch = rotation.getPitch();
+            
+        //     SmartDashboard.putNumber("yaw", yaw);
+        //     SmartDashboard.putNumber("pitch", pitch);
+        // }
         
         
         // if (getEstimatedPoseCam1().isPresent()){

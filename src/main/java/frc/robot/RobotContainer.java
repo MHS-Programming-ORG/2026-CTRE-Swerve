@@ -170,14 +170,14 @@ public class RobotContainer {
         //     )
         // );
 
-        joystick.rightTrigger().whileTrue(
+        joystick.b().whileTrue(
             drivetrain.applyRequest(() -> 
                 driveFacing
                 .withVelocityX(-joystick.getLeftY() * MaxSpeed)
                 .withVelocityY(-joystick.getLeftX() * MaxSpeed)
                 .withTargetDirection(Rotation2d.fromRadians(drivetrain.calculateHubAngle()))));
 
-        joystick.a().whileTrue(
+        joystick.y().whileTrue(
             drivetrain.applyRequest(() -> 
                 driveFacing
                 .withVelocityX(-joystick.getLeftY() * MaxSpeed)
@@ -191,7 +191,7 @@ public class RobotContainer {
             drivetrain.applyRequest(() -> idle).ignoringDisable(true)
         );
 
-        joystick.b().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+        joystick.x().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
@@ -200,20 +200,6 @@ public class RobotContainer {
     //     AutoBuilder.pathfindToPose( // used to test after DriveF2Meters on red side
     //     new Pose2d(13.7, 5.0, Rotation2d.fromDegrees(180)), 
     //     constraints,
-    //     0.0 // Goal end velocity
-    // ));
-
-    //     joystick.y().onTrue(
-    //     AutoBuilder.pathfindToPose(
-    //     new Pose2d(15.0, 1.0, Rotation2d.fromDegrees(180)), 
-    //     constraints, 
-    //     0.0 // Goal end velocity
-    // ));
-        
-    //     joystick.x().onTrue(
-    //     AutoBuilder.pathfindToPose(
-    //     new Pose2d(12.5, 1.0, Rotation2d.fromDegrees(180)), 
-    //     constraints, 
     //     0.0 // Goal end velocity
     // ));
 
@@ -232,7 +218,8 @@ public class RobotContainer {
     // joystick.leftBumper().whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
     
     //Passing
-    joystick.leftTrigger().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 1, 55, 0.5, () -> 3.9624));
+    joystick.a().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 1, 55, 0.5, () -> 3.9624));
+    joystick.a().and(conveyorRunning).whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
     // joystick.leftBumper().whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem)); 
     
 
@@ -240,8 +227,8 @@ public class RobotContainer {
     // joystick.y().onTrue(new InstantCommand(() -> cameras.driveModeOff()));
 
     //Zeroing the pivot of the intake
-    joystick.y().onTrue(new MoveToPositionMagicCommand(m_intakePivot, 0, 0.1));
-    joystick.x().whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
+    // joystick.y().onTrue(new MoveToPositionMagicCommand(m_intakePivot, 0, 0.1));
+    // joystick.x().whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
     }
     
     
