@@ -16,15 +16,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.ArduCams;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.PivotSubsystem;
-
-import com.ctre.phoenix6.Orchestra;
-import com.ctre.phoenix6.configs.AudioConfigs;
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.configs.AudioConfigs;
-
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.CameraServerJNI;
-import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 
 
@@ -71,7 +62,7 @@ public class Robot extends TimedRobot {
         m_timeAndJoystickReplay.update();
         CommandScheduler.getInstance().run(); 
                 Optional<EstimatedRobotPose> cam1Estimate = cameras.getEstimatedPoseCam1();
-        Optional<EstimatedRobotPose> cam2Estimate = cameras.getEstimatedPoseCam2();
+        // Optional<EstimatedRobotPose> cam2Estimate = cameras.getEstimatedPoseCam2();
 
         if (cam1Estimate.isPresent()){
             swerve.addVisionMeasurement(
@@ -139,6 +130,7 @@ public class Robot extends TimedRobot {
             CommandScheduler.getInstance().cancel(m_autonomousCommand);
         }
         pivot.setSetPoint(0);
+        
     }
 
     @Override

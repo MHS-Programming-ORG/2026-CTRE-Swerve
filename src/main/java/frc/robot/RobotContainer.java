@@ -6,53 +6,35 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
-import java.util.List;
-import java.util.Set;
-
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import com.pathplanner.lib.path.GoalEndState;
-import com.pathplanner.lib.path.IdealStartingState;
 import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.path.PathPoint;
-import com.pathplanner.lib.path.Waypoint;
-import com.pathplanner.lib.trajectory.PathPlannerTrajectory;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.CameraServerJNI;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.PIDCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.RossIdleCommand;
 import frc.robot.commands.RossShootCommand;
 import frc.robot.commands.IntakePivotCommands.AgitatePivotCommand;
 import frc.robot.commands.IntakePivotCommands.MoveToPositionMagicCommand;
 import frc.robot.commands.IntakeRollerCommands.runIntakeCommand;
+import frc.robot.commands.IntakeRollerCommands.runOuttakeCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.ConveyorSubsystem;
+import frc.robot.subsystems.HubActiveCheck;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.NetworkingPython;
 import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 // import frc.robot.subsystems.ArduCam;
@@ -86,12 +68,16 @@ public class RobotContainer {
     private final PivotSubsystem m_intakePivot = new PivotSubsystem(19, 0);
     private final ConveyorSubsystem m_ConveyorSubsystem = new ConveyorSubsystem(18);
     private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem(cameras, 15, 16, 17);
-
+    private final NetworkingPython networkingPython = new NetworkingPython();
+    private final HubActiveCheck hubActiveCheck = new HubActiveCheck();
   
 
     SendableChooser<Command> autoChooser;
 
     Trigger conveyorRunning = new Trigger(() -> m_ConveyorSubsystem.isRunning());
+    Trigger outtakeTrigger = new Trigger(() -> networkingPython.outtakePressed());
+    Trigger agitateTrigger = new Trigger(() -> networkingPython.agitatePressed());
+    Trigger weWinTrigger = new Trigger(() -> networkingPython.weWinPressed());
 
     // double turnOuput = pid.calculate(camera.getYaw(), 0);
     
@@ -134,6 +120,10 @@ public class RobotContainer {
     
 
     private void configureBindings() {
+        outtakeTrigger.whileTrue(new runOuttakeCommand(m_intakeSubsystem, m_intakePivot, m_ConveyorSubsystem));
+        agitateTrigger.whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
+        weWinTrigger.onTrue(new InstantCommand(() -> hubActiveCheck.setHubActivity()));
+
         shooterSubsystem.setDefaultCommand(new RossIdleCommand(shooterSubsystem, 20));
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
@@ -222,6 +212,8 @@ public class RobotContainer {
     joystick.a().and(conveyorRunning).whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
     // joystick.leftBumper().whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem)); 
     
+    //Phase Times
+
 
     // joystick.x().onTrue(new InstantCommand(() -> cameras.driveModeOn()));
     // joystick.y().onTrue(new InstantCommand(() -> cameras.driveModeOff()));

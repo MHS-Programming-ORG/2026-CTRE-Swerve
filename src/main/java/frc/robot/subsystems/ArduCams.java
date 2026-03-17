@@ -1,41 +1,34 @@
 package frc.robot.subsystems;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
-import org.photonvision.estimation.VisionEstimation;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform2d; // <--- If this yellow line goes away your doing somthing WRONG
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.estimator.PoseEstimator;
 
 
 public class ArduCams extends SubsystemBase{
 
     // http://photonvision.local:5800/
     PhotonCamera camera1 = new PhotonCamera("BlueSaber2"); // BlueSaber1
-    PhotonCamera camera2 = new PhotonCamera("BlueSaber1");
+    //PhotonCamera camera2 = new PhotonCamera("BlueSaber1");
     PhotonPoseEstimator photonPoseEstimator1;
     PhotonPoseEstimator photonPoseEstimator2;
     PhotonTrackedTarget target1 = camera1.getLatestResult().getBestTarget();
-    PhotonTrackedTarget target2 = camera2.getLatestResult().getBestTarget();
+    //PhotonTrackedTarget target2 = camera2.getLatestResult().getBestTarget();
     private double getx = 0;
+    private double anf = 0;
     
     public final AprilTagFieldLayout kTagLayout = 
                 AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
@@ -73,18 +66,18 @@ public class ArduCams extends SubsystemBase{
         return getEstimatedPose(photonEstimator1, camera1);
     }
 
-    public Optional<EstimatedRobotPose> getEstimatedPoseCam2(){
-        return getEstimatedPose(photonEstimator2, camera2);
-    }
+    // public Optional<EstimatedRobotPose> getEstimatedPoseCam2(){
+    //     return getEstimatedPose(photonEstimator2, camera2);
+    // }
 
     public void driveModeOn(){
         camera1.setDriverMode(true);
-        camera2.setDriverMode(true);
+      //  camera2.setDriverMode(true);
     }
 
     public void driveModeOff(){
         camera1.setDriverMode(false);
-        camera2.setDriverMode(false);
+      //  camera2.setDriverMode(false);
     }
 
     double hubPoseX = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red ? 11.920:4.630;
@@ -99,10 +92,9 @@ public class ArduCams extends SubsystemBase{
             for(var target : result.getTargets()){
                 int id = target.getFiducialId();
                 Transform3d trandsfomr = target.getBestCameraToTarget();
-                Rotation3d rotation3d = trandsfomr.getRotation();
-                SmartDashboard.putNumber("yy", rotation3d.getY());
-                SmartDashboard.putNumber("xx", rotation3d.getX());
-                SmartDashboard.putNumber("zz", rotation3d.getZ());
+                double x = trandsfomr.getTranslation().getX();
+                double z = trandsfomr.getTranslation().getZ();
+                anf = Math.toDegrees(Math.atan2(x,z));
 
                 if(id > 1 && id < 27){
                     y = target.getBestCameraToTarget().getX();
@@ -134,7 +126,7 @@ public class ArduCams extends SubsystemBase{
 
     // @Override
     public void periodic() {
-
+        SmartDashboard.putNumber("xx", anf);
         
         // if (camera1.hasTargets()) {
         //     PhotonPipelineResult target = camera1.getLatestResult();

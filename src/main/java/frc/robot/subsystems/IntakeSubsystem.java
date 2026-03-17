@@ -12,8 +12,6 @@ import static edu.wpi.first.units.Units.Amps;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX; 
-import edu.wpi.first.wpilibj.DigitalInput;
-
 
 public class IntakeSubsystem extends SubsystemBase {
 private TalonFX intakeMotor;

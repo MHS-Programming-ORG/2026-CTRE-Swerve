@@ -5,31 +5,43 @@
 package frc.robot.commands.IntakeRollerCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.ConveyorSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.PivotSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class runOuttakeCommand extends Command {
 IntakeSubsystem Outtake;
-  public runOuttakeCommand(IntakeSubsystem newintakeSubsystem)
+PivotSubsystem pivot;
+ConveyorSubsystem conveyor;
+  public runOuttakeCommand(IntakeSubsystem newintakeSubsystem, PivotSubsystem pivot, ConveyorSubsystem conveyor)
   {
     Outtake = newintakeSubsystem;
+    this.pivot = pivot;
+    this.conveyor = conveyor;
     addRequirements(Outtake);
+    addRequirements(pivot);
+    addRequirements(conveyor);
   }
 
   
   @Override
-  public void initialize() {}
+  public void initialize() {
+    pivot.setSetPoint(22);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     Outtake.setSpeed(0.45);
+    conveyor.setConveyorSpeed(-0.1);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
      Outtake.setSpeed(0);
+     conveyor.setConveyorSpeed(0);
   }
 
   // Returns true when the command should end.

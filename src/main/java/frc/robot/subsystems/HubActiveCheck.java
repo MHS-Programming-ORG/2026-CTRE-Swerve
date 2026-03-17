@@ -16,12 +16,16 @@ public class HubActiveCheck extends SubsystemBase {
   public HubActiveCheck() {
   }
 
-  public void resetTimer(){
-    timer.reset();
+  public void restartTimer(){
+    timer.restart();
   }
 
-  public void setHubActivity(boolean WeWin){
-    didWeWin = WeWin;
+  public void setHubActivity(){
+    if(didWeWin){
+      didWeWin = false;
+    } else{
+      didWeWin = true;
+    }
   }
 
   public void swapHubActivitiy(){
@@ -42,6 +46,8 @@ public class HubActiveCheck extends SubsystemBase {
   public void periodic() {
     hubIsActive = true;
     SmartDashboard.putBoolean("HubActive", hubIsActive);
+    SmartDashboard.putBoolean("Did We WIN?", didWeWin);
+
     if(timer.get() >= 10 && !transitionPassed){
       hubIsActive = didWeWin;
       transitionPassed = true;
