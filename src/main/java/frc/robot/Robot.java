@@ -133,6 +133,7 @@ public class Robot extends TimedRobot {
         }
         pivot.setSetPoint(0);
         hubActiveCheck.restartTimer();
+        hubActiveCheck.startCountdown();
     }
 
     @Override
