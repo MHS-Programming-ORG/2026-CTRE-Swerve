@@ -250,6 +250,10 @@ public class RobotContainer {
         return m_intakePivot;
     }
 
+    public HubActiveCheck getHubActiveCheck(){
+        return hubActiveCheck;
+    }
+
     public Command getAutonomousCommand() {
         return autoChooser.getSelected();
     }

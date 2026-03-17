@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.ArduCams;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.HubActiveCheck;
 import frc.robot.subsystems.PivotSubsystem;
 import edu.wpi.first.math.VecBuilder;
 
@@ -27,6 +28,7 @@ public class Robot extends TimedRobot {
     final CommandSwerveDrivetrain swerve;
     final ArduCams cameras;
     final PivotSubsystem pivot;
+    final HubActiveCheck hubActiveCheck;
    
     /* 
     private final TalonFX fx1 = new TalonFX(1);
@@ -50,7 +52,7 @@ public class Robot extends TimedRobot {
         cameras = m_robotContainer.getCameras();
         swerve = m_robotContainer.getSwerveSubsystem();
         pivot = m_robotContainer.getPivotSubsystem();
-        
+        hubActiveCheck = m_robotContainer.getHubActiveCheck();
 
         // CameraServer.startAutomaticCapture();
         // CameraServerJNI.setSourceResolution(0, 1920, 1080);
@@ -130,7 +132,7 @@ public class Robot extends TimedRobot {
             CommandScheduler.getInstance().cancel(m_autonomousCommand);
         }
         pivot.setSetPoint(0);
-        
+        hubActiveCheck.restartTimer();
     }
 
     @Override
