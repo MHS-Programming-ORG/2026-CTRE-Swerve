@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class HubActiveCheck extends SubsystemBase {
   public boolean hubIsActive = true;
-  public boolean didWeWin = false;
+  public boolean didWeWin = true;
   public Timer timer = new Timer();
 
   public HubActiveCheck() {
