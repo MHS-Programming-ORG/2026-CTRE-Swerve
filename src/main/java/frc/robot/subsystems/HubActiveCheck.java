@@ -19,7 +19,7 @@ public class HubActiveCheck extends SubsystemBase {
   boolean shift1Passed = false; 
   boolean shift2Passed = false; 
   boolean shift3Passed = false; 
-  boolean shift4Passed = false; 
+  boolean endgamePassed = false; 
 
   public HubActiveCheck() {
   }
@@ -36,18 +36,6 @@ public class HubActiveCheck extends SubsystemBase {
 
   public void setTransitionShift(){
     hubIsActive = true;
-  }
-
-  public void setCountdown(){
-    if(!transitionPassed){
-      countdown = 10;
-    }
-    else if(!shift1Passed || !shift2Passed || !shift3Passed || !shift4Passed){
-      countdown = 25;
-    }
-    else{
-      countdown = 30;
-    }
   }
 
   public void setHubActivity(){
@@ -76,32 +64,26 @@ public class HubActiveCheck extends SubsystemBase {
     if(timer.get() >= 10 && !transitionPassed){
       hubIsActive = !didWeWin;
       transitionPassed = true;
-      setCountdown();
+      countdown = 25;
     }
     if(timer.get() >= 35 && !shift1Passed){
       swapHubActivitiy();
       shift1Passed = true;
-      setCountdown();
+      countdown = 25;
     }
     if(timer.get() >= 60 && !shift2Passed){
       swapHubActivitiy();
       shift2Passed = true;
-      setCountdown();
-    }
-    if(timer.get() >= 85 && !shift3Passed){
-      swapHubActivitiy();
-      shift3Passed = true;
-      setCountdown();
+      countdown = 25;
     }
     if(timer.get() >= 110 && !shift3Passed){
       swapHubActivitiy();
       shift3Passed = true;
-      setCountdown();
+      countdown = 30;
     }
-    if(timer.get() >= 135 && !shift4Passed){
+    if(timer.get() >= 135 && !endgamePassed){
       hubIsActive = true;
-      shift4Passed = true;
-       setCountdown();
+      endgamePassed = true;
     }
     
     

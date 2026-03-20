@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 public class ShooterCalcV2 {
     private final double INCH_TO_METER = 0.0254;
     private final double[][] shooterData = {
+        {10, 0},
         {43, (12 * 1) * INCH_TO_METER},//These are caution  NOT ACCURATE just a guess
         {43, (12 * 2) * INCH_TO_METER},//These are caution NOT ACCURATE just a guess
         {43, (12 * 3) * INCH_TO_METER},

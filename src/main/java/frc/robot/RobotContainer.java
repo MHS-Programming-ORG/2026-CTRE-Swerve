@@ -58,6 +58,7 @@ public class RobotContainer {
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private final CommandXboxController joystick = new CommandXboxController(0);
+    private final CommandXboxController joystick2 = new CommandXboxController(1);
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
     // public final ArduCam camera = new ArduCam();  
@@ -212,8 +213,9 @@ public class RobotContainer {
     joystick.a().and(conveyorRunning).whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
     // joystick.leftBumper().whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem)); 
     
-    //Phase Times
-
+    //Pit Check
+    joystick2.leftBumper().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 1, 55, 0.5, () -> 0));
+    joystick2.leftBumper().and(conveyorRunning).whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
 
     // joystick.x().onTrue(new InstantCommand(() -> cameras.driveModeOn()));
     // joystick.y().onTrue(new InstantCommand(() -> cameras.driveModeOff()));
