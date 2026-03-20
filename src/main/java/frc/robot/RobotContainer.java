@@ -204,8 +204,11 @@ public class RobotContainer {
     joystick.rightBumper().whileFalse(new InstantCommand(() -> m_intakeSubsystem.setSpeed(0)));
     
     //Intaking with the Conveyor
-    joystick.leftBumper().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 1, 55, 0.5, () -> drivetrain.calculateDistance()));
+    joystick.leftBumper().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 1, 55, 0.5, () -> drivetrain.calculateDistance()));    
     joystick.leftBumper().and(conveyorRunning).whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
+
+    //Pit Check 
+    // joystick.leftBumper().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 1, 55, 0.5, () -> 0));
     // joystick.leftBumper().whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
     
     //Passing
@@ -214,8 +217,9 @@ public class RobotContainer {
     // joystick.leftBumper().whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem)); 
     
     //Pit Check
-    joystick2.leftBumper().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 1, 55, 0.5, () -> 0));
-    joystick2.leftBumper().and(conveyorRunning).whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
+    // joystick2.leftBumper().whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
+    // joystick2.a().whileTrue(new runOuttakeCommand(m_intakeSubsystem, m_intakePivot, m_ConveyorSubsystem));
+    // joystick2.b().onTrue(new InstantCommand(() -> hubActiveCheck.setHubActivity()));
 
     // joystick.x().onTrue(new InstantCommand(() -> cameras.driveModeOn()));
     // joystick.y().onTrue(new InstantCommand(() -> cameras.driveModeOff()));

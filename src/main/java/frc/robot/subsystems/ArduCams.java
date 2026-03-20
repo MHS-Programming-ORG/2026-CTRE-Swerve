@@ -96,7 +96,7 @@ public class ArduCams extends SubsystemBase{
                 double z = trandsfomr.getTranslation().getZ();
                 anf = Math.toDegrees(Math.atan2(x,z));
 
-                if(id > 1 && id < 27){
+                if(id == 9 || id == 10 || id == 25 || id == 26){
                     y = target.getBestCameraToTarget().getX();
                    // y = hubMath(id, target.getBestCameraToTarget().getX(), rotation3d.getZ());
                     break; // stop once we find a valid tag
@@ -126,7 +126,7 @@ public class ArduCams extends SubsystemBase{
 
     // @Override
     public void periodic() {
-        SmartDashboard.putNumber("xx", anf);
+        //SmartDashboard.putNumber("xx", anf);
         
         // if (camera1.hasTargets()) {
         //     PhotonPipelineResult target = camera1.getLatestResult();
