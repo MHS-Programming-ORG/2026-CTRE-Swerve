@@ -400,15 +400,20 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
 
     public double calculatePassAngle(){
+        double offset = 0;
+        if(DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Blue){offset = 180;}
         if(getState().Pose.getY() > 4.040){
-            return calculateAngle(passPose1X, passPose1Y);
+            return calculateAngle(passPose1X, passPose1Y) + Math.toRadians(offset);
         } else{
-            return calculateAngle(passPose2X, passPose2Y);
+            return calculateAngle(passPose2X, passPose2Y) + Math.toRadians(offset);
         }
     }
 
     public double calculateHubAngle(){
-        return calculateAngle(hubPoseX, hubPoseY);
+        //return calculateAngle(hubPoseX, hubPoseY);
+        double offset = 0;
+        if(DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Blue){offset = 180;}
+        return calculateAngle(hubPoseX, hubPoseY) + Math.toRadians(offset);
     }
 
     public double calculateDistance(){
@@ -423,6 +428,11 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return robot.getDistance(hub);
     }
 }
+
+// public double getSwerveOmega(){
+//     return
+// }
+
 
 
 

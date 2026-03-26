@@ -70,7 +70,7 @@ public class Robot extends TimedRobot {
             swerve.addVisionMeasurement(
                 cam1Estimate.get().estimatedPose.toPose2d(), 
                 cam1Estimate.get().timestampSeconds,
-                VecBuilder.fill(0.5, 0.5, 0.5)); //VecBuilder.fill(0.1,0.1,0.1)
+                VecBuilder.fill(0.5, 0.5, 99999999)); //VecBuilder.fill(0.5,0.5,0.5)
         }
 
         // if (cam2Estimate.isPresent()){

@@ -21,8 +21,8 @@ private TalonFXConfiguration configs;
   intakeMotor = new TalonFX(newintakeID);
   configs = new TalonFXConfiguration();
   configs.withCurrentLimits(new CurrentLimitsConfigs()
-   .withSupplyCurrentLimit(Amps.of(5))
-   .withSupplyCurrentLimitEnable(true));
+   .withSupplyCurrentLimit(Amps.of(23))
+   .withSupplyCurrentLimitEnable(false));
   intakeMotor.getConfigurator().apply(configs);
   intakeMotor.getConfigurator().refresh(configs);
 }
@@ -40,5 +40,6 @@ private TalonFXConfiguration configs;
   @Override
   public void periodic() {
    SmartDashboard.putNumber("IntakeEncoder", getEncoder());
+   SmartDashboard.putNumber("Intake Current", intakeMotor.getSupplyCurrent().getValueAsDouble());
   }
 }

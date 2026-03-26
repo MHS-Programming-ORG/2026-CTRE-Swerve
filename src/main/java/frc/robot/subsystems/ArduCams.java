@@ -84,7 +84,7 @@ public class ArduCams extends SubsystemBase{
     //double hubPoseY = 0;
     double hubPoseY = 4.040;
 
-    ////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////// davek shenannigans
     public double getX(Double distance){
         PhotonPipelineResult result = camera1.getLatestResult();
         double y = 0;

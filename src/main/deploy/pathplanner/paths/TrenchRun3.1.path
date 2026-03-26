@@ -3,67 +3,55 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.553688888888889,
-        "y": 4.025255555555555
+        "x": 7.802266666666666,
+        "y": 2.3199777777777775
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.9203,
-        "y": 4.034999999999999
+        "x": 8.13809319475346,
+        "y": 2.858347518365989
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "TrenchRun2End"
     },
     {
       "anchor": {
-        "x": 2.296655555555556,
-        "y": 4.025255555555555
+        "x": 6.6914,
+        "y": 0.8290777777777771
       },
       "prevControl": {
-        "x": 2.755576474803585,
-        "y": 4.025255555555555
+        "x": 7.117627312640416,
+        "y": 1.0848141653620265
       },
       "nextControl": {
-        "x": 1.9945777777777782,
-        "y": 4.025255555555555
+        "x": 6.477026768571863,
+        "y": 0.7004538389208956
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.7838777777777786,
-        "y": 5.574622222222222
+        "x": 3.4952222222222225,
+        "y": 0.8290777777777771
       },
       "prevControl": {
-        "x": 2.1300730714273537,
-        "y": 5.592174026419548
-      },
-      "nextControl": {
-        "x": 4.235800000000001,
-        "y": 5.535644444444444
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 7.773033333333334,
-        "y": 5.574622222222222
-      },
-      "prevControl": {
-        "x": 8.606183333333332,
-        "y": 5.676938888888888
+        "x": 4.4891555555555565,
+        "y": 0.35159999999999964
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Middle1End"
+      "linkedName": "TrenchRMidEnd"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 2.0589211618257126,
-      "rotationDegrees": -90.0
+      "waypointRelativePos": 0.25,
+      "rotationDegrees": 180.0
+    },
+    {
+      "waypointRelativePos": 1.8174273858921137,
+      "rotationDegrees": 180.0
     }
   ],
   "constraintZones": [
@@ -72,7 +60,7 @@
       "minWaypointRelativePos": 0,
       "maxWaypointRelativePos": 2.0,
       "constraints": {
-        "maxVelocity": 1.5,
+        "maxVelocity": 2.0,
         "maxAcceleration": 4.0,
         "maxAngularVelocity": 180.0,
         "maxAngularAcceleration": 360.0,
@@ -93,10 +81,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": -110.0
   },
   "reversed": false,
-  "folder": "MiddlePaths",
+  "folder": "TrenchRun",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 90.0

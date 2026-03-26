@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.40623333333333345,
-        "y": 0.6244444444444435
+        "x": 0.506,
+        "y": 0.724
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.8739666666666666,
-        "y": 0.9362666666666666
+        "x": 0.9152666666666667,
+        "y": 1.0845444444444448
       },
       "isLocked": false,
       "linkedName": "Outpost1End"
     },
     {
       "anchor": {
-        "x": 1.585311111111111,
-        "y": 1.5599111111111097
+        "x": 2.014066666666667,
+        "y": 2.183555555555555
       },
       "prevControl": {
-        "x": 0.9714111111111102,
-        "y": 1.0434555555555547
+        "x": 1.3417000000000003,
+        "y": 1.5793999999999992
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,7 +29,21 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 2.0,
+        "maxAcceleration": 4.0,
+        "maxAngularVelocity": 180.0,
+        "maxAngularAcceleration": 360.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {

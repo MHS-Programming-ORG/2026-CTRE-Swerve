@@ -11,13 +11,26 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Depot1.1"
+                  "pathName": "TrenchRun1"
                 }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "Intake"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.5
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Intake"
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -40,13 +53,13 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 1.0
+                        "waitTime": 0.1
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Depot1.2"
+                        "pathName": "TrenchRun2"
                       }
                     }
                   ]
@@ -58,7 +71,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Depot1.3"
+            "pathName": "TrenchRun3"
           }
         },
         {
@@ -82,7 +95,7 @@
                           {
                             "type": "wait",
                             "data": {
-                              "waitTime": 1.5
+                              "waitTime": 1.0
                             }
                           },
                           {
@@ -100,7 +113,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 6.0
+                  "waitTime": 5.0
                 }
               }
             ]
@@ -109,7 +122,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Depot1.4"
+            "pathName": "TrenchRun4"
           }
         }
       ]

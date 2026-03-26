@@ -70,7 +70,7 @@ public class RobotContainer {
     private final ConveyorSubsystem m_ConveyorSubsystem = new ConveyorSubsystem(18);
     private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem(cameras, 15, 16, 17);
     private final NetworkingPython networkingPython = new NetworkingPython();
-    private final HubActiveCheck hubActiveCheck = new HubActiveCheck();
+    private final HubActiveCheck hubActiveCheck = new HubActiveCheck(() -> networkingPython.weWinPressed());
   
 
     SendableChooser<Command> autoChooser;
@@ -95,7 +95,7 @@ public class RobotContainer {
         SmartDashboard.putData("Auto Chooser", autoChooser);
         SmartDashboard.putBoolean("Conveyor Trigger", conveyorRunning.getAsBoolean());
 
-        CameraServer.startAutomaticCapture();
+        // CameraServer.startAutomaticCapture();
         
 
         pid.enableContinuousInput(-Math.PI, Math.PI);
@@ -106,8 +106,9 @@ public class RobotContainer {
         NamedCommands.registerCommand("Intake", new runIntakeCommand(m_intakeSubsystem, m_intakePivot, m_ConveyorSubsystem, shooterSubsystem));
         NamedCommands.registerCommand("IntakePivotDown", new MoveToPositionMagicCommand(m_intakePivot, 22, 0.3));
         NamedCommands.registerCommand("IntakePivotTuck", new MoveToPositionMagicCommand(m_intakePivot, 0, 0.3));
-        NamedCommands.registerCommand("Shoot", new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 1, 55, 0.6, () -> drivetrain.calculateDistance()));
+        NamedCommands.registerCommand("Shoot", new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 1, 50, 0.6, () -> drivetrain.calculateDistance()));
         NamedCommands.registerCommand("Agitate", new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
+        NamedCommands.registerCommand("TrenchSHOT", new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 1, 50, 0.6, () -> 3.048));
         
         NamedCommands.registerCommand("Override Rotation", new InstantCommand(() -> 
         PPHolonomicDriveController.overrideRotationFeedback(() -> {
@@ -204,15 +205,18 @@ public class RobotContainer {
     joystick.rightBumper().whileFalse(new InstantCommand(() -> m_intakeSubsystem.setSpeed(0)));
     
     //Intaking with the Conveyor
-    joystick.leftBumper().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 1, 55, 0.5, () -> drivetrain.calculateDistance()));    
+    joystick.leftBumper().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 1, 50, 0.5, () -> drivetrain.calculateDistance()));    
     joystick.leftBumper().and(conveyorRunning).whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
 
     //Pit Check 
     // joystick.leftBumper().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 1, 55, 0.5, () -> 0));
     // joystick.leftBumper().whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
+
+    joystick.rightTrigger().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 1, 50, 0.5, () -> 3.048));
+    joystick.rightTrigger().and(conveyorRunning).whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
     
     //Passing
-    joystick.a().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 1, 55, 0.5, () -> 3.9624));
+    joystick.a().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 1, 50, 0.5, () -> 3.9624));
     joystick.a().and(conveyorRunning).whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
     // joystick.leftBumper().whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem)); 
     

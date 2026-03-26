@@ -11,13 +11,26 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "TrenchRun2.1"
+                  "pathName": "TrenchRun1"
                 }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "Intake"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.4
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Intake"
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -34,9 +47,22 @@
                 }
               },
               {
-                "type": "path",
+                "type": "sequential",
                 "data": {
-                  "pathName": "TrenchRun2.2"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.1
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "TrenchRun2"
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -45,7 +71,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "TrenchRun2.3"
+            "pathName": "TrenchRun3.1"
           }
         },
         {
@@ -59,7 +85,7 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "Shoot"
+                        "name": "TrenchSHOT"
                       }
                     },
                     {
@@ -69,7 +95,7 @@
                           {
                             "type": "wait",
                             "data": {
-                              "waitTime": 2.0
+                              "waitTime": 1.0
                             }
                           },
                           {
@@ -87,7 +113,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 5.0
+                  "waitTime": 4.0
                 }
               }
             ]
@@ -96,7 +122,45 @@
         {
           "type": "path",
           "data": {
-            "pathName": "TrenchRun2.4"
+            "pathName": "TrenchRightOutpost"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Outpost2"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Agitate"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         }
       ]

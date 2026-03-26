@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.773033333333334,
-        "y": 5.574622222222222
+        "x": 3.4952222222222225,
+        "y": 0.8290777777777771
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.7438,
-        "y": 5.0191888888888885
+        "x": 3.0859555555595084,
+        "y": 0.7901000000024805
       },
       "isLocked": false,
-      "linkedName": "Middle1End"
+      "linkedName": "TrenchRMidEnd"
     },
     {
       "anchor": {
-        "x": 7.773033333333334,
-        "y": 4.463755555555554
+        "x": 0.506,
+        "y": 0.724
       },
       "prevControl": {
-        "x": 7.812011111111113,
-        "y": 4.970466666666667
+        "x": 1.506,
+        "y": 0.7239999999999999
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Middle2End"
+      "linkedName": "Outpost1End"
     }
   ],
   "rotationTargets": [],
@@ -35,8 +35,8 @@
       "minWaypointRelativePos": 0,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 0.5,
-        "maxAcceleration": 1.5,
+        "maxVelocity": 2.0,
+        "maxAcceleration": 4.0,
         "maxAngularVelocity": 180.0,
         "maxAngularAcceleration": 360.0,
         "nominalVoltage": 12.0,
@@ -56,13 +56,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 180.0
   },
   "reversed": false,
-  "folder": "MiddlePaths",
+  "folder": "TrenchRun",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": -110.0
   },
   "useDefaultConstraints": true
 }

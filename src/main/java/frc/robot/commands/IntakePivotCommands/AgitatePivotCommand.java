@@ -34,7 +34,7 @@ public class AgitatePivotCommand extends Command {
   public void initialize() { 
     MovingInOrOut = false;
     timer.start();
-    intake.setSpeed(-0.7);
+    intake.setSpeed(-0.35);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

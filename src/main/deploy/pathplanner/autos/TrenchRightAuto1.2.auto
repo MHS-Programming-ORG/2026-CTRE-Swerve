@@ -15,9 +15,22 @@
                 }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "Intake"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.1
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Intake"
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -58,58 +71,39 @@
         {
           "type": "path",
           "data": {
-            "pathName": "TrenchRun3"
+            "pathName": "TrenchRun3.1"
           }
         },
         {
-          "type": "race",
+          "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "parallel",
+                "type": "named",
+                "data": {
+                  "name": "TrenchSHOT"
+                }
+              },
+              {
+                "type": "sequential",
                 "data": {
                   "commands": [
                     {
-                      "type": "named",
+                      "type": "wait",
                       "data": {
-                        "name": "Shoot"
+                        "waitTime": 1.0
                       }
                     },
                     {
-                      "type": "sequential",
+                      "type": "named",
                       "data": {
-                        "commands": [
-                          {
-                            "type": "wait",
-                            "data": {
-                              "waitTime": 1.0
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "Agitate"
-                            }
-                          }
-                        ]
+                        "name": "Agitate"
                       }
                     }
                   ]
                 }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 5.0
-                }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "TrenchRun4"
           }
         }
       ]

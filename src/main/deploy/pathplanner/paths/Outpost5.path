@@ -3,32 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.457533333333334,
-        "y": 5.7500222222222215
+        "x": 7.178622222222223,
+        "y": 2.5635888888888894
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.457533333333334,
-        "y": 5.7500222222222215
+        "x": 6.178622222222222,
+        "y": 2.5635888888888894
       },
       "isLocked": false,
-      "linkedName": "Depot1.4End"
+      "linkedName": "Outpost4End"
     },
     {
       "anchor": {
-        "x": 7.665844444444444,
-        "y": 4.668388888888888
+        "x": 2.111511111111111,
+        "y": 2.5635888888888894
       },
       "prevControl": {
-        "x": 7.3832555555555555,
-        "y": 5.7500222222222215
+        "x": 3.2909512299078045,
+        "y": 2.5635888888888894
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.31452282157676187,
+      "rotationDegrees": -125.00000000000001
+    },
+    {
+      "waypointRelativePos": 0.8273858921161762,
+      "rotationDegrees": -125.00000000000001
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -42,13 +51,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": -147.5
   },
   "reversed": false,
-  "folder": "DepotPaths",
+  "folder": "OutPostPaths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -125.00000000000001
   },
   "useDefaultConstraints": true
 }

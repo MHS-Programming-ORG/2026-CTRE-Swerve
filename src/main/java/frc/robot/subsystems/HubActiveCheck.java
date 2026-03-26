@@ -4,16 +4,19 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class HubActiveCheck extends SubsystemBase {
-  public boolean hubIsActive = true;
-  public boolean didWeWin = true;
-  public Timer timer = new Timer();
-  public Timer countdownTimer = new Timer();
-  public double countdown = 10;
+  public boolean hubIsActive;
+  public BooleanSupplier didWeWin;
+  public boolean win;
+  public Timer timer;
+  public Timer countdownTimer;
+  public double countdown;
 
   boolean transitionPassed = false; 
   boolean shift1Passed = false; 
@@ -21,7 +24,13 @@ public class HubActiveCheck extends SubsystemBase {
   boolean shift3Passed = false; 
   boolean endgamePassed = false; 
 
-  public HubActiveCheck() {
+  public HubActiveCheck(BooleanSupplier didWeWin) {
+    hubIsActive = true;
+    this.didWeWin = didWeWin;
+    win = true;
+    timer = new Timer();
+    countdownTimer = new Timer();
+    countdown = 10;
   }
 
   public void restartTimer(){
@@ -39,10 +48,11 @@ public class HubActiveCheck extends SubsystemBase {
   }
 
   public void setHubActivity(){
-    if(didWeWin){
-      didWeWin = false;
-    } else{
-      didWeWin = true;
+    if(!didWeWin.getAsBoolean()){
+      win = false;
+    }
+    else{
+      win = true;
     }
   }
 
@@ -57,12 +67,12 @@ public class HubActiveCheck extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putBoolean("HubActive", hubIsActive);
-    SmartDashboard.putBoolean("Did We WIN?", didWeWin);
+    SmartDashboard.putBoolean("Did We WIN?", win);
     SmartDashboard.putNumber("Timer", timer.get());
     SmartDashboard.putNumber("Phase Countdown", countdown);
 
     if(timer.get() >= 10 && !transitionPassed){
-      hubIsActive = !didWeWin;
+      hubIsActive = !win;
       transitionPassed = true;
       countdown = 25;
     }

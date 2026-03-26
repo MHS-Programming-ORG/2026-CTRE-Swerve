@@ -63,7 +63,7 @@ public class PivotSubsystem extends SubsystemBase {
     configs.Slot0.kG = 0; //Don't use this either, there is no gravity compensation on the pivot 
     configs.Slot0.kA = 0; //Don't use this either, there is no acceleration feedforward on the pivot 
     configs.withCurrentLimits(new CurrentLimitsConfigs()
-    .withSupplyCurrentLimit(Amps.of(15))
+    .withSupplyCurrentLimit(Amps.of(30))
     .withSupplyCurrentLimitEnable(true));
 
     magic.MotionMagicAcceleration = 70;
@@ -112,13 +112,23 @@ public class PivotSubsystem extends SubsystemBase {
     pivotMotor.setNeutralMode(NeutralModeValue.Brake);
   }
 
+  double lastSetpoint = 0;
+
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Intake-Pivot Encoders", getPivotEncoder());
     SmartDashboard.putNumber("Intake-Pivot Setpoint", setPoint);
     SmartDashboard.putBoolean("Pivot Limit Switch", isPressed());
+    SmartDashboard.putNumber("PIVIOT Current", pivotMotor.getSupplyCurrent().getValueAsDouble());
+    SmartDashboard.putNumber("PIVIOT lastSetpoint", lastSetpoint);
+
 
     pivotMotor.setControl(request.withPosition(setPoint));
     // pivotMotor.setControl(voltageReq.withOutput(voltageSet));
+     
+    if(pivotMotor.getVelocity().getValueAsDouble() < 0 && pivotMotor.getSupplyCurrent().getValueAsDouble() > 0){
+      lastSetpoint = getPivotEncoder();
+      setSetPoint(lastSetpoint);
+    }
   }
 }

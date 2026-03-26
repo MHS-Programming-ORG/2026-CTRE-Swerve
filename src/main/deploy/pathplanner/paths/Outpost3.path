@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.585311111111111,
-        "y": 1.5599111111111097
+        "x": 2.014066666666667,
+        "y": 2.183555555555555
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.2674222222222222,
-        "y": 0.8875444444444441
+        "x": 2.6961777777777782,
+        "y": 1.5111888888888894
       },
       "isLocked": false,
       "linkedName": "Outpost2End"
@@ -21,7 +21,7 @@
       },
       "prevControl": {
         "x": 2.4562444444444447,
-        "y": 0.6634222222222217
+        "y": 0.6634222222222218
       },
       "nextControl": {
         "x": 4.456244444444445,
@@ -41,7 +41,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Outpost3End"
     }
   ],
   "rotationTargets": [
@@ -53,11 +53,11 @@
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 1.1017369727047377,
-      "maxWaypointRelativePos": 2.0,
+      "minWaypointRelativePos": 1.0,
+      "maxWaypointRelativePos": 1.5,
       "constraints": {
-        "maxVelocity": 1.0,
-        "maxAcceleration": 3.0,
+        "maxVelocity": 2.5,
+        "maxAcceleration": 5.0,
         "maxAngularVelocity": 180.0,
         "maxAngularAcceleration": 360.0,
         "nominalVoltage": 12.0,
@@ -83,7 +83,7 @@
   "folder": "OutPostPaths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -139.8990924537879
+    "rotation": -139.89909245378792
   },
   "useDefaultConstraints": true
 }

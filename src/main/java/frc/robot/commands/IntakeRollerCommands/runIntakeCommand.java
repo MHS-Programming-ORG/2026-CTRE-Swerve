@@ -37,7 +37,7 @@ ShooterSubsystem shooter;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Intake.setSpeed(-0.7);
+    Intake.setSpeed(-0.6);
     conveyor.setConveyorSpeed(0.1);
     shooter.setKickerVelocity(-20);
   }
