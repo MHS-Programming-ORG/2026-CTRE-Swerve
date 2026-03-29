@@ -3,18 +3,27 @@ package frc.robot.subsystems.rollers;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.VoltageOut;
+import com.ctre.phoenix6.hardware.ParentDevice;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Current;
 
 import static frc.robot.subsystems.rollers.RollerSystemConstants.*;
 import static frc.robot.subsystems.util.PhoenixUtil.*;
 
 public class RollerSystemIOTalonFX implements RollerSystemIO{
-    private final TalonFX rollers = new TalonFX(rollerCANID);
-    private final StatusSignal<Angle> rollersPositionRot = rollers.
+    private final TalonFX roller = new TalonFX(rollerCANID);
+    private final StatusSignal<Angle> rollerPositionRot = roller.getPosition();
+    private final StatusSignal<AngularVelocity> rollerVelocityRotPerSec = roller.getVelocity();
+    private final StatusSignal<Current> rollerCurrentAmps = roller.getSupplyCurrent();
+
+    private final VoltageOut voltageReq = new VoltageOut(0.0);
 
     public RollerSystemIOTalonFX(){
         var rollerConfig = new TalonFXConfiguration();
@@ -22,8 +31,32 @@ public class RollerSystemIOTalonFX implements RollerSystemIO{
         rollerConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         rollerConfig.CurrentLimits.SupplyCurrentLimitEnable = false;
         rollerConfig.CurrentLimits.SupplyCurrentLimit = rollerCurrentLimit;
-        tryUntilOk(5, () -> rollers.getConfigurator().apply(rollerConfig, 0.5));
+        tryUntilOk(5, () -> roller.getConfigurator().apply(rollerConfig, 0.5));
 
-        BaseStatusSignal.setUpdateFrequencyForAll(null, null);
+        BaseStatusSignal.setUpdateFrequencyForAll(
+            50,
+            rollerPositionRot,
+            rollerVelocityRotPerSec,
+            rollerCurrentAmps);
+        ParentDevice.optimizeBusUtilizationForAll(roller);
     }
+
+    @Override
+    public void updateInputs(RollerSystemIOInputs io){
+        BaseStatusSignal.refreshAll(
+            rollerPositionRot,
+            rollerVelocityRotPerSec,
+            rollerCurrentAmps
+        );
+
+        io.rollerPositionRad = Units.rotationsToRadians(rollerPositionRot.getValueAsDouble());
+        io.rollerVelocityRadPerSec = Units.rotationsToRadians(rollerVelocityRotPerSec.getValueAsDouble());
+        io.rollerCurrentAmps = rollerCurrentAmps.getValueAsDouble();
+    }
+
+    @Override
+    public void setRollerVoltage(double volts){
+        roller.setControl(voltageReq.withOutput(volts));
+    }
+
 }

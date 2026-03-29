@@ -44,7 +44,7 @@ public class Robot extends LoggedRobot {
      * public final AudioConfigs audioConfigs = new AudioConfigs();
      */
 
-    /* log and replay timestamp and joystick data */
+    // /* log and replay timestamp and joystick data */
     private final HootAutoReplay m_timeAndJoystickReplay = new HootAutoReplay()
             .withTimestampReplay()
             .withJoystickReplay();

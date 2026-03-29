@@ -10,7 +10,7 @@ public interface RollerSystemIO {
         public double rollerCurrentAmps;
     }
 
-    default void updateInputs(RollerSystemIOInputs io){}
+    default public void updateInputs(RollerSystemIOInputs io){}
 
-    default void setSpeed(double speed){}
+    default public void setRollerVoltage(double volts){}
 }

@@ -4,6 +4,7 @@ import org.littletonrobotics.junction.Logger;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.Command;
 
 public class RollerSystem extends SubsystemBase{
 
@@ -20,5 +21,15 @@ public class RollerSystem extends SubsystemBase{
     public void periodic(){
         io.updateInputs(inputs);
         Logger.processInputs(inputsName, inputs);
+    }
+
+    public Command intake(){
+        return runEnd(
+            () -> {
+                io.setRollerVoltage(7.2);
+            }, 
+            () -> {
+                io.setRollerVoltage(0.0);
+            });
     }
 }
