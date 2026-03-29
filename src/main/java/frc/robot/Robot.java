@@ -9,6 +9,7 @@ import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
 
 import com.ctre.phoenix6.HootAutoReplay;
+import com.pathplanner.lib.commands.FollowPathCommand;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -70,7 +71,7 @@ public class Robot extends TimedRobot {
             swerve.addVisionMeasurement(
                 cam1Estimate.get().estimatedPose.toPose2d(), 
                 cam1Estimate.get().timestampSeconds,
-                VecBuilder.fill(0.5, 0.5, 99999999)); //VecBuilder.fill(0.5,0.5,0.5)
+                VecBuilder.fill(0.5, 0.5, 0.5)); //VecBuilder.fill(0.5,0.5,0.5)
         }
 
         // if (cam2Estimate.isPresent()){
@@ -82,6 +83,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
+        FollowPathCommand.warmupCommand().schedule(); // prevent delay when running autos
         /* 
         audioConfigs.withAllowMusicDurDisable(true);
         orchestra.addInstrument(fx1);

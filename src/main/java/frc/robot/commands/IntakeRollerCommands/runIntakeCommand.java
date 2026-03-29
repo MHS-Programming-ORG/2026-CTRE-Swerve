@@ -14,18 +14,12 @@ import frc.robot.subsystems.ShooterSubsystem;
 public class runIntakeCommand extends Command {
 IntakeSubsystem Intake;
 PivotSubsystem Pivot;
-ConveyorSubsystem conveyor;
-ShooterSubsystem shooter;
-  public runIntakeCommand(IntakeSubsystem newintakeSubsystem, PivotSubsystem newPivotSubsystem, ConveyorSubsystem newConveyorSubsystem, ShooterSubsystem shooter)
+  public runIntakeCommand(IntakeSubsystem newintakeSubsystem, PivotSubsystem newPivotSubsystem)
   {
     Intake = newintakeSubsystem;
     Pivot = newPivotSubsystem;
-    conveyor = newConveyorSubsystem;
-    this.shooter = shooter;
     addRequirements(Intake);
     addRequirements(Pivot);
-    addRequirements(conveyor);
-    addRequirements(shooter);
   }
 
   
@@ -37,17 +31,15 @@ ShooterSubsystem shooter;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Intake.setSpeed(-0.6);
-    conveyor.setConveyorSpeed(0.1);
-    shooter.setKickerVelocity(-20);
+    Intake.setSpeed(-1);
+    // conveyor.setConveyorSpeed(0.1);
+    // shooter.setKickerVelocity(-20);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
      Intake.setSpeed(0);
-     conveyor.setConveyorSpeed(0);
-     shooter.setKickerVelocity(0);
   }
 
   // Returns true when the command should end.

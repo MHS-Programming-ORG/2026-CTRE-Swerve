@@ -265,6 +265,17 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return m_sysIdRoutineToApply.dynamic(direction);
     }
 
+    boolean isRed;
+
+    double passPose1X; //blue 2.0 | red 14.5
+    double passPose1Y = 7.000;
+
+    double passPose2X; //blue 2.0 | red 14.5
+    double passPose2Y = 1.000;
+
+    double hubPoseX;
+    double hubPoseXWithOffset;
+    double hubPoseY = 4.040;
 
     @Override
     public void periodic() {
@@ -285,6 +296,14 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 m_hasAppliedOperatorPerspective = true;
             });
         }
+
+        isRed = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red;
+        passPose1X = isRed ? (14.500) : (2.000);
+
+        passPose2X = passPose1X;
+
+        hubPoseX = isRed ? (11.920) : (4.635);
+        hubPoseXWithOffset = isRed ? (11.920+0.5969) : (4.635-0.5969);
 
         Pose2d odometryPose = getState().Pose;
         
@@ -376,16 +395,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return getState().Pose;
     }
 
-    double passPose1X =  DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red ? (14.500) : (2.000); //blue 2.0 | red 14.5
-    double passPose1Y = 7.000;
-
-    double passPose2X = passPose1X; //blue 2.0 | red 14.5
-    double passPose2Y = 1.000;
-
-    double hubPoseX = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red ? (11.920) : (4.635);
-    double hubPoseXWithOffset = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red ? (11.920+0.5969) : (4.635-0.5969);
-    double hubPoseY = 4.040;
-
     double xDifference;
     double yDifference;
     double angleDifference;
@@ -401,7 +410,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     public double calculatePassAngle(){
         double offset = 0;
-        if(DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Blue){offset = 180;}
+
+        if(!isRed){ offset = 180;}
+
         if(getState().Pose.getY() > 4.040){
             return calculateAngle(passPose1X, passPose1Y) + Math.toRadians(offset);
         } else{
@@ -410,9 +421,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
 
     public double calculateHubAngle(){
-        //return calculateAngle(hubPoseX, hubPoseY);
         double offset = 0;
-        if(DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Blue){offset = 180;}
+
+        if(!isRed){ offset = 180;}
+
         return calculateAngle(hubPoseX, hubPoseY) + Math.toRadians(offset);
     }
 

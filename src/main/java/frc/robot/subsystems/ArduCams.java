@@ -21,7 +21,7 @@ import edu.wpi.first.apriltag.AprilTagFields;
 public class ArduCams extends SubsystemBase{
 
     // http://photonvision.local:5800/
-    PhotonCamera camera1 = new PhotonCamera("BlueSaber2"); // BlueSaber1
+    PhotonCamera camera1 = new PhotonCamera("BlueSaber1"); // BlueSaber2
     //PhotonCamera camera2 = new PhotonCamera("BlueSaber1");
     PhotonPoseEstimator photonPoseEstimator1;
     PhotonPoseEstimator photonPoseEstimator2;
