@@ -1,28 +1,29 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package frc.robot.subsystems;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class NetworkingPython extends SubsystemBase{ 
+public class NetworkingPython extends SubsystemBase {
+  /** Creates a new NetworkingPython. */
+  private NetworkTable table;
+  public NetworkingPython() {
+    table = NetworkTableInstance.getDefault().getTable("keyboard");
+  }
 
-    private NetworkTable table;
+  public boolean outtakePressed(){
+    return table.getEntry("outtake").getBoolean(false);
+  }
 
-    public NetworkingPython() {
-        table = NetworkTableInstance.getDefault().getTable("keyboard");
-    }
+   public boolean agitatePressed(){
+    return table.getEntry("agitate").getBoolean(false);
+  }
 
-    public boolean outtakePressed() {
-        return table.getEntry("outtake").getBoolean(false);
-    }
-
-    public boolean agitatePressed() {
-        return table.getEntry("agitate").getBoolean(false);
-    }
-
-    public boolean weWinPressed() {
-        return table.getEntry("WeWin!").getBoolean(false);
-    }
+   public boolean weWinPressed(){
+    return table.getEntry("WeWin!").getBoolean(false);
+  }
 }
-
-

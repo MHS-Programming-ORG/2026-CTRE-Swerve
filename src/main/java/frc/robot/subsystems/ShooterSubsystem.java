@@ -9,6 +9,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.util.function.DoubleSupplier;
@@ -21,13 +22,16 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 public class ShooterSubsystem extends SubsystemBase {
   // ADD SUPPLY CURRENT LIMIT
   /** Creates a new IntakeSubsystem. */
-  private static final double[] shooterConfigVals = {0.66, 0.1904296875, 0.07};
+  private static final double[] shooterConfigVals = {0.8, 0.1904296875, 0.07}; //0.66 0.07
   private static final double[] kickerConfigVals = {0.5, 0.4501953125, 0.06499999761581421};
   private ShooterCalcV2 shooterCalcV2;
   private ArduCams camera = new ArduCams();
   private TalonFX shooterMotor1, shooterMotor2, kickerMotor;
   private final VelocityVoltage velocityRequest = new VelocityVoltage(0);
   private double distance;
+
+  private double feedForward;
+  private SlewRateLimiter slewRateLimiter = new SlewRateLimiter(50);
 
   public ShooterSubsystem(ArduCams camera, int shooterPort1, int shooterPort2, int kickerPort) {
     shooterCalcV2 = new ShooterCalcV2();
@@ -84,8 +88,10 @@ public class ShooterSubsystem extends SubsystemBase {
   }
   
   public void setShooterVelocity(double targetRPS) {
-    shooterMotor1.setControl(velocityRequest.withVelocity(targetRPS).withSlot(0));
-    shooterMotor2.setControl(velocityRequest.withVelocity(-targetRPS).withSlot(0));
+    double setpointRPS = slewRateLimiter.calculate(targetRPS);
+    feedForward = Math.signum(setpointRPS) * shooterConfigVals[1] + setpointRPS * shooterConfigVals[2];
+    shooterMotor1.setControl(velocityRequest.withVelocity(targetRPS).withSlot(0).withFeedForward(feedForward));
+    shooterMotor2.setControl(velocityRequest.withVelocity(-targetRPS).withSlot(0).withFeedForward(feedForward));
   }
 
   public void stopShooterMotors(){
@@ -132,6 +138,7 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("[Shooter] Kicker", kickerMotor.getVelocity().getValueAsDouble());
     SmartDashboard.putNumber("ArduCam", camera.getX(0.0));
     SmartDashboard.putNumber("Rotor RPS",shooterMotor1.getRotorVelocity().getValueAsDouble());
+    SmartDashboard.putNumber("Shooter Accel", shooterMotor1.getAcceleration().getValueAsDouble());
     SmartDashboard.putNumber("Mechanism RPS",shooterMotor1.getVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Velocity Error", shooterMotor1.getClosedLoopError().getValueAsDouble());
     SmartDashboard.putNumber("RPS", shooterCalcV2.getRPSForDistance(camera.getX(distance)));

@@ -6,6 +6,12 @@ package frc.robot;
 
 import java.util.Optional;
 
+import org.littletonrobotics.junction.LogFileUtil;
+import org.littletonrobotics.junction.LoggedRobot;
+import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.networktables.NT4Publisher;
+import org.littletonrobotics.junction.wpilog.WPILOGReader;
+import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import org.photonvision.EstimatedRobotPose;
 
 import com.ctre.phoenix6.HootAutoReplay;
@@ -19,35 +25,48 @@ import frc.robot.subsystems.HubActiveCheck;
 import frc.robot.subsystems.PivotSubsystem;
 import edu.wpi.first.math.VecBuilder;
 
-
-public class Robot extends TimedRobot {
+public class Robot extends LoggedRobot {
     private Command m_autonomousCommand;
 
     private final RobotContainer m_robotContainer;
-    
+
     final CommandSwerveDrivetrain swerve;
     final ArduCams cameras;
     final PivotSubsystem pivot;
     final HubActiveCheck hubActiveCheck;
-   
-    /* 
-    private final TalonFX fx1 = new TalonFX(1);
-    private final TalonFX fx2 = new TalonFX(2);
-    private final TalonFX fx3 = new TalonFX(3);
-    private final TalonFX fx4 = new TalonFX(4);
-    private final Orchestra orchestra = new Orchestra();
-    public final AudioConfigs audioConfigs = new AudioConfigs();
-    */
 
+    /*
+     * private final TalonFX fx1 = new TalonFX(1);
+     * private final TalonFX fx2 = new TalonFX(2);
+     * private final TalonFX fx3 = new TalonFX(3);
+     * private final TalonFX fx4 = new TalonFX(4);
+     * private final Orchestra orchestra = new Orchestra();
+     * public final AudioConfigs audioConfigs = new AudioConfigs();
+     */
 
     /* log and replay timestamp and joystick data */
     private final HootAutoReplay m_timeAndJoystickReplay = new HootAutoReplay()
-        .withTimestampReplay()
-        .withJoystickReplay();
-
-
+            .withTimestampReplay()
+            .withJoystickReplay();
 
     public Robot() {
+        Logger.recordMetadata("2443", "MyProject"); // Set a metadata value
+
+        if (isReal()) {
+            Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
+            Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
+        } else {
+            setUseTiming(false); // Run as fast as possible
+            String logPath = LogFileUtil.findReplayLog(); // Pull the replay log from AdvantageScope (or prompt the
+                                                          // user)
+            Logger.setReplaySource(new WPILOGReader(logPath)); // Read replay log
+            Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a
+                                                                                                  // new log
+        }
+
+        Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may
+                        // be added.
+
         m_robotContainer = new RobotContainer();
         cameras = m_robotContainer.getCameras();
         swerve = m_robotContainer.getSwerveSubsystem();
@@ -62,46 +81,49 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         m_timeAndJoystickReplay.update();
-        CommandScheduler.getInstance().run(); 
-                Optional<EstimatedRobotPose> cam1Estimate = cameras.getEstimatedPoseCam1();
+        CommandScheduler.getInstance().run();
+        Optional<EstimatedRobotPose> cam1Estimate = cameras.getEstimatedPoseCam1();
         // Optional<EstimatedRobotPose> cam2Estimate = cameras.getEstimatedPoseCam2();
 
-        if (cam1Estimate.isPresent()){
+        if (cam1Estimate.isPresent()) {
             swerve.addVisionMeasurement(
-                cam1Estimate.get().estimatedPose.toPose2d(), 
-                cam1Estimate.get().timestampSeconds,
-                VecBuilder.fill(0.5, 0.5, 0.5)); //VecBuilder.fill(0.1,0.1,0.1)
+                    cam1Estimate.get().estimatedPose.toPose2d(),
+                    cam1Estimate.get().timestampSeconds,
+                    VecBuilder.fill(0.5, 0.5, 0.5)); // VecBuilder.fill(0.1,0.1,0.1)
         }
 
         // if (cam2Estimate.isPresent()){
-        //     swerve.addVisionMeasurement(
-        //         cam2Estimate.get().estimatedPose.toPose2d(), 
-        //         cam2Estimate.get().timestampSeconds);
+        // swerve.addVisionMeasurement(
+        // cam2Estimate.get().estimatedPose.toPose2d(),
+        // cam2Estimate.get().timestampSeconds);
         // }
     }
 
     @Override
     public void robotInit() {
-        /* 
-        audioConfigs.withAllowMusicDurDisable(true);
-        orchestra.addInstrument(fx1);
-        orchestra.addInstrument(fx2);
-        orchestra.addInstrument(fx3);
-        orchestra.addInstrument(fx4);
-        orchestra.loadMusic("output.chrp");
-        orchestra.play();
-        */
+        /*
+         * audioConfigs.withAllowMusicDurDisable(true);
+         * orchestra.addInstrument(fx1);
+         * orchestra.addInstrument(fx2);
+         * orchestra.addInstrument(fx3);
+         * orchestra.addInstrument(fx4);
+         * orchestra.loadMusic("output.chrp");
+         * orchestra.play();
+         */
     }
 
     @Override
     public void disabledInit() {
+        hubActiveCheck.stopTimer();
+        hubActiveCheck.stopCountdown();
+        hubActiveCheck.setTransitionShift();
         pivot.setSetPoint(0);
         pivot.setCoast();
     }
 
     @Override
     public void disabledPeriodic() {
-        if(pivot.isPressed()){
+        if (pivot.isPressed()) {
             pivot.resetEncoder();
         }
     }
@@ -121,10 +143,12 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void autonomousPeriodic() {}
+    public void autonomousPeriodic() {
+    }
 
     @Override
-    public void autonomousExit() {}
+    public void autonomousExit() {
+    }
 
     @Override
     public void teleopInit() {
@@ -133,6 +157,7 @@ public class Robot extends TimedRobot {
         }
         pivot.setSetPoint(0);
         hubActiveCheck.restartTimer();
+        hubActiveCheck.startCountdown();
     }
 
     @Override
@@ -140,7 +165,8 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void teleopExit() {}
+    public void teleopExit() {
+    }
 
     @Override
     public void testInit() {
@@ -148,11 +174,14 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void testPeriodic() {}
+    public void testPeriodic() {
+    }
 
     @Override
-    public void testExit() {}
+    public void testExit() {
+    }
 
     @Override
-    public void simulationPeriodic() {}
+    public void simulationPeriodic() {
+    }
 }

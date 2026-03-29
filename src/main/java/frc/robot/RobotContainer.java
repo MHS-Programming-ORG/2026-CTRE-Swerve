@@ -37,6 +37,8 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.NetworkingPython;
 import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.rollers.RollerSystem;
+import frc.robot.subsystems.rollers.RollerSystemIO;
 // import frc.robot.subsystems.ArduCam;
 import frc.robot.subsystems.ArduCams;
 
@@ -70,7 +72,8 @@ public class RobotContainer {
     private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem(cameras, 15, 16, 17);
     private final NetworkingPython networkingPython = new NetworkingPython();
     private final HubActiveCheck hubActiveCheck = new HubActiveCheck();
-  
+
+    private final RollerSystem rollers = new RollerSystem("Roller Inputs", new RollerSystemIO(){}, 20);
 
     SendableChooser<Command> autoChooser;
 
@@ -88,6 +91,8 @@ public class RobotContainer {
 
 
     public RobotContainer() {
+        
+
         registerNamedCommands();
 
         autoChooser = AutoBuilder.buildAutoChooser();
@@ -102,7 +107,7 @@ public class RobotContainer {
     }
 
      public void registerNamedCommands(){
-        NamedCommands.registerCommand("Intake", new runIntakeCommand(m_intakeSubsystem, m_intakePivot, m_ConveyorSubsystem, shooterSubsystem));
+        NamedCommands.registerCommand("Intake", new runIntakeCommand(rollers, m_intakePivot));
         NamedCommands.registerCommand("IntakePivotDown", new MoveToPositionMagicCommand(m_intakePivot, 22, 0.3));
         NamedCommands.registerCommand("IntakePivotTuck", new MoveToPositionMagicCommand(m_intakePivot, 0, 0.3));
         NamedCommands.registerCommand("Shoot", new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 1, 55, 0.6, () -> drivetrain.calculateDistance()));
@@ -199,7 +204,7 @@ public class RobotContainer {
     /// ////////////////////////////////
     /// 
     // Shooting with Agitate
-    joystick.rightBumper().whileTrue(new runIntakeCommand(m_intakeSubsystem, m_intakePivot, m_ConveyorSubsystem, shooterSubsystem));
+    joystick.rightBumper().whileTrue(new runIntakeCommand(rollers, m_intakePivot));
     joystick.rightBumper().whileFalse(new InstantCommand(() -> m_intakeSubsystem.setSpeed(0)));
     
     //Intaking with the Conveyor
@@ -208,12 +213,13 @@ public class RobotContainer {
     // joystick.leftBumper().whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
     
     //Passing
-    joystick.a().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 1, 55, 0.5, () -> 3.9624));
+    joystick.a().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 1, 70, 0.5, () -> 3.9624));
     joystick.a().and(conveyorRunning).whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
     // joystick.leftBumper().whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem)); 
     
     //Phase Times
-
+    joystick.rightTrigger().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 1, 70, 0.5, () -> 4.572));
+    joystick.rightTrigger().and(conveyorRunning).whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
 
     // joystick.x().onTrue(new InstantCommand(() -> cameras.driveModeOn()));
     // joystick.y().onTrue(new InstantCommand(() -> cameras.driveModeOff()));
@@ -222,8 +228,7 @@ public class RobotContainer {
     // joystick.y().onTrue(new MoveToPositionMagicCommand(m_intakePivot, 0, 0.1));
     // joystick.x().whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
     }
-    
-    
+
     
     ////////////////////////////////////
     ///       ON-THE-FLY PATHS       ///
@@ -232,7 +237,7 @@ public class RobotContainer {
 
     // WAYPOINTS ARE BASED ON DRIVERSTATION TEAM COLOR
     
-    PathConstraints constraints = new PathConstraints(1.0/6.0, 1.0/6.0, Math.PI/3 , Math.PI/6); // The constraints for this path.
+                                                                                                                                PathConstraints constraints = new PathConstraints(1.0/6.0, 1.0/6.0, Math.PI/3 , Math.PI/6); // The constraints for this path.
 
     ////////////////////////////////////
     ///        GET SUBSYSTEMS        ///

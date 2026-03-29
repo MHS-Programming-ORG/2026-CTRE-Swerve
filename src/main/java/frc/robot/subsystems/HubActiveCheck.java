@@ -9,15 +9,46 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class HubActiveCheck extends SubsystemBase {
-  public boolean hubIsActive = true;
-  public boolean didWeWin = true;
-  public Timer timer = new Timer();
+  private boolean hubIsActive;
+  public boolean didWeWin;
+  private Timer timer;
+  private Timer countdownTimer;
+  private double countdown;
+  
+  private boolean transitionPassed = false; 
+  private boolean shift1Passed = false; 
+  private boolean shift2Passed = false; 
+  private boolean shift3Passed = false; 
+  private boolean shift4Passed = false; 
 
   public HubActiveCheck() {
+    hubIsActive = true;
+    didWeWin = true;
+    timer = new Timer();
+    countdownTimer = new Timer();
+    countdown = 10;
+  }
+
+  public void setTransitionShift(){
+    countdown = 10;
   }
 
   public void restartTimer(){
-    timer.restart();
+    timer.reset();
+    timer.start();
+  }
+
+  public void startCountdown(){
+    countdownTimer.reset();
+    countdownTimer.start();
+  }
+
+  public void stopTimer(){
+    timer.stop();
+  }
+
+  public void stopCountdown(){
+    countdownTimer.stop();
   }
 
   public void setHubActivity(){
@@ -28,7 +59,7 @@ public class HubActiveCheck extends SubsystemBase {
     }
   }
 
-  public void swapHubActivitiy(){
+  private void swapHubActivitiy(){
     if(hubIsActive){
       hubIsActive = false;
     } else{
@@ -36,41 +67,42 @@ public class HubActiveCheck extends SubsystemBase {
     }
   }
 
-  boolean transitionPassed = false; 
-  boolean shift1Passed = false; 
-  boolean shift2Passed = false; 
-  boolean shift3Passed = false; 
-  boolean shift4Passed = false; 
-
   @Override
   public void periodic() {
-    hubIsActive = true;
     SmartDashboard.putBoolean("HubActive", hubIsActive);
     SmartDashboard.putBoolean("Did We WIN?", didWeWin);
+    SmartDashboard.putBoolean("Shift 4", shift4Passed);
+    SmartDashboard.putNumber("Phase Countdown", countdown);
 
     if(timer.get() >= 10 && !transitionPassed){
-      hubIsActive = didWeWin;
+      hubIsActive = !didWeWin;
       transitionPassed = true;
+      countdown = 25;
     }
     if(timer.get() >= 35 && !shift1Passed){
       swapHubActivitiy();
       shift1Passed = true;
+      countdown = 25;
     }
     if(timer.get() >= 60 && !shift2Passed){
       swapHubActivitiy();
       shift2Passed = true;
+      countdown = 25;
     }
     if(timer.get() >= 85 && !shift3Passed){
       swapHubActivitiy();
       shift3Passed = true;
+      countdown = 25;
     }
-    if(timer.get() >= 110 && !shift3Passed){
-      swapHubActivitiy();
-      shift3Passed = true;
-    }
-    if(timer.get() >= 135 && !shift4Passed){
+    if(timer.get() >= 110 && !shift4Passed){
       hubIsActive = true;
       shift4Passed = true;
+      countdown = 30;
+    }
+
+    if(countdownTimer.get() >= 1){
+      countdown--;
+      startCountdown();
     }
   }
 }
