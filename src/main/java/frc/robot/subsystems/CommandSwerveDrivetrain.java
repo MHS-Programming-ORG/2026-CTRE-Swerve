@@ -275,7 +275,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     double hubPoseX;
     double hubPoseXWithOffset;
-    double hubPoseY = 4.040;
+    double hubPoseY = 4.035;
 
     @Override
     public void periodic() {
@@ -298,12 +298,14 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         }
 
         isRed = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red;
-        passPose1X = isRed ? (14.500) : (2.000);
+        passPose1X = isRed ? (14.500) : (1.900);
 
         passPose2X = passPose1X;
 
-        hubPoseX = isRed ? (11.920) : (4.635);
+        hubPoseX = isRed ? (11.915) : (4.625);
         hubPoseXWithOffset = isRed ? (11.920+0.5969) : (4.635-0.5969);
+
+        distance = Math.sqrt(Math.pow(xDifference, 2) + Math.pow(yDifference, 2));
 
         Pose2d odometryPose = getState().Pose;
         
@@ -400,6 +402,13 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     double angleDifference;
     double distance;
     
+    /**
+     * Return the angle of a robot to a given a coordinate target.
+     *
+     * @param xPose The X coordinate of the target.
+     * @param yPose The Y coordinate of the target.
+     * @return The angle of a robot to a given a coordinate target
+     */
     private double calculateAngle(double xPose, double yPose){ //FIXME robotic
         xDifference = xPose - getState().Pose.getX();
         yDifference = yPose - getState().Pose.getY();
@@ -407,6 +416,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         
         return angleDifference;
     }
+
+
 
     public double calculatePassAngle(){
         double offset = 0;
@@ -438,6 +449,13 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         Translation2d hub = new Translation2d(hubX, 4.040);
 
         return robot.getDistance(hub);
+    }
+
+    public double calculateDistance2Hub(){
+        xDifference = hubPoseX - getState().Pose.getX();
+        yDifference = hubPoseY - getState().Pose.getY();
+
+        return distance;
     }
 }
 

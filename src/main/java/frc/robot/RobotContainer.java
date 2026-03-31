@@ -85,8 +85,9 @@ public class RobotContainer {
 
     Trigger conveyorRunning = new Trigger(() -> m_ConveyorSubsystem.isRunning());
     Trigger outtakeTrigger = new Trigger(() -> networkingPython.outtakePressed());
-    Trigger agitateTrigger = new Trigger(() -> networkingPython.agitatePressed());
+    // Trigger agitateTrigger = new Trigger(() -> networkingPython.agitatePressed());
     Trigger weWinTrigger = new Trigger(() -> networkingPython.weWinPressed());
+    Trigger fastRevTrigger = new Trigger(() -> networkingPython.fastRevPressed());
 
     // double turnOuput = pid.calculate(camera.getYaw(), 0);
     
@@ -131,10 +132,11 @@ public class RobotContainer {
 
     private void configureBindings() {
         outtakeTrigger.whileTrue(new runOuttakeCommand(m_intakeSubsystem, m_intakePivot, m_ConveyorSubsystem));
-        agitateTrigger.whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
+        // agitateTrigger.whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
         weWinTrigger.onTrue(new InstantCommand(() -> hubActiveCheck.setHubActivity()));
 
         shooterSubsystem.setDefaultCommand(new RossIdleCommand(shooterSubsystem, 30));
+        fastRevTrigger.whileTrue(new RossIdleCommand(shooterSubsystem, 90, 0));
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
@@ -226,8 +228,8 @@ public class RobotContainer {
     //multiply by 0.26385224274 to allegedly drive 1 m/s
     
     
-    //Intaking with the Conveyor
-    joystick.leftBumper().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 1, 50, 0.5, () -> drivetrain.calculateDistance()));    
+    //Shooting
+    joystick.leftBumper().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 1, 50, 0.5, () -> drivetrain.calculateDistance2Hub()));    
     joystick.leftBumper().and(conveyorRunning).whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
 
     //Pit Check 
@@ -243,19 +245,7 @@ public class RobotContainer {
     //Passing
     joystick.a().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 1, 50, 0.5, () -> 3.9624));
     joystick.a().and(conveyorRunning).whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
-    // joystick.leftBumper().whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem)); 
-    
-    //Pit Check
-    // joystick2.leftBumper().whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
-    // joystick2.a().whileTrue(new runOuttakeCommand(m_intakeSubsystem, m_intakePivot, m_ConveyorSubsystem));
-    // joystick2.b().onTrue(new InstantCommand(() -> hubActiveCheck.setHubActivity()));
 
-    // joystick.x().onTrue(new InstantCommand(() -> cameras.driveModeOn()));
-    // joystick.y().onTrue(new InstantCommand(() -> cameras.driveModeOff()));
-
-    //Zeroing the pivot of the intake
-    // joystick.y().onTrue(new MoveToPositionMagicCommand(m_intakePivot, 0, 0.1));
-    // joystick.x().whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
     }
     
     

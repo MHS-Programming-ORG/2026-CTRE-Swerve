@@ -16,13 +16,17 @@ public class NetworkingPython extends SubsystemBase{
         return table.getEntry("outtake").getBoolean(false);
     }
 
-    public boolean agitatePressed() {
+    public boolean fastRevPressed() {
         return table.getEntry("agitate").getBoolean(false);
     }
 
     public boolean weWinPressed() {
         return table.getEntry("WeWin!").getBoolean(false);
     }
+
+    // public boolean fastRevPressed(){
+    //     return table.getEntry("JeffRev").getBoolean(false);
+    // }
 }
 
 

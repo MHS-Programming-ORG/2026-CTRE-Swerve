@@ -12,6 +12,7 @@ import com.ctre.phoenix6.HootAutoReplay;
 import com.pathplanner.lib.commands.FollowPathCommand;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.ArduCams;
@@ -64,14 +65,16 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         m_timeAndJoystickReplay.update();
         CommandScheduler.getInstance().run(); 
-                Optional<EstimatedRobotPose> cam1Estimate = cameras.getEstimatedPoseCam1();
+        Optional<EstimatedRobotPose> cam1Estimate = cameras.getEstimatedPoseCam1();
         // Optional<EstimatedRobotPose> cam2Estimate = cameras.getEstimatedPoseCam2();
 
         if (cam1Estimate.isPresent()){
+            SmartDashboard.putNumber("EstPoseX", cam1Estimate.get().estimatedPose.toPose2d().getX());
+            SmartDashboard.putNumber("EstPoseY", cam1Estimate.get().estimatedPose.toPose2d().getY());
             swerve.addVisionMeasurement(
                 cam1Estimate.get().estimatedPose.toPose2d(), 
-                cam1Estimate.get().timestampSeconds,
-                VecBuilder.fill(0.5, 0.5, 0.5)); //VecBuilder.fill(0.5,0.5,0.5)
+                cam1Estimate.get().timestampSeconds
+                ); //VecBuilder.fill(0.5,0.5,0.5) 
         }
 
         // if (cam2Estimate.isPresent()){
@@ -83,7 +86,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
-        FollowPathCommand.warmupCommand().schedule(); // prevent delay when running autos
+        //FollowPathCommand.warmupCommand().schedule(); // prevent delay when running autos
         /* 
         audioConfigs.withAllowMusicDurDisable(true);
         orchestra.addInstrument(fx1);

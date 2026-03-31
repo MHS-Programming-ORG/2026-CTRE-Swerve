@@ -22,10 +22,10 @@ public class ArduCams extends SubsystemBase{
 
     // http://photonvision.local:5800/
     PhotonCamera camera1 = new PhotonCamera("BlueSaber1"); // BlueSaber2
-    //PhotonCamera camera2 = new PhotonCamera("BlueSaber1");
+    PhotonCamera camera2 = new PhotonCamera("BlueSaber2");
     PhotonPoseEstimator photonPoseEstimator1;
     PhotonPoseEstimator photonPoseEstimator2;
-    PhotonTrackedTarget target1 = camera1.getLatestResult().getBestTarget();
+    //PhotonTrackedTarget target1 = camera1.getLatestResult().getBestTarget();
     //PhotonTrackedTarget target2 = camera2.getLatestResult().getBestTarget();
     private double getx = 0;
     private double anf = 0;
@@ -35,7 +35,7 @@ public class ArduCams extends SubsystemBase{
     
                 // https://docs.photonvision.org/en/latest/docs/apriltag-pipelines/coordinate-systems.html#coordinate-systems
     public final Transform3d kRobotToCam1 =
-                new Transform3d(new Translation3d(-0.343, 0.315, 0.0), new Rotation3d(0, -20*Math.PI/180, Math.PI));
+                new Transform3d(new Translation3d(-0.315, 0.0, 0.209), new Rotation3d(0, -20*Math.PI/180, Math.PI)); // -0.343, 0.315, 0.0
 
     public final Transform3d kRobotToCam2 = 
                 new Transform3d(new Translation3d(0.0, 0.0, 0.0), new Rotation3d(0, 0, 0));
@@ -54,11 +54,16 @@ public class ArduCams extends SubsystemBase{
 
     public Optional<EstimatedRobotPose> getEstimatedPose(PhotonPoseEstimator estimator, PhotonCamera camera){
     PhotonPipelineResult result = camera.getLatestResult();
+
+    SmartDashboard.putNumber("TagCount", result.targets.size());
+    SmartDashboard.putBoolean("HasMultiTagResult", result.getMultiTagResult().isPresent());
+
     if(result.targets.size() >= 2){
         return estimator.estimateCoprocMultiTagPose(result);
     } else if (result.targets.size() == 1){
         return estimator.estimateLowestAmbiguityPose(result);
     }
+    
     return Optional.empty();
     }
 
@@ -82,7 +87,7 @@ public class ArduCams extends SubsystemBase{
 
     double hubPoseX = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red ? 11.920:4.630;
     //double hubPoseY = 0;
-    double hubPoseY = 4.040;
+    double hubPoseY = 4.035;
 
     //////////////////////////////////////////////////////////////////////////////////////// davek shenannigans
     public double getX(Double distance){
@@ -138,15 +143,6 @@ public class ArduCams extends SubsystemBase{
         //     SmartDashboard.putNumber("pitch", pitch);
         // }
         
-        
-        // if (getEstimatedPoseCam1().isPresent()){
-        //     EstimatedRobotPose pose1 = getEstimatedPoseCam1().get();
-        //     SmartDashboard.putNumber("Camera1EstX", pose1.estimatedPose.getX());
-        //     SmartDashboard.putNumber("Camera1EstY", pose1.estimatedPose.getY());
-        //     SmartDashboard.putNumber("Camera1EstRotation", pose1.estimatedPose.getRotation().getAngle());
-        // } 
-        
-       
         // if (getEstimatedPoseCam2().isPresent()){
         //      EstimatedRobotPose pose2 = getEstimatedPoseCam2().get();
         //     SmartDashboard.putNumber("Camera2EstX", pose2.estimatedPose.getX());

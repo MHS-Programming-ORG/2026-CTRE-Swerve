@@ -13,21 +13,21 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class RossIdleCommand extends Command {
   private ShooterSubsystem shooterSub;
   private Timer timer;
-  private double idleDistance;
+  private double idleRPS;
   private double idleDelay;
 
-  public RossIdleCommand(ShooterSubsystem shooterSub, double idleDistance, double idleDelay) {
+  public RossIdleCommand(ShooterSubsystem shooterSub, double idleRPS, double idleDelay) {
     this.shooterSub = shooterSub;
     addRequirements(shooterSub);
 
     this.timer = new Timer();
-    this.idleDistance = idleDistance;
+    this.idleRPS = idleRPS;
     this.idleDelay = idleDelay;
   }
 
-  public RossIdleCommand(ShooterSubsystem shooterSub, double idleDistance) {
+  public RossIdleCommand(ShooterSubsystem shooterSub, double idleRPS) {
     // Call the main constructor with a default of idleDelay of 2.0
-    this(shooterSub, idleDistance, 2.0);
+    this(shooterSub, idleRPS, 2.0);
   }
 
   @Override
@@ -45,9 +45,9 @@ public class RossIdleCommand extends Command {
     // command is running.
     // Check to see that some amount of time has passed since the command
     // has started.  At that point, run the shooter motors to the idle speed
-    SmartDashboard.putNumber("RPS", shooterSub.getShooterShoot(idleDistance));
+    SmartDashboard.putNumber("RPS", shooterSub.getShooterShoot(idleRPS));
     if (timer.get() >= idleDelay) {
-      shooterSub.setShooterVelocity(idleDistance);
+      shooterSub.setShooterVelocity(idleRPS);
     }
   }
 
