@@ -16,7 +16,6 @@ import org.photonvision.EstimatedRobotPose;
 
 import com.ctre.phoenix6.HootAutoReplay;
 
-import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.ArduCams;
@@ -32,7 +31,7 @@ public class Robot extends LoggedRobot {
 
     final CommandSwerveDrivetrain swerve;
     final ArduCams cameras;
-    final PivotSubsystem pivot;
+    // final PivotSubsystem pivot;
     final HubActiveCheck hubActiveCheck;
 
     /*
@@ -70,7 +69,7 @@ public class Robot extends LoggedRobot {
         m_robotContainer = new RobotContainer();
         cameras = m_robotContainer.getCameras();
         swerve = m_robotContainer.getSwerveSubsystem();
-        pivot = m_robotContainer.getPivotSubsystem();
+        // pivot = m_robotContainer.getPivotSubsystem();
         hubActiveCheck = m_robotContainer.getHubActiveCheck();
 
         // CameraServer.startAutomaticCapture();
@@ -114,23 +113,23 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void disabledInit() {
-        hubActiveCheck.stopTimer();
-        hubActiveCheck.stopCountdown();
-        hubActiveCheck.setTransitionShift();
-        pivot.setSetPoint(0);
-        pivot.setCoast();
+        // hubActiveCheck.stopTimer();
+        // hubActiveCheck.stopCountdown();
+        // hubActiveCheck.setTransitionShift();
+        // pivot.setSetPoint(0);
+        // pivot.setCoast();
     }
 
     @Override
     public void disabledPeriodic() {
-        if (pivot.isPressed()) {
-            pivot.resetEncoder();
-        }
+        // if (pivot.isPressed()) {
+        //     pivot.resetEncoder();
+        // }
     }
 
     @Override
     public void disabledExit() {
-        pivot.setBrake();
+        // pivot.setBrake();
     }
 
     @Override
@@ -155,9 +154,9 @@ public class Robot extends LoggedRobot {
         if (m_autonomousCommand != null) {
             CommandScheduler.getInstance().cancel(m_autonomousCommand);
         }
-        pivot.setSetPoint(0);
-        hubActiveCheck.restartTimer();
-        hubActiveCheck.startCountdown();
+        // pivot.setSetPoint(0);
+        // hubActiveCheck.restartTimer();
+        // hubActiveCheck.startCountdown();
     }
 
     @Override

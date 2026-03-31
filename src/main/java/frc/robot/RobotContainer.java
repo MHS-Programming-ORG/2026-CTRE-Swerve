@@ -39,6 +39,8 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.rollers.RollerSystem;
 import frc.robot.subsystems.rollers.RollerSystemIO;
 import frc.robot.subsystems.rollers.RollerSystemIOTalonFX;
+import frc.robot.subsystems.slamtake.Slam;
+import frc.robot.subsystems.slamtake.SlamIOTalonFX;
 // import frc.robot.subsystems.ArduCam;
 import frc.robot.subsystems.ArduCams;
 
@@ -67,13 +69,14 @@ public class RobotContainer {
     public final PIDController pid = new PIDController(5, 0.0, 0.0);
 
     private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem(20);
-    private final PivotSubsystem m_intakePivot = new PivotSubsystem(19, 0);
+    // private final PivotSubsystem m_intakePivot = new PivotSubsystem(19, 9);
     private final ConveyorSubsystem m_ConveyorSubsystem = new ConveyorSubsystem(18);
     private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem(cameras, 15, 16, 17);
     private final NetworkingPython networkingPython = new NetworkingPython();
     private final HubActiveCheck hubActiveCheck = new HubActiveCheck();
 
     private final RollerSystem rollers = new RollerSystem("Roller Inputs", new RollerSystemIOTalonFX());
+    private final Slam slaptake = new Slam(new SlamIOTalonFX());
 
     SendableChooser<Command> autoChooser;
 
@@ -107,11 +110,10 @@ public class RobotContainer {
     }
 
      public void registerNamedCommands(){
-        NamedCommands.registerCommand("Intake", rollers.intake());
-        NamedCommands.registerCommand("IntakePivotDown", new MoveToPositionMagicCommand(m_intakePivot, 22, 0.3));
-        NamedCommands.registerCommand("IntakePivotTuck", new MoveToPositionMagicCommand(m_intakePivot, 0, 0.3));
+        // NamedCommands.registerCommand("IntakePivotDown", new MoveToPositionMagicCommand(m_intakePivot, 22, 0.3));
+        // NamedCommands.registerCommand("IntakePivotTuck", new MoveToPositionMagicCommand(m_intakePivot, 0, 0.3));
         NamedCommands.registerCommand("Shoot", new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 1, 55, 0.6, () -> drivetrain.calculateDistance()));
-        NamedCommands.registerCommand("Agitate", new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
+        // NamedCommands.registerCommand("Agitate", new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
         
         NamedCommands.registerCommand("Override Rotation", new InstantCommand(() -> 
         PPHolonomicDriveController.overrideRotationFeedback(() -> {
@@ -204,7 +206,8 @@ public class RobotContainer {
     /// ////////////////////////////////
     /// 
     // Shooting with Agitate
-    joystick.rightBumper().whileTrue(rollers.intake());
+    // joystick.rightBumper().whileTrue(rollers.intake());
+    
     
     //Intaking with the Conveyor
     // joystick.leftBumper().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 1, 55, 0.5, () -> drivetrain.calculateDistance()));
@@ -250,9 +253,9 @@ public class RobotContainer {
         return cameras;
     }
 
-    public PivotSubsystem getPivotSubsystem(){
-        return m_intakePivot;
-    }
+    // public PivotSubsystem getPivotSubsystem(){
+    //     return m_intakePivot;
+    // }
 
     public HubActiveCheck getHubActiveCheck(){
         return hubActiveCheck;

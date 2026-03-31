@@ -9,10 +9,11 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.math.util.Units;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
+import edu.wpi.first.wpilibj.DriverStation;
 
 import static frc.robot.subsystems.rollers.RollerSystemConstants.*;
 import static frc.robot.subsystems.util.PhoenixUtil.*;
@@ -22,8 +23,9 @@ public class RollerSystemIOTalonFX implements RollerSystemIO{
     private final StatusSignal<Angle> rollerPositionRot = roller.getPosition();
     private final StatusSignal<AngularVelocity> rollerVelocityRotPerSec = roller.getVelocity();
     private final StatusSignal<Current> rollerCurrentAmps = roller.getSupplyCurrent();
-
-    private final VoltageOut voltageReq = new VoltageOut(0.0);
+    
+    private double volts;
+    private final VoltageOut voltageReq = new VoltageOut(0.0);  
 
     public RollerSystemIOTalonFX(){
         var rollerConfig = new TalonFXConfiguration();
@@ -49,14 +51,22 @@ public class RollerSystemIOTalonFX implements RollerSystemIO{
             rollerCurrentAmps
         );
 
-        io.rollerPositionRad = Units.rotationsToRadians(rollerPositionRot.getValueAsDouble());
-        io.rollerVelocityRadPerSec = Units.rotationsToRadians(rollerVelocityRotPerSec.getValueAsDouble());
+        io.rollerPositionRot = rollerPositionRot.getValueAsDouble();
+        io.rollerVelocityRotPerSec = rollerVelocityRotPerSec.getValueAsDouble();
         io.rollerCurrentAmps = rollerCurrentAmps.getValueAsDouble();
     }
 
     @Override
-    public void setRollerVoltage(double volts){
-        roller.setControl(voltageReq.withOutput(volts));
-    }
+    public void updateOutputs(RollerSystemIOOutputs outputs){
+        if(DriverStation.isDisabled()){
+            volts = 0.0;
+        }
+        else{
+            volts = MathUtil.clamp(outputs.appliedVoltage, -12.0, 12.0);
+        }
 
+        if(outputs.mode == RollerSystemIOMode.VOLTAGE_CONTROL){
+            roller.setControl(voltageReq.withOutput(volts));
+        }
+    }
 }
