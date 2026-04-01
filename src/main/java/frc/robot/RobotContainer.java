@@ -27,6 +27,7 @@ import frc.robot.commands.RossIdleCommand;
 import frc.robot.commands.RossShootCommand;
 import frc.robot.commands.IntakePivotCommands.AgitatePivotCommand;
 import frc.robot.commands.IntakePivotCommands.MoveToPositionMagicCommand;
+import frc.robot.commands.IntakeRollerCommands.runIntakeCMD;
 import frc.robot.commands.IntakeRollerCommands.runOuttakeCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -36,11 +37,6 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.NetworkingPython;
 import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.rollers.RollerSystem;
-import frc.robot.subsystems.rollers.RollerSystemIO;
-import frc.robot.subsystems.rollers.RollerSystemIOTalonFX;
-import frc.robot.subsystems.slamtake.Slam;
-import frc.robot.subsystems.slamtake.SlamIOTalonFX;
 // import frc.robot.subsystems.ArduCam;
 import frc.robot.subsystems.ArduCams;
 
@@ -69,14 +65,11 @@ public class RobotContainer {
     public final PIDController pid = new PIDController(5, 0.0, 0.0);
 
     private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem(20);
-    // private final PivotSubsystem m_intakePivot = new PivotSubsystem(19, 9);
+    private final PivotSubsystem m_intakePivot = new PivotSubsystem(19, 0);
     private final ConveyorSubsystem m_ConveyorSubsystem = new ConveyorSubsystem(18);
     private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem(cameras, 15, 16, 17);
     private final NetworkingPython networkingPython = new NetworkingPython();
     private final HubActiveCheck hubActiveCheck = new HubActiveCheck();
-
-    private final RollerSystem rollers = new RollerSystem("Roller Inputs", new RollerSystemIOTalonFX());
-    private final Slam slaptake = new Slam(new SlamIOTalonFX());
 
     SendableChooser<Command> autoChooser;
 
@@ -137,9 +130,9 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
+                drive.withVelocityX(-joystick.getLeftY() * MaxSpeed * 0.25) // Drive forward with negative Y (forward)
+                    .withVelocityY(-joystick.getLeftX() * MaxSpeed * 0.25) // Drive left with negative X (left)
+                    .withRotationalRate(-joystick.getRightX() * MaxAngularRate * 0.25) // Drive counterclockwise with negative X (left)
             )
         );
 
@@ -207,7 +200,7 @@ public class RobotContainer {
     /// 
     // Shooting with Agitate
     // joystick.rightBumper().whileTrue(rollers.intake());
-    
+    joystick.rightBumper().whileTrue(new runIntakeCMD(m_intakePivot, m_intakeSubsystem));
     
     //Intaking with the Conveyor
     // joystick.leftBumper().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 1, 55, 0.5, () -> drivetrain.calculateDistance()));
@@ -253,9 +246,9 @@ public class RobotContainer {
         return cameras;
     }
 
-    // public PivotSubsystem getPivotSubsystem(){
-    //     return m_intakePivot;
-    // }
+    public PivotSubsystem getPivotSubsystem(){
+        return m_intakePivot;
+    }
 
     public HubActiveCheck getHubActiveCheck(){
         return hubActiveCheck;

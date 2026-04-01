@@ -5,13 +5,6 @@
 package frc.robot;
 
 import java.util.Optional;
-
-import org.littletonrobotics.junction.LogFileUtil;
-import org.littletonrobotics.junction.LoggedRobot;
-import org.littletonrobotics.junction.Logger;
-import org.littletonrobotics.junction.networktables.NT4Publisher;
-import org.littletonrobotics.junction.wpilog.WPILOGReader;
-import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import org.photonvision.EstimatedRobotPose;
 
 import com.ctre.phoenix6.HootAutoReplay;
@@ -21,17 +14,22 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.ArduCams;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.HubActiveCheck;
-import frc.robot.subsystems.PivotSubsystem;
+import edu.wpi.first.epilogue.Epilogue;
+import edu.wpi.first.epilogue.Logged;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.TimedRobot;
+import frc.robot.subsystems.PivotSubsystem;
 
-public class Robot extends LoggedRobot {
+@Logged
+public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
 
     private final RobotContainer m_robotContainer;
 
     final CommandSwerveDrivetrain swerve;
     final ArduCams cameras;
-    // final PivotSubsystem pivot;
+    final PivotSubsystem pivot;
     final HubActiveCheck hubActiveCheck;
 
     /*
@@ -49,32 +47,15 @@ public class Robot extends LoggedRobot {
             .withJoystickReplay();
 
     public Robot() {
-        Logger.recordMetadata("2443", "MyProject"); // Set a metadata value
-
-        if (isReal()) {
-            Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
-            Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
-        } else {
-            setUseTiming(false); // Run as fast as possible
-            String logPath = LogFileUtil.findReplayLog(); // Pull the replay log from AdvantageScope (or prompt the
-                                                          // user)
-            Logger.setReplaySource(new WPILOGReader(logPath)); // Read replay log
-            Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a
-                                                                                                  // new log
-        }
-
-        Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may
-                        // be added.
 
         m_robotContainer = new RobotContainer();
         cameras = m_robotContainer.getCameras();
         swerve = m_robotContainer.getSwerveSubsystem();
-        // pivot = m_robotContainer.getPivotSubsystem();
+        pivot = m_robotContainer.getPivotSubsystem();
         hubActiveCheck = m_robotContainer.getHubActiveCheck();
 
-        // CameraServer.startAutomaticCapture();
-        // CameraServerJNI.setSourceResolution(0, 1920, 1080);
-        // CameraServerJNI.setSourceFPS(0, 10);
+        DataLogManager.start();
+        Epilogue.bind(this);
     }
 
     @Override
@@ -113,23 +94,15 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void disabledInit() {
-        // hubActiveCheck.stopTimer();
-        // hubActiveCheck.stopCountdown();
-        // hubActiveCheck.setTransitionShift();
-        // pivot.setSetPoint(0);
-        // pivot.setCoast();
+        pivot.setSetPoint(0);
     }
 
     @Override
     public void disabledPeriodic() {
-        // if (pivot.isPressed()) {
-        //     pivot.resetEncoder();
-        // }
     }
 
     @Override
     public void disabledExit() {
-        // pivot.setBrake();
     }
 
     @Override
@@ -154,9 +127,8 @@ public class Robot extends LoggedRobot {
         if (m_autonomousCommand != null) {
             CommandScheduler.getInstance().cancel(m_autonomousCommand);
         }
-        // pivot.setSetPoint(0);
-        // hubActiveCheck.restartTimer();
-        // hubActiveCheck.startCountdown();
+
+        pivot.setSetPoint(0);
     }
 
     @Override

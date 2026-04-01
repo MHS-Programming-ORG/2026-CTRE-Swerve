@@ -10,6 +10,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import static edu.wpi.first.units.Units.Amps;
@@ -120,5 +121,16 @@ public class PivotSubsystem extends SubsystemBase {
 
     pivotMotor.setControl(request.withPosition(setPoint));
     // pivotMotor.setControl(voltageReq.withOutput(voltageSet));
+
+    if(DriverStation.isDisabled()){
+      if(isPressed()){
+        pivotMotor.setPosition(0);
+      }
+      
+      pivotMotor.setNeutralMode(NeutralModeValue.Coast);
+    }
+    else{
+      pivotMotor.setNeutralMode(NeutralModeValue.Brake);
+    }
   }
 }

@@ -9,6 +9,8 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 public class ConveyorSubsystem extends SubsystemBase {
      private TalonFX conveyorMotor;
      private TalonFXConfiguration configs;
+     
+     
     public ConveyorSubsystem(int newConveyorID) {
         conveyorMotor = new TalonFX(newConveyorID);
         configs = new TalonFXConfiguration();
