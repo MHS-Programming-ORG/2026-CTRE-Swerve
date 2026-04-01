@@ -56,14 +56,6 @@ public class RobotContainer {
     .withDeadband(MaxSpeed * 0.1)
     .withRotationalDeadband(0); // Let the PID handle the small movements
 
-    private final SwerveRequest.SwerveDriveBrake brakeX = new SwerveRequest.SwerveDriveBrake();
-
-    public Command getXModeWithBrakeCommand(){
-        return drivetrain.applyRequest(() -> brakeX)
-            .beforeStarting(() -> drivetrain.configNeutralMode(NeutralModeValue.Brake))
-            .andThen(() -> drivetrain.configNeutralMode(NeutralModeValue.Coast));
-    }
-
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private final CommandXboxController joystick = new CommandXboxController(0);
@@ -135,7 +127,7 @@ public class RobotContainer {
         // agitateTrigger.whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
         weWinTrigger.onTrue(new InstantCommand(() -> hubActiveCheck.setHubActivity()));
 
-        shooterSubsystem.setDefaultCommand(new RossIdleCommand(shooterSubsystem, 30));
+        //shooterSubsystem.setDefaultCommand(new RossIdleCommand(shooterSubsystem, 30)); //FIXME change back
         fastRevTrigger.whileTrue(new RossIdleCommand(shooterSubsystem, 90, 0));
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
@@ -196,8 +188,9 @@ public class RobotContainer {
             drivetrain.applyRequest(() -> idle).ignoringDisable(true)
         );
 
-        joystick.x().whileTrue(getXModeWithBrakeCommand());
-        //joystick.x().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+        joystick.x().whileTrue(new InstantCommand(() -> shooterSubsystem.setVoltage(6)));
+        joystick.x().whileFalse(new InstantCommand(() -> shooterSubsystem.setVoltage(0.0)));
+        joystick.x().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         drivetrain.registerTelemetry(logger::telemeterize);
 

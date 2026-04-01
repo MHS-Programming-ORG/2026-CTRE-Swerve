@@ -132,15 +132,15 @@ public class ArduCams extends SubsystemBase{
     // @Override
     public void periodic() {
         //SmartDashboard.putNumber("xx", anf);
-        
-        // if (camera1.hasTargets()) {
-        //     PhotonPipelineResult target = camera1.getLatestResult();
-        //     Rotation3d rotation = target.getRotation();
-        //     double yaw = rotation.getYaw();
-        //     double pitch = rotation.getPitch();
-            
-        //     SmartDashboard.putNumber("yaw", yaw);
-        //     SmartDashboard.putNumber("pitch", pitch);
+        PhotonPipelineResult result = camera1.getLatestResult();
+
+        if (result.hasTargets()) {
+            var target = result.getBestTarget();
+            double yaw = target.getYaw();
+            SmartDashboard.putNumber("yaw", yaw);
+        }
+        //    SmartDashboard.putNumber("pitch", pitch);
+        //    double pitch = rotation.getPitch();
         // }
         
         // if (getEstimatedPoseCam2().isPresent()){

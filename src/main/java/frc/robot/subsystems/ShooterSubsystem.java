@@ -9,6 +9,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.util.function.DoubleSupplier;
@@ -16,18 +18,23 @@ import java.util.function.DoubleSupplier;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 
 
 public class ShooterSubsystem extends SubsystemBase {
   // ADD SUPPLY CURRENT LIMIT
   /** Creates a new IntakeSubsystem. */
-  private static final double[] shooterConfigVals = {0.66, 0.1904296875, 0.07};
-  private static final double[] kickerConfigVals = {0.5, 0.4501953125, 0.06499999761581421};
+  // {kP, kS, kV}
+  private static final double[] shooterConfigVals = {0.8, 0.1904296875, 0.12}; //0.66, 0.1904296875, 0.07
+  private static final double[] kickerConfigVals = {0.5, 0.4501953125, 0.06499999761581421}; //0.5, 0.4501953125, 0.06499999761581421
   private ShooterCalcV2 shooterCalcV2;
   private ArduCams camera = new ArduCams();
   private TalonFX shooterMotor1, shooterMotor2, kickerMotor;
   private final VelocityVoltage velocityRequest = new VelocityVoltage(0);
+  private final VoltageOut voltageOutRequest = new VoltageOut(0);
   private double distance;
+
+  private SlewRateLimiter slewRateLimiter = new SlewRateLimiter(3);
 
   public ShooterSubsystem(ArduCams camera, int shooterPort1, int shooterPort2, int kickerPort) {
     shooterCalcV2 = new ShooterCalcV2();
@@ -40,8 +47,8 @@ public class ShooterSubsystem extends SubsystemBase {
     var sLimitsConfig = new CurrentLimitsConfigs();
     sLimitsConfig.StatorCurrentLimit = 30;
     sLimitsConfig.SupplyCurrentLimit = 20;
-    sLimitsConfig.SupplyCurrentLimitEnable = true;
-    sLimitsConfig.StatorCurrentLimitEnable = true;
+    sLimitsConfig.SupplyCurrentLimitEnable = false;
+    sLimitsConfig.StatorCurrentLimitEnable = false;
 
     var shooterConfig = new TalonFXConfiguration();
     shooterConfig.Slot0.kP = shooterConfigVals[0];
@@ -79,13 +86,19 @@ public class ShooterSubsystem extends SubsystemBase {
     }
   }
 
+  public void setVoltage(double voltage){
+    shooterMotor1.setControl(voltageOutRequest.withOutput(voltage));
+    shooterMotor2.setControl(voltageOutRequest.withOutput(-voltage));
+  }
+
   public void setKickerVelocity(double speedRPS){
     kickerMotor.setControl(velocityRequest.withVelocity(speedRPS).withSlot(0));
   }
   
   public void setShooterVelocity(double targetRPS) {
-    shooterMotor1.setControl(velocityRequest.withVelocity(targetRPS).withSlot(0));
-    shooterMotor2.setControl(velocityRequest.withVelocity(-targetRPS).withSlot(0));
+    double goalRPS = slewRateLimiter.calculate(targetRPS);
+    shooterMotor1.setControl(velocityRequest.withVelocity(goalRPS).withSlot(0));
+    shooterMotor2.setControl(velocityRequest.withVelocity(-goalRPS).withSlot(0));
   }
 
   public void stopShooterMotors(){
@@ -135,5 +148,6 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Mechanism RPS",shooterMotor1.getVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Velocity Error", shooterMotor1.getClosedLoopError().getValueAsDouble());
     SmartDashboard.putNumber("RPS", shooterCalcV2.getRPSForDistance(camera.getX(distance)));
+    SmartDashboard.putNumber("Accel", shooterMotor1.getAcceleration().getValueAsDouble());
   }
 }

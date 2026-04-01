@@ -101,7 +101,6 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledInit() {
         pivot.setSetPoint(0);
-        pivot.setCoast();
     }
 
     @Override
@@ -113,7 +112,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledExit() {
-        pivot.setBrake();
     }
 
     @Override
@@ -137,8 +135,6 @@ public class Robot extends TimedRobot {
             CommandScheduler.getInstance().cancel(m_autonomousCommand);
         }
         pivot.setSetPoint(0);
-        hubActiveCheck.restartTimer();
-        hubActiveCheck.startCountdown();
     }
 
     @Override
