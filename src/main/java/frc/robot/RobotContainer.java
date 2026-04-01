@@ -33,7 +33,6 @@ import frc.robot.commands.IntakeRollerCommands.runOuttakeCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.ConveyorSubsystem;
-import frc.robot.subsystems.HubActiveCheck;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.NetworkingPython;
 import frc.robot.subsystems.PivotSubsystem;
@@ -71,7 +70,6 @@ public class RobotContainer {
     private final ConveyorSubsystem m_ConveyorSubsystem = new ConveyorSubsystem(18);
     private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem(cameras, 15, 16, 17);
     private final NetworkingPython networkingPython = new NetworkingPython();
-    private final HubActiveCheck hubActiveCheck = new HubActiveCheck(() -> networkingPython.weWinPressed());
 
     SendableChooser<Command> autoChooser;
 
@@ -90,6 +88,8 @@ public class RobotContainer {
 
 
     public RobotContainer() {
+        
+
         registerNamedCommands();
 
         autoChooser = AutoBuilder.buildAutoChooser();
@@ -104,7 +104,7 @@ public class RobotContainer {
     }
 
      public void registerNamedCommands(){
-        NamedCommands.registerCommand("Intake", new runIntakeCommand(m_intakeSubsystem, m_intakePivot));
+        NamedCommands.registerCommand("Intake", new runIntakeCommand(m_intakePivot, m_intakeSubsystem));
         NamedCommands.registerCommand("IntakePivotDown", new MoveToPositionMagicCommand(m_intakePivot, 22, 0.3));
         NamedCommands.registerCommand("IntakePivotTuck", new MoveToPositionMagicCommand(m_intakePivot, 0, 0.3));
         NamedCommands.registerCommand("Shoot", new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 1, 50, 0.6, () -> drivetrain.calculateDistance()));
@@ -125,7 +125,6 @@ public class RobotContainer {
     private void configureBindings() {
         outtakeTrigger.whileTrue(new runOuttakeCommand(m_intakeSubsystem, m_intakePivot, m_ConveyorSubsystem));
         // agitateTrigger.whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
-        weWinTrigger.onTrue(new InstantCommand(() -> hubActiveCheck.setHubActivity()));
 
         //shooterSubsystem.setDefaultCommand(new RossIdleCommand(shooterSubsystem, 30)); //FIXME change back
         fastRevTrigger.whileTrue(new RossIdleCommand(shooterSubsystem, 90, 0));
@@ -134,9 +133,9 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
+                drive.withVelocityX(-joystick.getLeftY() * MaxSpeed * 0.25) // Drive forward with negative Y (forward)
+                    .withVelocityY(-joystick.getLeftX() * MaxSpeed * 0.25) // Drive left with negative X (left)
+                    .withRotationalRate(-joystick.getRightX() * MaxAngularRate * 0.25) // Drive counterclockwise with negative X (left)
             )
         );
 
@@ -164,12 +163,12 @@ public class RobotContainer {
         //     )
         // );
 
-        joystick.b().whileTrue(
-            drivetrain.applyRequest(() -> 
-                driveFacing
-                .withVelocityX(-joystick.getLeftY() * MaxSpeed)
-                .withVelocityY(-joystick.getLeftX() * MaxSpeed)
-                .withTargetDirection(Rotation2d.fromRadians(drivetrain.calculateHubAngle()))));
+        // joystick.b().whileTrue(
+        //     drivetrain.applyRequest(() -> 
+        //         driveFacing
+        //         .withVelocityX(-joystick.getLeftY() * MaxSpeed)
+        //         .withVelocityY(-joystick.getLeftX() * MaxSpeed)
+        //         .withTargetDirection(Rotation2d.fromRadians(drivetrain.calculateHubAngle()))));
 
         // joystick.y().whileTrue(
         //     drivetrain.applyRequest(() -> 
@@ -178,7 +177,7 @@ public class RobotContainer {
         //         .withVelocityY(-joystick.getLeftX() * MaxSpeed)
         //         .withTargetDirection(Rotation2d.fromRadians(drivetrain.calculatePassAngle()))));
 
-        joystick.y().whileTrue(new runIntakeCommand(m_intakeSubsystem, m_intakePivot));
+        joystick.y().whileTrue(new runIntakeCommand(m_intakePivot, m_intakeSubsystem));
         joystick.y().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, MaxAngularRate, MaxSpeed, MaxAngularRate, () -> drivetrain.calculateDistance()));
         
         // Idle while the robot is disabled. This ensures the configured
@@ -210,7 +209,7 @@ public class RobotContainer {
     /// 
 
     // Shooting with Agitate
-    joystick.rightBumper().whileTrue(new runIntakeCommand(m_intakeSubsystem, m_intakePivot));
+    joystick.rightBumper().whileTrue(new runIntakeCommand(m_intakePivot, m_intakeSubsystem));
     joystick.rightBumper().whileFalse(new InstantCommand(() -> m_intakeSubsystem.setSpeed(0)));
     joystick.rightBumper().whileTrue(
         drivetrain.applyRequest(() ->
@@ -240,8 +239,7 @@ public class RobotContainer {
     joystick.a().and(conveyorRunning).whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
 
     }
-    
-    
+
     
     ////////////////////////////////////
     ///       ON-THE-FLY PATHS       ///
@@ -250,7 +248,7 @@ public class RobotContainer {
 
     // WAYPOINTS ARE BASED ON DRIVERSTATION TEAM COLOR
     
-    PathConstraints constraints = new PathConstraints(1.0/6.0, 1.0/6.0, Math.PI/3 , Math.PI/6); // The constraints for this path.
+                                                                                                                                PathConstraints constraints = new PathConstraints(1.0/6.0, 1.0/6.0, Math.PI/3 , Math.PI/6); // The constraints for this path.
 
     ////////////////////////////////////
     ///        GET SUBSYSTEMS        ///
@@ -266,10 +264,6 @@ public class RobotContainer {
 
     public PivotSubsystem getPivotSubsystem(){
         return m_intakePivot;
-    }
-
-    public HubActiveCheck getHubActiveCheck(){
-        return hubActiveCheck;
     }
 
     public Command getAutonomousCommand() {

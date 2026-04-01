@@ -80,7 +80,11 @@
               {
                 "type": "wait",
                 "data": {
+<<<<<<< HEAD
                   "waitTime": 4.0
+=======
+                  "waitTime": 6.0
+>>>>>>> Logging
                 }
               }
             ]

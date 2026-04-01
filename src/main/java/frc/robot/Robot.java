@@ -5,66 +5,61 @@
 package frc.robot;
 
 import java.util.Optional;
-
 import org.photonvision.EstimatedRobotPose;
 
 import com.ctre.phoenix6.HootAutoReplay;
 import com.pathplanner.lib.commands.FollowPathCommand;
-
-import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.ArduCams;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.HubActiveCheck;
-import frc.robot.subsystems.PivotSubsystem;
+import edu.wpi.first.epilogue.Epilogue;
+import edu.wpi.first.epilogue.Logged;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.TimedRobot;
+import frc.robot.subsystems.PivotSubsystem;
 
-
+@Logged
 public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
 
     private final RobotContainer m_robotContainer;
-    
+
     final CommandSwerveDrivetrain swerve;
     final ArduCams cameras;
     final PivotSubsystem pivot;
-    final HubActiveCheck hubActiveCheck;
-   
-    /* 
-    private final TalonFX fx1 = new TalonFX(1);
-    private final TalonFX fx2 = new TalonFX(2);
-    private final TalonFX fx3 = new TalonFX(3);
-    private final TalonFX fx4 = new TalonFX(4);
-    private final Orchestra orchestra = new Orchestra();
-    public final AudioConfigs audioConfigs = new AudioConfigs();
-    */
 
+    /*
+     * private final TalonFX fx1 = new TalonFX(1);
+     * private final TalonFX fx2 = new TalonFX(2);
+     * private final TalonFX fx3 = new TalonFX(3);
+     * private final TalonFX fx4 = new TalonFX(4);
+     * private final Orchestra orchestra = new Orchestra();
+     * public final AudioConfigs audioConfigs = new AudioConfigs();
+     */
 
-    /* log and replay timestamp and joystick data */
+    // /* log and replay timestamp and joystick data */
     private final HootAutoReplay m_timeAndJoystickReplay = new HootAutoReplay()
-        .withTimestampReplay()
-        .withJoystickReplay();
-
-
+            .withTimestampReplay()
+            .withJoystickReplay();
 
     public Robot() {
+
         m_robotContainer = new RobotContainer();
         cameras = m_robotContainer.getCameras();
         swerve = m_robotContainer.getSwerveSubsystem();
         pivot = m_robotContainer.getPivotSubsystem();
-        hubActiveCheck = m_robotContainer.getHubActiveCheck();
 
-        // CameraServer.startAutomaticCapture();
-        // CameraServerJNI.setSourceResolution(0, 1920, 1080);
-        // CameraServerJNI.setSourceFPS(0, 10);
+        DataLogManager.start();
+        Epilogue.bind(this);
     }
 
     @Override
     public void robotPeriodic() {
         m_timeAndJoystickReplay.update();
-        CommandScheduler.getInstance().run(); 
+        CommandScheduler.getInstance().run();
         Optional<EstimatedRobotPose> cam1Estimate = cameras.getEstimatedPoseCam1();
         // Optional<EstimatedRobotPose> cam2Estimate = cameras.getEstimatedPoseCam2();
 
@@ -105,9 +100,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledPeriodic() {
-        if(pivot.isPressed()){
-            pivot.resetEncoder();
-        }
     }
 
     @Override
@@ -124,16 +116,19 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void autonomousPeriodic() {}
+    public void autonomousPeriodic() {
+    }
 
     @Override
-    public void autonomousExit() {}
+    public void autonomousExit() {
+    }
 
     @Override
     public void teleopInit() {
         if (m_autonomousCommand != null) {
             CommandScheduler.getInstance().cancel(m_autonomousCommand);
         }
+
         pivot.setSetPoint(0);
     }
 
@@ -142,7 +137,8 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void teleopExit() {}
+    public void teleopExit() {
+    }
 
     @Override
     public void testInit() {
@@ -150,11 +146,14 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void testPeriodic() {}
+    public void testPeriodic() {
+    }
 
     @Override
-    public void testExit() {}
+    public void testExit() {
+    }
 
     @Override
-    public void simulationPeriodic() {}
+    public void simulationPeriodic() {
+    }
 }

@@ -126,13 +126,12 @@ public class PivotSubsystem extends SubsystemBase {
 
     pivotMotor.setControl(request.withPosition(setPoint));
     // pivotMotor.setControl(voltageReq.withOutput(voltageSet));
-     
-    if(pivotMotor.getVelocity().getValueAsDouble() < 0 && pivotMotor.getSupplyCurrent().getValueAsDouble() > 0){
-      lastSetpoint = getPivotEncoder();
-      setSetPoint(lastSetpoint);
-    }
 
     if(DriverStation.isDisabled()){
+      if(isPressed()){
+        pivotMotor.setPosition(0);
+      }
+      
       pivotMotor.setNeutralMode(NeutralModeValue.Coast);
     }
     else{

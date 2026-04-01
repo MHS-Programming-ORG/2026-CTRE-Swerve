@@ -5,41 +5,39 @@
 package frc.robot.commands.IntakeRollerCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ConveyorSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class runIntakeCommand extends Command {
-IntakeSubsystem Intake;
-PivotSubsystem Pivot;
-  public runIntakeCommand(IntakeSubsystem newintakeSubsystem, PivotSubsystem newPivotSubsystem)
-  {
-    Intake = newintakeSubsystem;
-    Pivot = newPivotSubsystem;
-    addRequirements(Intake);
-    addRequirements(Pivot);
+  /** Creates a new runIntakeCMD. */
+  PivotSubsystem pivot;
+  IntakeSubsystem intake;
+  public runIntakeCommand(PivotSubsystem pivot, IntakeSubsystem intake) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    this.pivot = pivot;
+    addRequirements(pivot);
+
+    this.intake = intake;
+    addRequirements(intake);
   }
 
-  
+  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Pivot.setSetPoint(22);
+    pivot.setSetPoint(21);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Intake.setSpeed(-0.6);
-    // conveyor.setConveyorSpeed(0.1);
-    // shooter.setKickerVelocity(-20);
+    intake.setSpeed(0.6);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-     Intake.setSpeed(0);
+     intake.setSpeed(0);
   }
 
   // Returns true when the command should end.

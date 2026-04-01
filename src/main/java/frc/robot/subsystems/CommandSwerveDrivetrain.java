@@ -30,7 +30,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.math.geometry.Translation2d;
-
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import frc.robot.generated.TunerConstants;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
 
 
@@ -42,6 +43,19 @@ import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
  * https://v6.docs.ctr-electronics.com/en/stable/docs/tuner/tuner-swerve/index.html
  */
 public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Subsystem {
+    private static CommandSwerveDrivetrain instance;
+
+    public static CommandSwerveDrivetrain getInstance(){
+        if (instance == null) instance = TunerConstants.createDrivetrain();
+        return instance;
+    }
+
+    ChassisSpeeds robotRelVelocity = new ChassisSpeeds();
+
+    public ChassisSpeeds getRobotRelVelocity(){
+        return robotRelVelocity;
+    }
+
     private static final double kSimLoopPeriod = 0.004; // 4 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
