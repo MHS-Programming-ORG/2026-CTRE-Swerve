@@ -1,4 +1,4 @@
-package org.littletonrobotics.frc2026;
+package frc.robot;
 
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -51,7 +51,7 @@ public final class Constants {
   /** Checks that the default robot is selected and tuning mode is disabled. */
   public static class CheckPullRequest {
     public static void main(String... args) {
-      if (robot != RobotType.DARWIN || tuningMode) {
+      if (robot != RobotType.DIGGER || tuningMode) {
         System.err.println("Do not merge, non-default constants are configured.");
         System.exit(1);
       }

@@ -9,35 +9,6 @@ import frc.robot.generated.TunerConstants;
 public class ShooterCalcV2 {
     private final double INCH_TO_METER = 0.0254;
 
-    private static final InterpolatingDoubleTreeMap flywheelSpeedMap = 
-        new InterpolatingDoubleTreeMap();
-
-    public record LaunchParameters(){}
-
-    private LaunchParameters latestParameters = null;
-
-    private static final double phaseDelay;
-
-    static{
-        phaseDelay = 0.03;
-    }
-
-    public LaunchParameters getParameters(){
-        Pose2d estimatePose2d = CommandSwerveDrivetrain.getInstance().getPose2d();
-        ChassisSpeeds robotRelativeSpeed = CommandSwerveDrivetrain.getInstance().getRobotRelVelocity();
-        estimatePose2d = 
-            estimatePose2d.exp(
-                new Twist2d(
-                    robotRelativeSpeed.vxMetersPerSecond * phaseDelay,
-                    robotRelativeSpeed.vyMetersPerSecond * phaseDelay,
-                    robotRelativeSpeed.omegaRadiansPerSecond * phaseDelay
-                )
-            );
-
-        latestParameters = new LaunchParameters();
-        return latestParameters;
-    }
-
     private final double[][] shooterData = {
         {10, 0},
         {45, (12 * 1) * INCH_TO_METER},//These are caution  NOT ACCURATE just a guess
