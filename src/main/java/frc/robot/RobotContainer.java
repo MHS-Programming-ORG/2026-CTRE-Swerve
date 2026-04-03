@@ -67,7 +67,7 @@ public class RobotContainer {
 
     private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem(20);
     private final PivotSubsystem m_intakePivot = new PivotSubsystem(19, 0);
-    private final ConveyorSubsystem m_ConveyorSubsystem = new ConveyorSubsystem(18);
+    private final ConveyorSubsystem m_ConveyorSubsystem = new ConveyorSubsystem(18, 0);
     private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem(cameras, 15, 16, 17);
     private final NetworkingPython networkingPython = new NetworkingPython();
 
