@@ -24,10 +24,12 @@ import com.ctre.phoenix6.signals.MotorAlignmentValue;
 
 public class IntakeSubsystem extends SubsystemBase {
 private TalonFX intakeMotor;
+private TalonFX intakeFollower;
 private TalonFXConfiguration configs;
 
-  public IntakeSubsystem(int newleaderID) {
+  public IntakeSubsystem(int newleaderID, int newFollowerID) {
   intakeMotor = new TalonFX(newleaderID);
+  intakeFollower = new TalonFX(newFollowerID);
   configs = new TalonFXConfiguration();
   configs.withCurrentLimits(new CurrentLimitsConfigs()
    .withSupplyCurrentLimit(Amps.of(5))
@@ -36,6 +38,8 @@ private TalonFXConfiguration configs;
     .withInverted(InvertedValue.Clockwise_Positive));
   intakeMotor.getConfigurator().apply(configs);
   intakeMotor.getConfigurator().refresh(configs);
+
+  intakeFollower.setControl(new Follower(newleaderID, MotorAlignmentValue.Opposed));
 }
 
   public void setSpeed(double speed){
