@@ -43,8 +43,8 @@ public class ShooterCalcV2 {
         {25, (12 * 1) * INCH_TO_METER},//These are caution  NOT ACCURATE just a guess
         {25, (12 * 2) * INCH_TO_METER},//These are caution NOT ACCURATE just a guess
         {35, (12 * 3) * INCH_TO_METER},
-        {47, (12 * 4) * INCH_TO_METER},
-        {47, (12 * 5) * INCH_TO_METER},
+        {39, (12 * 4) * INCH_TO_METER},
+        {43, (12 * 5) * INCH_TO_METER},
         {48, (12 * 6) * INCH_TO_METER},
         {49, (12 * 7) * INCH_TO_METER},
         {50, (12 * 8) * INCH_TO_METER},

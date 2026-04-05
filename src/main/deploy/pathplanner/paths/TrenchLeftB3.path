@@ -3,42 +3,51 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.5183888888888895,
-        "y": 0.6244444444444435
+        "x": 7.685333333333334,
+        "y": 5.7013
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.529133333333333,
-        "y": 0.38116666666666554
+        "x": 6.983733333333333,
+        "y": 4.960722222222222
       },
       "isLocked": false,
-      "linkedName": "TrenchRightB4End"
+      "linkedName": "TrenchRun2.2End"
     },
     {
       "anchor": {
-        "x": 6.740122222222222,
-        "y": 3.5867555555555555
+        "x": 2.462311111111111,
+        "y": 5.857211111111111
       },
       "prevControl": {
-        "x": 6.729714586044178,
-        "y": 3.8365388238286435
+        "x": 3.407522222222221,
+        "y": 5.711044444444445
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "TrenchRightB5End"
+      "linkedName": "TrenchLeftB3End"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.3659751037344436,
+      "rotationDegrees": 90.0
+    },
+    {
+      "waypointRelativePos": 0.8190871369294629,
+      "rotationDegrees": 90.0
+    }
+  ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.06451612903225806,
+      "minWaypointRelativePos": 0,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 2.0,
-        "maxAcceleration": 2.5,
-        "maxAngularVelocity": 180.0,
-        "maxAngularAcceleration": 360.0,
+        "maxVelocity": 3.5,
+        "maxAcceleration": 7.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 540.0,
         "nominalVoltage": 12.0,
         "unlimited": false
       }
@@ -55,14 +64,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 1.0,
-    "rotation": 90.0
+    "velocity": 0.0,
+    "rotation": 124.69515353123403
   },
   "reversed": false,
-  "folder": "TrenchRunRight",
+  "folder": "TrenchRunLeft",
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": 0.0
+    "velocity": 1.5,
+    "rotation": -100.0
   },
   "useDefaultConstraints": true
 }

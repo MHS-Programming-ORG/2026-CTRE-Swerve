@@ -101,7 +101,7 @@ public class ArduCams extends SubsystemBase{
                 double z = trandsfomr.getTranslation().getZ();
                 anf = Math.toDegrees(Math.atan2(x,z));
 
-                if(id == 9 || id == 10 || id == 25 || id == 26  || id == 11 || id == 2  || id == 5 || id == 8){
+                if(id == 9 || id == 10 || id == 25 || id == 26  || id == 11 || id == 2  || id == 5 || id == 8 || id == 27 || id == 18 || id == 21 || id == 24){
                     y = target.getBestCameraToTarget().getX();
                    // y = hubMath(id, target.getBestCameraToTarget().getX(), rotation3d.getZ());
                     break; // stop once we find a valid tag
@@ -110,7 +110,7 @@ public class ArduCams extends SubsystemBase{
         }
 
         //double y = result.hasTargets()?result.getBestTarget().getBestCameraToTarget().getX():0;
-        if(y != 0){getx = y;}else{getx = distance;} // set distance to your fixed RPS when april tag is undetected]]]]]]]]]]]
+        if(y != 0){getx = y;}else{getx = distance;} // set distance to your fixed RPS when april tag is undetected
         SmartDashboard.putBoolean("UsingCamera", y != 0);
         return getx;
     }

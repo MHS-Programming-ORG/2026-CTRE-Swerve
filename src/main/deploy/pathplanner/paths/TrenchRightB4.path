@@ -16,24 +16,19 @@
     },
     {
       "anchor": {
-        "x": 4.392,
-        "y": 0.819
+        "x": 4.5183888888888895,
+        "y": 0.6244444444444435
       },
       "prevControl": {
-        "x": 3.232122222222222,
-        "y": 0.7218888888888888
+        "x": 3.358511111111111,
+        "y": 0.5273333333333323
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "TrenchRightB4End"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.4323651452282138,
-      "rotationDegrees": -90.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [
     {
       "name": "Constraints Zone",
@@ -61,7 +56,7 @@
   },
   "goalEndState": {
     "velocity": 3.0,
-    "rotation": -90.0
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "TrenchRunRight",
