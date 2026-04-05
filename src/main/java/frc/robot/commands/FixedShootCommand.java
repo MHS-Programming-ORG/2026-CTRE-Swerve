@@ -9,14 +9,13 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Timer;
 
-public class RossShootCommand extends Command {
+public class FixedShootCommand extends Command {
   private ShooterSubsystem shooterSub;
   private ConveyorSubsystem conveyorSub;
-  private double kickerVel, conveyorVel;
-  private DoubleSupplier distance;
+  private double kickerVel, conveyorVel, goalRPS;
   private Timer timer;
 
-  public RossShootCommand(ShooterSubsystem shooterSub, ConveyorSubsystem conveyorSub, double kickerVel, double conveyorVel,  DoubleSupplier distance) {
+  public FixedShootCommand(ShooterSubsystem shooterSub, ConveyorSubsystem conveyorSub, double kickerVel, double conveyorVel, double goalRPS) {
     this.shooterSub = shooterSub;
     addRequirements(shooterSub);
 
@@ -26,7 +25,7 @@ public class RossShootCommand extends Command {
     this.timer = new Timer();
     this.kickerVel = kickerVel;
     this.conveyorVel = conveyorVel;
-    this.distance = distance;
+    this.goalRPS = goalRPS;
   }
 
   @Override
@@ -35,7 +34,7 @@ public class RossShootCommand extends Command {
 
     // Run the shooter to let it spin up
     // shooterSub.setShooterVelocity(shooterVel);
-    shooterSub.cameraShoot(distance);
+    shooterSub.fixedShoot(goalRPS);
      shooterSub.setKickerVelocity(kickerVel);
     // shooterSub.setKickerVelocity(-5);
   }
@@ -57,7 +56,7 @@ public class RossShootCommand extends Command {
     // }
     
     // Checks velocity of one shooter motor to see if it is greater than or equal to calculated rps from ShooterCalcV2
-    if(MathUtil.isNear(shooterSub.getShooterShoot(distance.getAsDouble()), shooterSub.getShooterVelocity(), 3)){
+    if(MathUtil.isNear(goalRPS, shooterSub.getShooterVelocity(), 3)){
       conveyorSub.setConveyorSpeed(conveyorVel);
     }
   }

@@ -25,13 +25,13 @@ public class runIntakeCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    pivot.setSetPoint(21);
+    pivot.setSetPoint(28);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.setSpeed(0.6);
+    intake.setSpeed(0.4);
   }
 
   // Called once the command ends or is interrupted.

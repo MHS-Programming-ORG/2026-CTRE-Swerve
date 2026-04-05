@@ -6,12 +6,13 @@
     "DepotPaths",
     "MiddlePaths",
     "OutPostPaths",
-    "OutpostBumpRush",
+    "TrenchRunLeft",
     "RushTopPaths",
-    "TrenchRun"
+    "TrenchRunRight"
   ],
   "autoFolders": [
-    "New Folder"
+    "Middle",
+    "Trench"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 6.0,

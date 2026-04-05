@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 3.4952222222222225,
-        "y": 0.8290777777777771
+        "y": 0.7706111111111102
       },
       "prevControl": null,
       "nextControl": {
         "x": 3.0859555555595084,
-        "y": 0.7901000000024805
+        "y": 0.7316333333358136
       },
       "isLocked": false,
       "linkedName": "TrenchRMidEnd"
@@ -59,7 +59,7 @@
     "rotation": 180.0
   },
   "reversed": false,
-  "folder": "TrenchRun",
+  "folder": "OutPostPaths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -110.0

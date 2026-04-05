@@ -24,7 +24,7 @@ import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 
 
 public class PivotSubsystem extends SubsystemBase {
-  
+  //MMMMMAAAAXXX ENCHODER is `28.216796875
   TalonFX pivotMotor;
   DigitalInput pivotLimitSwitch;
 
@@ -49,26 +49,26 @@ public class PivotSubsystem extends SubsystemBase {
     limit = new SoftwareLimitSwitchConfigs();
     limit.ForwardSoftLimitEnable = true;
     limit.ReverseSoftLimitEnable = true;
-    limit.ForwardSoftLimitThreshold = 22;
+    limit.ForwardSoftLimitThreshold = 28.5;
     limit.ReverseSoftLimitThreshold = 0;
     
     setPoint = 0;
 
     configs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     configs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-    configs.Slot0.kP = 1;
+    configs.Slot0.kP = 1.0;
     configs.Slot0.kI = 0;
     configs.Slot0.kD = 0;
-    configs.Slot0.kS = 0.4; 
+    configs.Slot0.kS = 0.6; 
     configs.Slot0.kV = 0; //Don't use this, last time we used it we broke the pivot 
     configs.Slot0.kG = 0; //Don't use this either, there is no gravity compensation on the pivot 
     configs.Slot0.kA = 0; //Don't use this either, there is no acceleration feedforward on the pivot 
     configs.withCurrentLimits(new CurrentLimitsConfigs()
     .withSupplyCurrentLimit(Amps.of(30))
-    .withSupplyCurrentLimitEnable(true));
+    .withSupplyCurrentLimitEnable(false));
 
     magic.MotionMagicAcceleration = 70;
-    magic.MotionMagicCruiseVelocity = 35;
+    magic.MotionMagicCruiseVelocity = 70;
     magic.MotionMagicExpo_kA = 0.10000000149011612;
     magic.MotionMagicExpo_kV = 0.11999999731779099;
 

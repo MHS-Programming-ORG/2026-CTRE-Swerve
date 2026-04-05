@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.FixedShootCommand;
 import frc.robot.commands.RossIdleCommand;
 import frc.robot.commands.RossShootCommand;
 import frc.robot.commands.IntakePivotCommands.AgitatePivotCommand;
@@ -39,6 +40,7 @@ import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 // import frc.robot.subsystems.ArduCam;
 import frc.robot.subsystems.ArduCams;
+import frc.robot.commands.CloseShootCommand;
 
 
 public class RobotContainer {
@@ -52,8 +54,7 @@ public class RobotContainer {
 
     private final SwerveRequest.FieldCentricFacingAngle driveFacing = new SwerveRequest.FieldCentricFacingAngle()    
     .withHeadingPID(5,0,0)// Placeholder
-    .withDeadband(MaxSpeed * 0.1)
-    .withRotationalDeadband(0); // Let the PID handle the small movements
+    .withDeadband(MaxSpeed * 0.1);
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
@@ -65,10 +66,10 @@ public class RobotContainer {
     public final ArduCams cameras = new ArduCams();
     public final PIDController pid = new PIDController(5, 0.0, 0.0);
 
-    private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem(20);
-    private final PivotSubsystem m_intakePivot = new PivotSubsystem(19, 0);
-    private final ConveyorSubsystem m_ConveyorSubsystem = new ConveyorSubsystem(18);
-    private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem(cameras, 15, 16, 17);
+    private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem(20, 19); //FIXME add intake follower ID
+    private final PivotSubsystem m_intakePivot = new PivotSubsystem(21, 0);
+    private final ConveyorSubsystem m_ConveyorSubsystem = new ConveyorSubsystem(17, 18); //FIXME add indexer ID
+    private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem(cameras, 15, 16, 14);
     private final NetworkingPython networkingPython = new NetworkingPython();
 
     SendableChooser<Command> autoChooser;
@@ -105,17 +106,16 @@ public class RobotContainer {
 
      public void registerNamedCommands(){
         NamedCommands.registerCommand("Intake", new runIntakeCommand(m_intakePivot, m_intakeSubsystem));
-        NamedCommands.registerCommand("IntakePivotDown", new MoveToPositionMagicCommand(m_intakePivot, 22, 0.3));
+        NamedCommands.registerCommand("IntakePivotDown", new MoveToPositionMagicCommand(m_intakePivot, 28, 0.3));
         NamedCommands.registerCommand("IntakePivotTuck", new MoveToPositionMagicCommand(m_intakePivot, 0, 0.3));
-        NamedCommands.registerCommand("Shoot", new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 1, 50, 0.6, () -> drivetrain.calculateDistance()));
+        NamedCommands.registerCommand("Shoot", new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 70, 0.7, () -> drivetrain.calculateDistance()));
         NamedCommands.registerCommand("Agitate", new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
-        NamedCommands.registerCommand("TrenchSHOT", new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 1, 50, 0.6, () -> 3.048));
+        NamedCommands.registerCommand("TrenchSHOT", new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 50, 0.5, 60));
         
-        NamedCommands.registerCommand("Override Rotation", new InstantCommand(() -> 
-        PPHolonomicDriveController.overrideRotationFeedback(() -> {
-        return pid.calculate(drivetrain.getPose2d().getRotation().getDegrees(), drivetrain.calculateHubAngle());
-        }))
-        );
+        NamedCommands.registerCommand("AimToHub", drivetrain.applyRequest(() -> 
+                driveFacing
+                .withTargetDirection(Rotation2d.fromRadians(drivetrain.calculateHubAngle()))));
+
     
         
      }
@@ -133,52 +133,30 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                drive.withVelocityX(-joystick.getLeftY() * MaxSpeed * 0.25) // Drive forward with negative Y (forward)
-                    .withVelocityY(-joystick.getLeftX() * MaxSpeed * 0.25) // Drive left with negative X (left)
-                    .withRotationalRate(-joystick.getRightX() * MaxAngularRate * 0.25) // Drive counterclockwise with negative X (left)
+                drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
+                    .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+                    .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
         );
 
-        // joystick.a().whileTrue(
-        //      drivetrain.applyRequest(() ->
-        //         drive.withVelocityX(joystick.getLeftY() * MaxSpeed*0.1) // Drive forward with negative Y (forward)
-        //             .withVelocityY(joystick.getLeftX() * MaxSpeed*0.1) // Drive left with negative X (left)
-        //             .withRotationalRate(camera.cameraHasTargets() ? pid.calculate(-camera.getYaw(), 0) : -joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
-        //     )
-        // );
 
-        // IN METERES
-        //double hubPoseX = 0;//DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Blue ? (11.920+0.5969):
 
-        // joystick.a().whileTrue(
-        //      drivetrain.applyRequest(() ->
-        //         drive.withVelocityX(joystick.getLeftY() * MaxSpeed*0.1) // Drive forward with negative Y (forward)
-        //             .withVelocityY(joystick.getLeftX() * MaxSpeed*0.1) // Drive left with negative X (left)
-        //             .withRotationalRate(pid.calculate(
-        //                 drivetrain.getPose2d().getRotation().getRadians(),
-        //                 drivetrain.calculateAngle(
-        //                     hubPoseX,
-        //                     hubPoseY
-        //                 ))) // Drive counterclockwise with negative X (left)
-        //     )
-        // );
+        joystick.b().whileTrue(
+            drivetrain.applyRequest(() -> 
+                driveFacing
+                .withVelocityX(-joystick.getLeftY() * MaxSpeed)
+                .withVelocityY(-joystick.getLeftX() * MaxSpeed)
+                .withTargetDirection(Rotation2d.fromRadians(drivetrain.calculateHubAngle()))));
 
-        // joystick.b().whileTrue(
-        //     drivetrain.applyRequest(() -> 
-        //         driveFacing
-        //         .withVelocityX(-joystick.getLeftY() * MaxSpeed)
-        //         .withVelocityY(-joystick.getLeftX() * MaxSpeed)
-        //         .withTargetDirection(Rotation2d.fromRadians(drivetrain.calculateHubAngle()))));
+        joystick.y().whileTrue(
+            drivetrain.applyRequest(() -> 
+                driveFacing
+                .withVelocityX(-joystick.getLeftY() * MaxSpeed)
+                .withVelocityY(-joystick.getLeftX() * MaxSpeed)
+                .withTargetDirection(Rotation2d.fromRadians(drivetrain.calculatePassAngle()))));
 
-        // joystick.y().whileTrue(
-        //     drivetrain.applyRequest(() -> 
-        //         driveFacing
-        //         .withVelocityX(-joystick.getLeftY() * MaxSpeed)
-        //         .withVelocityY(-joystick.getLeftX() * MaxSpeed)
-        //         .withTargetDirection(Rotation2d.fromRadians(drivetrain.calculatePassAngle()))));
-
-        joystick.y().whileTrue(new runIntakeCommand(m_intakePivot, m_intakeSubsystem));
-        joystick.y().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, MaxAngularRate, MaxSpeed, MaxAngularRate, () -> drivetrain.calculateDistance()));
+        joystick.start().whileTrue(new runIntakeCommand(m_intakePivot, m_intakeSubsystem));
+        joystick.start().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, MaxSpeed, MaxAngularRate, () -> drivetrain.calculateDistance()));
         
         // Idle while the robot is disabled. This ensures the configured
         // neutral mode is applied to the drive motors while disabled.
@@ -187,11 +165,11 @@ public class RobotContainer {
             drivetrain.applyRequest(() -> idle).ignoringDisable(true)
         );
 
-        joystick.x().whileTrue(new InstantCommand(() -> shooterSubsystem.setVoltage(6)));
-        joystick.x().whileFalse(new InstantCommand(() -> shooterSubsystem.setVoltage(0.0)));
+        // joystick.x().whileTrue(new InstantCommand(() -> shooterSubsystem.setVoltage(6)));
+        // joystick.x().whileFalse(new InstantCommand(() -> shooterSubsystem.setVoltage(0.0)));
         joystick.x().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
-        drivetrain.registerTelemetry(logger::telemeterize);
+        // drivetrain.registerTelemetry(logger::telemeterize);
 
   
     // joystick.b().onTrue(
@@ -211,44 +189,54 @@ public class RobotContainer {
     // Shooting with Agitate
     joystick.rightBumper().whileTrue(new runIntakeCommand(m_intakePivot, m_intakeSubsystem));
     joystick.rightBumper().whileFalse(new InstantCommand(() -> m_intakeSubsystem.setSpeed(0)));
-    joystick.rightBumper().whileTrue(
-        drivetrain.applyRequest(() ->
-                drive.withVelocityX(-joystick.getLeftY() * MaxSpeed * 0.26385224274) 
-                    .withVelocityY(-joystick.getLeftX() * MaxSpeed * 0.26385224274)
-                    .withRotationalRate(-joystick.getRightX() * MaxAngularRate)
-            ));
+    // joystick.rightBumper().whileTrue(
+    //     drivetrain.applyRequest(() ->
+    //             drive.withVelocityX(-joystick.getLeftY() * MaxSpeed * 0.26385224274) 
+    //                 .withVelocityY(-joystick.getLeftX() * MaxSpeed * 0.26385224274)
+    //                 .withRotationalRate(-joystick.getRightX() * MaxAngularRate)
+    //         ));
     //multiply by 0.26385224274 to allegedly drive 1 m/s
     
     
     //Shooting
-    joystick.leftBumper().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 1, 50, 0.5, () -> drivetrain.calculateDistance2Hub()));    
+    // joystick2.a().whileTrue(new InstantCommand(() -> m_ConveyorSubsystem.setConveyorSpeed(0.3)));//FIXME TESTING
+    joystick.leftBumper().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 70, 0.7, () -> drivetrain.calculateDistance()));    
     joystick.leftBumper().and(conveyorRunning).whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
 
     //Pit Check 
-    // joystick.leftBumper().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 1, 55, 0.5, () -> 0));
+    //joystick.leftBumper().whileTrue(new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 10, 0.1, 10));
     // joystick.leftBumper().whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
 
-    joystick.rightTrigger().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 1, 50, 0.5, () -> 3.048));
+    //Trench Shooting
+    joystick.rightTrigger().whileTrue(new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 50, 0.5, 60));
     joystick.rightTrigger().and(conveyorRunning).whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
     
-    joystick.leftTrigger().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 1, 90, 0.5, () -> 4.572));
+    //Tower Shooting
+    joystick.leftTrigger().whileTrue(new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 70, 0.7, 80));
     joystick.leftTrigger().and(conveyorRunning).whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
     
     //Passing
-    joystick.a().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 1, 50, 0.5, () -> 3.9624));
+    joystick.a().whileTrue(new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 80, 0.8, 60));
     joystick.a().and(conveyorRunning).whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
+
+    // joystick2.b().whileTrue(new InstantCommand(() -> m_intakeSubsystem.setSpeed(0.5)));
+    // joystick2.b().whileFalse(new InstantCommand(() -> m_intakeSubsystem.setSpeed(0)));
+
+
+    // joystick2.a().onTrue(new MoveToPositionMagicCommand(m_intakePivot, 28, 0.1));
+    // joystick2.b().onTrue(new MoveToPositionMagicCommand(m_intakePivot, 0, 0.1));
+
+    
+    // joystick2.x().whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
+    // joystick2.x().whileFalse(new InstantCommand(() -> shooterSubsystem.setVoltage(0.0)));
+    // joystick2.a().whileFalse(new InstantCommand(() -> m_intakePivot.setVoltage(0)))
+
+    //Near Hub Shooting
+    joystick.back().whileTrue(new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 80, 0.6, 40));
+    joystick.back().whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
 
     }
 
-    
-    ////////////////////////////////////
-    ///       ON-THE-FLY PATHS       ///
-    /// ////////////////////////////////
-    
-
-    // WAYPOINTS ARE BASED ON DRIVERSTATION TEAM COLOR
-    
-                                                                                                                                PathConstraints constraints = new PathConstraints(1.0/6.0, 1.0/6.0, Math.PI/3 , Math.PI/6); // The constraints for this path.
 
     ////////////////////////////////////
     ///        GET SUBSYSTEMS        ///

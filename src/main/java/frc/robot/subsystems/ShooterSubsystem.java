@@ -25,8 +25,8 @@ public class ShooterSubsystem extends SubsystemBase {
   // ADD SUPPLY CURRENT LIMIT
   /** Creates a new IntakeSubsystem. */
   // {kP, kS, kV}
-  private static final double[] shooterConfigVals = {0.8, 0.1904296875, 0.12}; //0.66, 0.1904296875, 0.07
-  private static final double[] kickerConfigVals = {0.5, 0.4501953125, 0.06499999761581421}; //0.5, 0.4501953125, 0.06499999761581421
+  private static final double[] shooterConfigVals = {0.8, 0.2967, 0.103}; //0.8, 0.1904296875, 0.12 //0.66, 0.1904296875, 0.07
+  private static final double[] kickerConfigVals = {0.5, 0.345, 0.102}; //0.5, 0.4501953125, 0.06499999761581421
   private ShooterCalcV2 shooterCalcV2;
   private ArduCams camera = new ArduCams();
   private TalonFX shooterMotor1, shooterMotor2, kickerMotor;
@@ -34,7 +34,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private final VoltageOut voltageOutRequest = new VoltageOut(0);
   private double distance;
 
-  private SlewRateLimiter slewRateLimiter = new SlewRateLimiter(3);
+  private SlewRateLimiter slewRateLimiter = new SlewRateLimiter(7.5);
 
   public ShooterSubsystem(ArduCams camera, int shooterPort1, int shooterPort2, int kickerPort) {
     shooterCalcV2 = new ShooterCalcV2();
@@ -91,6 +91,10 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterMotor2.setControl(voltageOutRequest.withOutput(-voltage));
   }
 
+  public void setKickerVoltage(double voltage){
+    kickerMotor.setControl(voltageOutRequest.withOutput(voltage));
+  }
+
   public void setKickerVelocity(double speedRPS){
     kickerMotor.setControl(velocityRequest.withVelocity(speedRPS).withSlot(0));
   }
@@ -118,17 +122,29 @@ public class ShooterSubsystem extends SubsystemBase {
     return shooterMotor2.getVelocity().getValueAsDouble();
   }
 
+  public double getKickerVelocity(){
+    return kickerMotor.getVelocity().getValueAsDouble();
+  }
+
   // Goal: Shoot a min dist of 6feet (1.8288m) to max dist of 12 feet (3.6576m)
   // Kicker Vel > Shooter Vel == Higher Y
   // Kicker Vel < Shooter Vel == Lower Y
   // Kicker Vel = Shooter Vel == Equal Y
-  public void shooterShoot(DoubleSupplier distance){
+  public void cameraShoot(DoubleSupplier distance){
     //if(){
       this.distance = distance.getAsDouble();
       SmartDashboard.putNumber("CoordiantePositon", this.distance);
       setShooterVelocity(shooterCalcV2.getRPSForDistance(camera.getX(this.distance)));
     //}
   }
+
+   public void fixedShoot(double goalRPS){
+    //if(){
+      setShooterVelocity(goalRPS);
+    //}
+  }
+
+  
 
   public double getShooterShoot(double xDist){
     return shooterCalcV2.getRPSForDistance((camera.getX(xDist)));

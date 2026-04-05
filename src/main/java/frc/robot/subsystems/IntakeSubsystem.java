@@ -17,23 +17,29 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.InvertedValue; 
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.MotorAlignmentValue; 
 
 public class IntakeSubsystem extends SubsystemBase {
 private TalonFX intakeMotor;
 private TalonFXConfiguration configs;
+private TalonFX intakeFollower;
 
-  public IntakeSubsystem(int newintakeID) {
+  public IntakeSubsystem(int newintakeID, int newFollowerID) {
   intakeMotor = new TalonFX(newintakeID);
+  intakeFollower = new TalonFX(newFollowerID);
   configs = new TalonFXConfiguration();
   configs.withCurrentLimits(new CurrentLimitsConfigs()
    .withSupplyCurrentLimit(Amps.of(5))
    .withSupplyCurrentLimitEnable(false));
   configs.withMotorOutput(new MotorOutputConfigs()
-    .withInverted(InvertedValue.Clockwise_Positive));
+    .withInverted(InvertedValue.CounterClockwise_Positive));
   intakeMotor.getConfigurator().apply(configs);
   intakeMotor.getConfigurator().refresh(configs);
+
+  intakeFollower.setControl(new Follower(newintakeID, MotorAlignmentValue.Opposed));
 }
 
   public void setSpeed(double speed){
@@ -46,7 +52,7 @@ private TalonFXConfiguration configs;
 
   @Override
   public void periodic() {
-   SmartDashboard.putNumber("IntakeEncoder", getEncoder());
+   SmartDashboard.putNumber("IntakeVelocity", intakeMotor.getVelocity().getValueAsDouble());
    SmartDashboard.putNumber("Intake Current", intakeMotor.getSupplyCurrent().getValueAsDouble());
   }
 }

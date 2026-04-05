@@ -8,24 +8,40 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.13809319475346,
-        "y": 2.858347518365989
+        "x": 7.879932236422036,
+        "y": 2.6278189791277233
       },
       "isLocked": false,
       "linkedName": "TrenchRun2End"
     },
     {
       "anchor": {
-        "x": 6.6914,
-        "y": 0.8290777777777771
+        "x": 7.412488888888889,
+        "y": 3.3626333333333323
       },
       "prevControl": {
-        "x": 7.117627312640416,
-        "y": 1.0848141653620265
+        "x": 8.053533839318359,
+        "y": 3.36313246749801
       },
       "nextControl": {
-        "x": 6.477026768571863,
-        "y": 0.7004538389208956
+        "x": 6.340175798092408,
+        "y": 3.361798402649471
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.554977777777778,
+        "y": 0.6536777777777774
+      },
+      "prevControl": {
+        "x": 7.010499717243695,
+        "y": 0.6636100882420694
+      },
+      "nextControl": {
+        "x": 6.116697884001242,
+        "y": 0.6441214170449674
       },
       "isLocked": false,
       "linkedName": null
@@ -33,11 +49,11 @@
     {
       "anchor": {
         "x": 3.4952222222222225,
-        "y": 0.8290777777777771
+        "y": 0.7706111111111102
       },
       "prevControl": {
-        "x": 4.4891555555555565,
-        "y": 0.3515999999999996
+        "x": 4.784867930667156,
+        "y": 0.8715992133778641
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,11 +62,15 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.25,
+      "waypointRelativePos": 1.4614107883817529,
+      "rotationDegrees": -90.0
+    },
+    {
+      "waypointRelativePos": 2.0688796680498096,
       "rotationDegrees": 180.0
     },
     {
-      "waypointRelativePos": 1.8174273858921137,
+      "waypointRelativePos": 2.8107883817427326,
       "rotationDegrees": 180.0
     }
   ],
@@ -58,12 +78,12 @@
     {
       "name": "Constraints Zone",
       "minWaypointRelativePos": 0,
-      "maxWaypointRelativePos": 2.0,
+      "maxWaypointRelativePos": 3.0,
       "constraints": {
-        "maxVelocity": 2.0,
+        "maxVelocity": 3.5,
         "maxAcceleration": 4.0,
-        "maxAngularVelocity": 180.0,
-        "maxAngularAcceleration": 360.0,
+        "maxAngularVelocity": 270.0,
+        "maxAngularAcceleration": 540.0,
         "nominalVoltage": 12.0,
         "unlimited": false
       }
@@ -84,10 +104,10 @@
     "rotation": -110.0
   },
   "reversed": false,
-  "folder": "TrenchRun",
+  "folder": "TrenchRunRight",
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": 90.0
+    "velocity": 3.0,
+    "rotation": 100.0
   },
   "useDefaultConstraints": true
 }

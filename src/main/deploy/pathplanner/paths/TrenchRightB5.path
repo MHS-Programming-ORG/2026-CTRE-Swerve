@@ -3,33 +3,47 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.7438,
-        "y": 1.160388888888889
+        "x": 4.392,
+        "y": 0.819
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.7438,
-        "y": 1.7874497567281347
+        "x": 7.402744444444444,
+        "y": 0.575722222222222
       },
       "isLocked": false,
-      "linkedName": "OutpostBumpRush2End"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.7438,
-        "y": 2.4076777777777774
+        "x": 6.574466666666666,
+        "y": 3.5770111111111103
       },
       "prevControl": {
-        "x": 7.7438,
-        "y": 1.7937004457878003
+        "x": 6.29994368102436,
+        "y": 3.5600746794758953
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "OutpostBump3"
+      "linkedName": "TrenchRightB5End"
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.0,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 4.0,
+        "maxAcceleration": 5.0,
+        "maxAngularVelocity": 180.0,
+        "maxAngularAcceleration": 360.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -41,11 +55,11 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 1.0,
     "rotation": 90.0
   },
   "reversed": false,
-  "folder": "OutpostBumpRush",
+  "folder": "TrenchRunRight",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 90.0

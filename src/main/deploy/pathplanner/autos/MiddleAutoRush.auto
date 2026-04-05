@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "TrenchRun1"
+            "pathName": "Middle1"
           }
         },
         {
@@ -27,13 +27,13 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 1.5
+                        "waitTime": 1.0
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "TrenchRun2"
+                        "pathName": "Middle2"
                       }
                     }
                   ]
@@ -45,13 +45,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "TrenchRun3"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Trench Run 4.1"
+            "pathName": "Middle3"
           }
         },
         {
@@ -71,13 +65,13 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 2.0
+                        "waitTime": 1.0
                       }
                     },
                     {
                       "type": "named",
                       "data": {
-                        "name": "IntakePivotTuck"
+                        "name": "Agitate"
                       }
                     }
                   ]
@@ -90,6 +84,6 @@
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Middle",
   "choreoAuto": false
 }

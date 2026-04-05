@@ -35,7 +35,7 @@ public class ArduCams extends SubsystemBase{
     
                 // https://docs.photonvision.org/en/latest/docs/apriltag-pipelines/coordinate-systems.html#coordinate-systems
     public final Transform3d kRobotToCam1 =
-                new Transform3d(new Translation3d(-0.315, 0.0, 0.209), new Rotation3d(0, -20*Math.PI/180, Math.PI)); // -0.343, 0.315, 0.0
+                new Transform3d(new Translation3d(-0.315, 0.0, 0.171), new Rotation3d(0, -20*Math.PI/180, Math.PI)); //-0.315, 0.0, 0.209  // -0.343, 0.315, 0.0
 
     public final Transform3d kRobotToCam2 = 
                 new Transform3d(new Translation3d(0.0, 0.0, 0.0), new Rotation3d(0, 0, 0));
@@ -57,7 +57,7 @@ public class ArduCams extends SubsystemBase{
 
     SmartDashboard.putNumber("TagCount", result.targets.size());
     SmartDashboard.putBoolean("HasMultiTagResult", result.getMultiTagResult().isPresent());
-
+    
     if(result.targets.size() >= 2){
         return estimator.estimateCoprocMultiTagPose(result);
     } else if (result.targets.size() == 1){
@@ -101,7 +101,7 @@ public class ArduCams extends SubsystemBase{
                 double z = trandsfomr.getTranslation().getZ();
                 anf = Math.toDegrees(Math.atan2(x,z));
 
-                if(id == 9 || id == 10 || id == 25 || id == 26){
+                if(id == 9 || id == 10 || id == 25 || id == 26  || id == 11 || id == 2  || id == 5 || id == 8){
                     y = target.getBestCameraToTarget().getX();
                    // y = hubMath(id, target.getBestCameraToTarget().getX(), rotation3d.getZ());
                     break; // stop once we find a valid tag

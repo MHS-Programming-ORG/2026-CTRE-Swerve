@@ -40,18 +40,18 @@ public class ShooterCalcV2 {
 
     private final double[][] shooterData = {
         {10, 0},
-        {45, (12 * 1) * INCH_TO_METER},//These are caution  NOT ACCURATE just a guess
-        {45, (12 * 2) * INCH_TO_METER},//These are caution NOT ACCURATE just a guess
-        {45, (12 * 3) * INCH_TO_METER},
+        {25, (12 * 1) * INCH_TO_METER},//These are caution  NOT ACCURATE just a guess
+        {25, (12 * 2) * INCH_TO_METER},//These are caution NOT ACCURATE just a guess
+        {35, (12 * 3) * INCH_TO_METER},
         {47, (12 * 4) * INCH_TO_METER},
         {47, (12 * 5) * INCH_TO_METER},
-        {49, (12 * 6) * INCH_TO_METER},
+        {48, (12 * 6) * INCH_TO_METER},
         {49, (12 * 7) * INCH_TO_METER},
-        {54, (12 * 8) * INCH_TO_METER},
-        {54, (12 * 9) * INCH_TO_METER},
-        {57, (12 * 10) * INCH_TO_METER},
-        {57, (12 * 11) * INCH_TO_METER}, //These are caution  NOT ACCURATE just a guess
-        {57.5, (12 * 12) * INCH_TO_METER},
+        {50, (12 * 8) * INCH_TO_METER},
+        {55, (12 * 9) * INCH_TO_METER},
+        {73, (12 * 10) * INCH_TO_METER},
+        {73, (12 * 11) * INCH_TO_METER}, //These are caution  NOT ACCURATE just a guess
+        {73.5, (12 * 12) * INCH_TO_METER},
         {80, (12 * 15) * INCH_TO_METER},
     };
 

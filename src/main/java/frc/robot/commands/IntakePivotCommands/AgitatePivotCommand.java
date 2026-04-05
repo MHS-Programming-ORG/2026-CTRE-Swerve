@@ -15,8 +15,8 @@ import frc.robot.subsystems.IntakeSubsystem;
 public class AgitatePivotCommand extends Command {
   IntakeSubsystem intake;
   PivotSubsystem pivot;
-  double pivotIn = 10.5;
-  double pivotOut = 21;
+  double pivotIn = 20;
+  double pivotOut = 28;
   boolean MovingInOrOut;
   Timer timer = new Timer();
   /** Creates a new AgitatorCommand. */
@@ -34,7 +34,7 @@ public class AgitatePivotCommand extends Command {
   public void initialize() { 
     MovingInOrOut = false;
     timer.start();
-    intake.setSpeed(-0.35);
+    intake.setSpeed(0.35);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
