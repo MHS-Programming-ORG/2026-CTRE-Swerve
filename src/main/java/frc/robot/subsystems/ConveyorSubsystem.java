@@ -13,6 +13,7 @@ import com.ctre.phoenix6.controls.Follower;
 
 public class ConveyorSubsystem extends SubsystemBase {
      private TalonFX conveyorMotor;
+     private TalonFX conveyorFollower;
      private TalonFXConfiguration configs;
      private TalonFX indexer;
      

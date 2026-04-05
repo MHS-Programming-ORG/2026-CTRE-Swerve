@@ -18,14 +18,18 @@ import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.MotorAlignmentValue; 
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue; 
 
 public class IntakeSubsystem extends SubsystemBase {
 private TalonFX intakeMotor;
-private TalonFXConfiguration configs;
 private TalonFX intakeFollower;
+private TalonFXConfiguration configs;
+
 
   public IntakeSubsystem(int newintakeID, int newFollowerID) {
   intakeMotor = new TalonFX(newintakeID);
