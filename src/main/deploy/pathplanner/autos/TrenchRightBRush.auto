@@ -94,7 +94,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "TrenchSHOT"
+                  "name": "MidishSHOT"
                 }
               },
               {
@@ -221,7 +221,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "TrenchSHOT"
+                  "name": "Shoot"
                 }
               },
               {

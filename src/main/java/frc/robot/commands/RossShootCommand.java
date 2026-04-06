@@ -57,7 +57,11 @@ public class RossShootCommand extends Command {
     // }
     
     // Checks velocity of one shooter motor to see if it is greater than or equal to calculated rps from ShooterCalcV2
-    if(MathUtil.isNear(shooterSub.getShooterShoot(distance.getAsDouble()), shooterSub.getShooterVelocity(), 3)){
+    // if(MathUtil.isNear(shooterSub.getShooterShoot(distance.getAsDouble()), shooterSub.getShooterVelocity(), 3)){
+    //   conveyorSub.setConveyorSpeed(conveyorVel);
+    // }
+
+     if(MathUtil.isNear(kickerVel, shooterSub.getKickerVelocity(), 3)){
       conveyorSub.setConveyorSpeed(conveyorVel);
     }
   }

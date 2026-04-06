@@ -80,6 +80,11 @@ public class RobotContainer {
     Trigger weWinTrigger = new Trigger(() -> networkingPython.weWinPressed());
     Trigger fastRevTrigger = new Trigger(() -> networkingPython.fastRevPressed());
 
+    Trigger inAllianceZoneTrigger = new Trigger(() -> 
+        drivetrain.getPose2d().getX() <= 4.625 || 
+        drivetrain.getPose2d().getX() >= 11.915
+        );
+
     // double turnOuput = pid.calculate(camera.getYaw(), 0);
     
     //double hubPoseX = (11.920+0.5969);
@@ -127,8 +132,10 @@ public class RobotContainer {
         outtakeTrigger.whileTrue(new runOuttakeCommand(m_intakeSubsystem, m_intakePivot, m_ConveyorSubsystem));
         // agitateTrigger.whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
 
-        //shooterSubsystem.setDefaultCommand(new RossIdleCommand(shooterSubsystem, 30)); //FIXME change back
-        fastRevTrigger.whileTrue(new RossIdleCommand(shooterSubsystem, 90, 0));
+        // shooterSubsystem.setDefaultCommand(new RossIdleCommand(shooterSubsystem, 30)); //FIXME change back
+        //shooterSubsystem.getShooterShoot(drivetrain.calculateDistance()) + 10;
+        // fastRevTrigger.whileTrue(new RossIdleCommand(shooterSubsystem, 90, 0));
+        // inAllianceZoneTrigger.whileTrue(new RossIdleCommand(shooterSubsystem, 90, 0));
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
@@ -148,6 +155,7 @@ public class RobotContainer {
                 .withVelocityX(-joystick.getLeftY() * MaxSpeed)
                 .withVelocityY(-joystick.getLeftX() * MaxSpeed)
                 .withTargetDirection(Rotation2d.fromRadians(drivetrain.calculateHubAngle()))));
+        joystick.b().whileTrue(new RossIdleCommand(shooterSubsystem, 90, 0));
 
         joystick.y().whileTrue(
             drivetrain.applyRequest(() -> 
@@ -213,7 +221,7 @@ public class RobotContainer {
     joystick.rightTrigger().and(conveyorRunning).whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
     
     //Tower Shooting
-    joystick.leftTrigger().whileTrue(new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 70, 0.7, 80));
+    joystick.leftTrigger().whileTrue(new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 60, 0.6, 80));
     joystick.leftTrigger().and(conveyorRunning).whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
     
     //Passing

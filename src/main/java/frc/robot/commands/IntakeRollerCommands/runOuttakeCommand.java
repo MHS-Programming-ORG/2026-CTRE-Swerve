@@ -27,13 +27,13 @@ ConveyorSubsystem conveyor;
   
   @Override
   public void initialize() {
-    pivot.setSetPoint(22);
+    pivot.setSetPoint(28);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Outtake.setSpeed(0.45);
+    Outtake.setSpeed(-0.45);
     conveyor.setConveyorSpeed(-0.1);
   }
 
