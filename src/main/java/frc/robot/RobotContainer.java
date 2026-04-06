@@ -41,6 +41,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 // import frc.robot.subsystems.ArduCam;
 import frc.robot.subsystems.ArduCams;
 import frc.robot.commands.CloseShootCommand;
+import frc.robot.commands.CalculateShootCommand;
 
 
 public class RobotContainer {
@@ -209,7 +210,7 @@ public class RobotContainer {
     
     //Shooting
     // joystick2.a().whileTrue(new InstantCommand(() -> m_ConveyorSubsystem.setConveyorSpeed(0.3)));//FIXME TESTING
-    joystick.leftBumper().whileTrue(new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 70, 0.7, () -> drivetrain.calculateDistance()));    
+    joystick.leftBumper().whileTrue(new CalculateShootCommand(shooterSubsystem, m_ConveyorSubsystem, 0.7, () -> drivetrain.calculateDistance()));    
     joystick.leftBumper().and(conveyorRunning).whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
 
     //Pit Check 

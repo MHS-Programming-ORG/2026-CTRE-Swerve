@@ -138,6 +138,11 @@ public class ShooterSubsystem extends SubsystemBase {
     //}
   }
 
+  public void calculateKicker(DoubleSupplier distance){
+    this.distance = distance.getAsDouble();
+    setKickerVelocity(shooterCalcV2.getKickerRPSForDistance(camera.getX(this.distance)));
+  }
+
    public void fixedShoot(double goalRPS){
     //if(){
       setShooterVelocity(goalRPS);
@@ -148,6 +153,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public double getShooterShoot(double xDist){
     return shooterCalcV2.getRPSForDistance((camera.getX(xDist)));
+  }
+
+  public double getKickerShoot(double xDist){
+    return shooterCalcV2.getKickerRPSForDistance(camera.getX(xDist));
   }
 
   @Override

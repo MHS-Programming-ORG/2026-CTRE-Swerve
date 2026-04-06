@@ -22,6 +22,7 @@ public class ShooterCalcV2 {
         phaseDelay = 0.03;
     }
 
+
     public LaunchParameters getParameters(){
         Pose2d estimatePose2d = CommandSwerveDrivetrain.getInstance().getPose2d();
         ChassisSpeeds robotRelativeSpeed = CommandSwerveDrivetrain.getInstance().getRobotRelVelocity();
@@ -55,6 +56,25 @@ public class ShooterCalcV2 {
         {80, (12 * 15) * INCH_TO_METER},
     };
 
+    private final double[][] kickerData = {
+        {10, 0},
+        {85, (12 * 1) * INCH_TO_METER},//These are caution  NOT ACCURATE just a guess
+        {85, (12 * 2) * INCH_TO_METER},//These are caution NOT ACCURATE just a guess
+        {80, (12 * 3) * INCH_TO_METER},
+        {70, (12 * 4) * INCH_TO_METER},
+        {65, (12 * 5) * INCH_TO_METER},
+        {60, (12 * 6) * INCH_TO_METER},
+        {55, (12 * 7) * INCH_TO_METER},
+        {55, (12 * 8) * INCH_TO_METER},
+        {55, (12 * 9) * INCH_TO_METER},
+        {55, (12 * 10) * INCH_TO_METER},
+        {55, (12 * 11) * INCH_TO_METER}, //These are caution  NOT ACCURATE just a guess
+        {55, (12 * 12) * INCH_TO_METER},
+        {55, (12 * 15) * INCH_TO_METER},
+    };
+
+
+
     public double getRPSForDistance(double targetDistanceMeters) {
 
         for (int i = 0; i < shooterData.length - 1; i++) {
@@ -70,5 +90,22 @@ public class ShooterCalcV2 {
             }
         }
         return shooterData[shooterData.length - 1][0];
+    }
+
+       public double getKickerRPSForDistance(double targetDistanceMeters) {
+
+        for (int i = 0; i < kickerData.length - 1; i++) {
+
+            double rps1 = kickerData[i][0];
+            double dist1 = kickerData[i][1];
+            double rps2 = kickerData[i + 1][0];
+            double dist2 = kickerData[i + 1][1];
+
+            if (targetDistanceMeters >= dist1 && targetDistanceMeters <= dist2) {
+                double ratio = (targetDistanceMeters - dist1) / (dist2 - dist1);
+                return rps1 + ratio * (rps2 - rps1);
+            }
+        }
+        return kickerData[kickerData.length - 1][0];
     }
 }
