@@ -57,7 +57,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "TrenchLeft3End"
     }
   ],
   "rotationTargets": [
@@ -70,8 +70,8 @@
       "rotationDegrees": 90.0
     },
     {
-      "waypointRelativePos": 2.746058091286307,
-      "rotationDegrees": 0.0
+      "waypointRelativePos": 2.7460580912862915,
+      "rotationDegrees": 90.0
     }
   ],
   "constraintZones": [

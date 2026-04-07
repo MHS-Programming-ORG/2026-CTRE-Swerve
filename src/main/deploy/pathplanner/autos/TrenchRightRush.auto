@@ -98,6 +98,12 @@
                 }
               },
               {
+                "type": "named",
+                "data": {
+                  "name": "AimToHub"
+                }
+              },
+              {
                 "type": "sequential",
                 "data": {
                   "commands": [
@@ -119,7 +125,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 3.0
+                  "waitTime": 4.0
                 }
               }
             ]
@@ -136,9 +142,15 @@
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "TrenchRight1"
+                  "name": "TrenchSHOT"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AimToHub"
                 }
               },
               {
@@ -148,57 +160,19 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.1
+                        "waitTime": 1.0
                       }
                     },
                     {
                       "type": "named",
                       "data": {
-                        "name": "Intake"
+                        "name": "Agitate"
                       }
                     }
                   ]
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.1
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "TrenchRight2"
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "TrenchRight3"
           }
         }
       ]

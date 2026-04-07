@@ -8,20 +8,68 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.9592777777777783,
-        "y": 0.5269999999999992
+        "x": 3.4465000000000003,
+        "y": 0.4782777777777778
       },
       "isLocked": false,
       "linkedName": "TrenchRMidEnd"
     },
     {
       "anchor": {
-        "x": 4.392,
-        "y": 0.819
+        "x": 5.83388888888889,
+        "y": 0.7706111111111102
       },
       "prevControl": {
-        "x": 4.142,
-        "y": 0.819
+        "x": 5.375900000000001,
+        "y": 0.702399999999999
+      },
+      "nextControl": {
+        "x": 6.291877777777779,
+        "y": 0.8388222222222215
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.116477777777778,
+        "y": 3.3333999999999993
+      },
+      "prevControl": {
+        "x": 6.195581905842668,
+        "y": 2.020271474122781
+      },
+      "nextControl": {
+        "x": 6.067755555555557,
+        "y": 4.142188888888889
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.83388888888889,
+        "y": 0.7706111111111102
+      },
+      "prevControl": {
+        "x": 6.9582276054082275,
+        "y": 1.3552672437011626
+      },
+      "nextControl": {
+        "x": 5.346666666666668,
+        "y": 0.5172555555555562
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.4952222222222225,
+        "y": 0.7706111111111102
+      },
+      "prevControl": {
+        "x": 3.9726999999999997,
+        "y": 0.5075111111111108
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,6 +79,18 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.4323651452282138,
+      "rotationDegrees": -90.0
+    },
+    {
+      "waypointRelativePos": 0.7917012448132907,
+      "rotationDegrees": -90.0
+    },
+    {
+      "waypointRelativePos": 1.59170124481328,
+      "rotationDegrees": 90.0
+    },
+    {
+      "waypointRelativePos": 2.964315352697064,
       "rotationDegrees": -90.0
     }
   ],
@@ -61,7 +121,7 @@
   },
   "goalEndState": {
     "velocity": 3.0,
-    "rotation": -90.0
+    "rotation": -111.3179122754616
   },
   "reversed": false,
   "folder": "TrenchRunRight",

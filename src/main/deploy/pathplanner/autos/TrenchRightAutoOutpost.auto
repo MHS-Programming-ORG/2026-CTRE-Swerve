@@ -89,6 +89,12 @@
                       }
                     },
                     {
+                      "type": "named",
+                      "data": {
+                        "name": "AimToHub"
+                      }
+                    },
+                    {
                       "type": "sequential",
                       "data": {
                         "commands": [
@@ -128,7 +134,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": null
+            "pathName": "Shoot From Outpost"
           }
         },
         {
@@ -139,6 +145,12 @@
                 "type": "named",
                 "data": {
                   "name": "Shoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AimToHub"
                 }
               },
               {
