@@ -7,6 +7,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
@@ -22,8 +23,8 @@ public class ConveyorSubsystem extends SubsystemBase {
         indexer = new TalonFX(newIndexerID);
         configs = new TalonFXConfiguration();
         configs.withCurrentLimits(new CurrentLimitsConfigs()
-        .withSupplyCurrentLimit(Amps.of(10))
-        .withSupplyCurrentLimitEnable(false));
+        .withSupplyCurrentLimit(Amps.of(20))
+        .withSupplyCurrentLimitEnable(true));
         configs.withMotorOutput(new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive));
         conveyorMotor.getConfigurator().apply(configs);
 
@@ -38,5 +39,8 @@ public class ConveyorSubsystem extends SubsystemBase {
     }
 
     @Override
-    public void periodic() {}
+    public void periodic() {
+        SmartDashboard.putNumber("Conveyor Current Amps", conveyorMotor.getSupplyCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Indexer Current Amps", indexer.getSupplyCurrent().getValueAsDouble());
+    }
 }

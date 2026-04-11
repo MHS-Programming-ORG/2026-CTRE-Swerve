@@ -68,7 +68,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "TrenchLeftB3"
+                  "pathName": "TrenchLeft3"
                 }
               }
             ]
@@ -85,7 +85,13 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "MidishSHOT"
+                        "name": "TrenchSHOT"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AimToHub"
                       }
                     },
                     {
@@ -106,12 +112,6 @@
                           }
                         ]
                       }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "AimToHub"
-                      }
                     }
                   ]
                 }
@@ -126,7 +126,7 @@
           }
         },
         {
-          "type": "race",
+          "type": "parallel",
           "data": {
             "commands": [
               {
@@ -148,7 +148,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "TrenchLeftB4"
+                        "pathName": "TrenchLeftW4"
                       }
                     }
                   ]
@@ -168,7 +168,13 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "MidishSHOT"
+                        "name": "TrenchSHOT"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AimToHub"
                       }
                     },
                     {
@@ -189,20 +195,8 @@
                           }
                         ]
                       }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "AimToHub"
-                      }
                     }
                   ]
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 8.0
                 }
               }
             ]

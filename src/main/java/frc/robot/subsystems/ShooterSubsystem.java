@@ -45,10 +45,16 @@ public class ShooterSubsystem extends SubsystemBase {
     kickerMotor = new TalonFX(kickerPort);
 
     var sLimitsConfig = new CurrentLimitsConfigs();
-    sLimitsConfig.StatorCurrentLimit = 30;
-    sLimitsConfig.SupplyCurrentLimit = 20;
-    sLimitsConfig.SupplyCurrentLimitEnable = false;
-    sLimitsConfig.StatorCurrentLimitEnable = false;
+    sLimitsConfig.StatorCurrentLimit = 140;
+    sLimitsConfig.SupplyCurrentLimit = 120;
+    sLimitsConfig.SupplyCurrentLimitEnable = true;
+    sLimitsConfig.StatorCurrentLimitEnable = true;
+
+    var followerLimitConfig = new CurrentLimitsConfigs();
+    followerLimitConfig.StatorCurrentLimit = 110;
+    followerLimitConfig.SupplyCurrentLimit = 100;
+    followerLimitConfig.SupplyCurrentLimitEnable = true;
+    followerLimitConfig.StatorCurrentLimitEnable = true;
 
     var shooterConfig = new TalonFXConfiguration();
     shooterConfig.Slot0.kP = shooterConfigVals[0];
@@ -56,16 +62,23 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterConfig.Slot0.kV = shooterConfigVals[2];
     shooterConfig.Slot0.StaticFeedforwardSign = StaticFeedforwardSignValue.UseVelocitySign;
 
+
     var kickerConfig = new TalonFXConfiguration();
     kickerConfig.Slot0.kP = kickerConfigVals[0];
     kickerConfig.Slot0.kS = kickerConfigVals[1];
     kickerConfig.Slot0.kV = kickerConfigVals[2];
     kickerConfig.Slot0.StaticFeedforwardSign = StaticFeedforwardSignValue.UseVelocitySign;
+
+    var kickerLimitConfig = new CurrentLimitsConfigs();
+    kickerLimitConfig.StatorCurrentLimit = 70;
+    kickerLimitConfig.SupplyCurrentLimit = 65;
+    kickerLimitConfig.StatorCurrentLimitEnable = true;
+    kickerLimitConfig.SupplyCurrentLimitEnable = true;
     
     shooterMotor1.getConfigurator().apply(shooterConfig);
     shooterMotor1.getConfigurator().apply(sLimitsConfig);
     shooterMotor2.getConfigurator().apply(shooterConfig);
-    shooterMotor2.getConfigurator().apply(sLimitsConfig);
+    shooterMotor2.getConfigurator().apply(followerLimitConfig);
     kickerMotor.getConfigurator().apply(kickerConfig);
     kickerMotor.getConfigurator().apply(sLimitsConfig);
 
@@ -175,5 +188,7 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Velocity Error", shooterMotor1.getClosedLoopError().getValueAsDouble());
     SmartDashboard.putNumber("RPS", shooterCalcV2.getRPSForDistance(camera.getX(distance)));
     SmartDashboard.putNumber("Accel", shooterMotor1.getAcceleration().getValueAsDouble());
+    SmartDashboard.putNumber("Shooter Current Amps", shooterMotor1.getSupplyCurrent().getValueAsDouble());
+    SmartDashboard.putNumber("Kicker Current Amps", kickerMotor.getSupplyCurrent().getValueAsDouble());
   }
 }

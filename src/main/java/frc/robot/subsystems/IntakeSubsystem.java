@@ -29,21 +29,30 @@ public class IntakeSubsystem extends SubsystemBase {
 private TalonFX intakeMotor;
 private TalonFX intakeFollower;
 private TalonFXConfiguration configs;
+private TalonFXConfiguration followerConfigs;
 
 
   public IntakeSubsystem(int newintakeID, int newFollowerID) {
   intakeMotor = new TalonFX(newintakeID);
   intakeFollower = new TalonFX(newFollowerID);
   configs = new TalonFXConfiguration();
+  followerConfigs = new TalonFXConfiguration();
   configs.withCurrentLimits(new CurrentLimitsConfigs()
-   .withSupplyCurrentLimit(Amps.of(5))
-   .withSupplyCurrentLimitEnable(false));
+   .withSupplyCurrentLimit(10)
+   .withSupplyCurrentLimitEnable(true));
   configs.withMotorOutput(new MotorOutputConfigs()
     .withInverted(InvertedValue.CounterClockwise_Positive));
   intakeMotor.getConfigurator().apply(configs);
   intakeMotor.getConfigurator().refresh(configs);
 
+  followerConfigs.withCurrentLimits(new CurrentLimitsConfigs()
+  .withSupplyCurrentLimit(10)
+  .withSupplyCurrentLimitEnable(true));
+  intakeFollower.getConfigurator().apply(followerConfigs);
+  intakeFollower.getConfigurator().refresh(followerConfigs);
+
   intakeFollower.setControl(new Follower(newintakeID, MotorAlignmentValue.Opposed));
+  
 }
 
   public void setSpeed(double speed){
@@ -57,6 +66,7 @@ private TalonFXConfiguration configs;
   @Override
   public void periodic() {
    SmartDashboard.putNumber("IntakeVelocity", intakeMotor.getVelocity().getValueAsDouble());
-   SmartDashboard.putNumber("Intake Current", intakeMotor.getSupplyCurrent().getValueAsDouble());
+   SmartDashboard.putNumber("Intake Leader Current", intakeMotor.getSupplyCurrent().getValueAsDouble());
+   SmartDashboard.putNumber("Intake Follower Current", intakeFollower.getSupplyCurrent().getValueAsDouble());
   }
 }

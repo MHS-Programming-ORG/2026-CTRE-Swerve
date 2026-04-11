@@ -7,6 +7,8 @@ import java.util.function.Supplier;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -27,10 +29,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import frc.robot.generated.TunerConstants;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
 
@@ -94,7 +98,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     );
 
     /* SysId routine for characterizing steer. This is used to find PID gains for the steer motors. */
-    private final SysIdRoutine m_sysIdRoutineSteer = new SysIdRoutine(
+    public final SysIdRoutine m_sysIdRoutineSteer = new SysIdRoutine(
         new SysIdRoutine.Config(
             null,        // Use default ramp rate (1 V/s)
             Volts.of(7), // Use dynamic voltage of 7 V
@@ -291,6 +295,11 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     double hubPoseXWithOffset;
     double hubPoseY = 4.035;
 
+    double module0 = 0;
+    double module1 = 0;
+    double module2 = 0;
+    double module3 = 0;
+
     @Override
     public void periodic() {
         /*
@@ -327,12 +336,25 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         yCord = odometryPose.getY();
         theta = odometryPose.getRotation().getRadians();
 
+        module0 = CommandSwerveDrivetrain.getInstance().getModule(0).getEncoder().getAbsolutePosition().getValue().in(Rotations);
+        module1 = CommandSwerveDrivetrain.getInstance().getModule(1).getEncoder().getAbsolutePosition().getValue().in(Rotations);
+        module2 = CommandSwerveDrivetrain.getInstance().getModule(2).getEncoder().getAbsolutePosition().getValue().in(Rotations);
+        module3 = CommandSwerveDrivetrain.getInstance().getModule(3).getEncoder().getAbsolutePosition().getValue().in(Rotations);
+
+        SmartDashboard.putNumber("Module0 Angle", module0);
+        SmartDashboard.putNumber("Module1 Angle", module1);
+        SmartDashboard.putNumber("Module2 Angle", module2);
+        SmartDashboard.putNumber("Module3 Angle", module3);
+        
+
         SmartDashboard.putString("POSE", getState().Pose.toString());
         SmartDashboard.putString("AB-POSE", AutoBuilder.getCurrentPose().toString());
         
         SmartDashboard.putNumber("xCoord", xCord);
         SmartDashboard.putNumber("yCoord", yCord);
         SmartDashboard.putNumber("heading", theta);
+
+
 
         SmartDashboard.putNumber("TargetX", hubPoseX);
         SmartDashboard.putNumber("TargetY", hubPoseY);
@@ -448,7 +470,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public double calculateHubAngle(){
         double offset = 0;
 
-        if(!isRed){ offset = 180;}
+        if(!isRed){ offset = 181;}
 
         return calculateAngle(hubPoseX, hubPoseY) + Math.toRadians(offset);
     }
@@ -469,7 +491,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         xDifference = hubPoseX - getState().Pose.getX();
         yDifference = hubPoseY - getState().Pose.getY();
 
-        return distance;
+        return distance - 13.5; //swerve base is 27 inches subtract pose to pose by center of robot to shooter
     }
 
     

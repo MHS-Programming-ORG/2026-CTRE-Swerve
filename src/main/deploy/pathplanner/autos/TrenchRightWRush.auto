@@ -11,7 +11,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "TrenchLeft1"
+                  "pathName": "TrenchRight1"
                 }
               },
               {
@@ -21,7 +21,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.35
+                        "waitTime": 0.1
                       }
                     },
                     {
@@ -31,95 +31,6 @@
                       }
                     }
                   ]
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "TrenchLeft2"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "TrenchLeftB3"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "parallel",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "MidishSHOT"
-                      }
-                    },
-                    {
-                      "type": "sequential",
-                      "data": {
-                        "commands": [
-                          {
-                            "type": "wait",
-                            "data": {
-                              "waitTime": 2.0
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "Agitate"
-                            }
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "AimToHub"
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 4.0
                 }
               }
             ]
@@ -148,7 +59,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "TrenchLeftB4"
+                        "pathName": "TrenchRight2"
                       }
                     }
                   ]
@@ -162,38 +73,50 @@
           "data": {
             "commands": [
               {
-                "type": "parallel",
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "TrenchRight3"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "TrenchSHOT"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AimToHub"
+                }
+              },
+              {
+                "type": "sequential",
                 "data": {
                   "commands": [
                     {
-                      "type": "named",
+                      "type": "wait",
                       "data": {
-                        "name": "MidishSHOT"
-                      }
-                    },
-                    {
-                      "type": "sequential",
-                      "data": {
-                        "commands": [
-                          {
-                            "type": "wait",
-                            "data": {
-                              "waitTime": 2.0
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "Agitate"
-                            }
-                          }
-                        ]
+                        "waitTime": 1.0
                       }
                     },
                     {
                       "type": "named",
                       "data": {
-                        "name": "AimToHub"
+                        "name": "Agitate"
                       }
                     }
                   ]
@@ -202,7 +125,77 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 8.0
+                  "waitTime": 4.0
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.1
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "TrenchRightW4"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "TrenchSHOT"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AimToHub"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Agitate"
+                      }
+                    }
+                  ]
                 }
               }
             ]

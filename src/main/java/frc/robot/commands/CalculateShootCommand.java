@@ -60,7 +60,7 @@ public class CalculateShootCommand extends Command {
     //   conveyorSub.setConveyorSpeed(conveyorVel);
     // }
 
-     if(MathUtil.isNear(shooterSub.getKickerShoot(distance.getAsDouble()), shooterSub.getKickerVelocity(), 3)){
+     if(MathUtil.isNear(shooterSub.getKickerShoot(distance.getAsDouble()), shooterSub.getKickerVelocity(), 3) && MathUtil.isNear(shooterSub.getShooterShoot(distance.getAsDouble()), shooterSub.getShooterVelocity(), 3)){
       conveyorSub.setConveyorSpeed(conveyorVel);
     }
   }
