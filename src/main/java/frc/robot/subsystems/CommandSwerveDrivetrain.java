@@ -47,12 +47,12 @@ import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
  * https://v6.docs.ctr-electronics.com/en/stable/docs/tuner/tuner-swerve/index.html
  */
 public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Subsystem {
-    private static CommandSwerveDrivetrain instance;
+    // private static CommandSwerveDrivetrain instance;
 
-    public static CommandSwerveDrivetrain getInstance(){
-        if (instance == null) instance = TunerConstants.createDrivetrain();
-        return instance;
-    }
+    // public static CommandSwerveDrivetrain getInstance(){
+    //     if (instance == null) instance = TunerConstants.createDrivetrain();
+    //     return instance;
+    // }
 
     ChassisSpeeds robotRelVelocity = new ChassisSpeeds();
 
@@ -336,10 +336,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         yCord = odometryPose.getY();
         theta = odometryPose.getRotation().getRadians();
 
-        module0 = CommandSwerveDrivetrain.getInstance().getModule(0).getEncoder().getAbsolutePosition().getValue().in(Rotations);
-        module1 = CommandSwerveDrivetrain.getInstance().getModule(1).getEncoder().getAbsolutePosition().getValue().in(Rotations);
-        module2 = CommandSwerveDrivetrain.getInstance().getModule(2).getEncoder().getAbsolutePosition().getValue().in(Rotations);
-        module3 = CommandSwerveDrivetrain.getInstance().getModule(3).getEncoder().getAbsolutePosition().getValue().in(Rotations);
+        module0 = getModule(0).getEncoder().getAbsolutePosition().getValue().in(Rotations);
+        module1 = getModule(1).getEncoder().getAbsolutePosition().getValue().in(Rotations);
+        module2 = getModule(2).getEncoder().getAbsolutePosition().getValue().in(Rotations);
+        module3 = getModule(3).getEncoder().getAbsolutePosition().getValue().in(Rotations);
 
         SmartDashboard.putNumber("Module0 Angle", module0);
         SmartDashboard.putNumber("Module1 Angle", module1);
