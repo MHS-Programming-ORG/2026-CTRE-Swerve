@@ -23,21 +23,21 @@ public class ShooterCalcV2 {
     }
 
 
-    public LaunchParameters getParameters(){
-        Pose2d estimatePose2d = CommandSwerveDrivetrain.getInstance().getPose2d();
-        ChassisSpeeds robotRelativeSpeed = CommandSwerveDrivetrain.getInstance().getRobotRelVelocity();
-        estimatePose2d = 
-            estimatePose2d.exp(
-                new Twist2d(
-                    robotRelativeSpeed.vxMetersPerSecond * phaseDelay,
-                    robotRelativeSpeed.vyMetersPerSecond * phaseDelay,
-                    robotRelativeSpeed.omegaRadiansPerSecond * phaseDelay
-                )
-            );
+    // public LaunchParameters getParameters(){
+    //     Pose2d estimatePose2d = CommandSwerveDrivetrain.getInstance().getPose2d();
+    //     ChassisSpeeds robotRelativeSpeed = CommandSwerveDrivetrain.getInstance().getRobotRelVelocity();
+    //     estimatePose2d = 
+    //         estimatePose2d.exp(
+    //             new Twist2d(
+    //                 robotRelativeSpeed.vxMetersPerSecond * phaseDelay,
+    //                 robotRelativeSpeed.vyMetersPerSecond * phaseDelay,
+    //                 robotRelativeSpeed.omegaRadiansPerSecond * phaseDelay
+    //             )
+    //         );
 
-        latestParameters = new LaunchParameters();
-        return latestParameters;
-    }
+    //     latestParameters = new LaunchParameters();
+    //     return latestParameters;
+    // }
 
     private final double[][] shooterData = {
         {10, 0},
