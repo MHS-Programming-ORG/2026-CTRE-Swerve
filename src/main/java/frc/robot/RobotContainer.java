@@ -9,6 +9,7 @@ import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -18,9 +19,12 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.units.MassUnit;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -119,7 +123,10 @@ public class RobotContainer {
         NamedCommands.registerCommand("Shoot", new RossShootCommand(shooterSubsystem, m_ConveyorSubsystem, 70, 0.7, () -> drivetrain.calculateDistance()));
         NamedCommands.registerCommand("Agitate", new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
         NamedCommands.registerCommand("TrenchSHOT", new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 50, 0.5, 50));
+        NamedCommands.registerCommand("CloseSHOT", new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 80, 0.5, 40));
         NamedCommands.registerCommand("MidishSHOT", new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 50, 0.5, 45));
+        NamedCommands.registerCommand("MidishSHOT", new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 50, 0.5, 45));
+
         // NamedCommands.registerCommand("Reset Mid Auto", new InstantCommand(() -> drivetrain.resetPose(new Pose2d(3.505, 4.025, new Rotation2d(0)))));
         NamedCommands.registerCommand("AimToHub", drivetrain.applyRequest(() -> 
                 driveFacing
@@ -216,12 +223,12 @@ public class RobotContainer {
     joystick.rightTrigger().and(conveyorRunning).whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
      
     //Tower Shooting
-    joystick.leftTrigger().whileTrue(new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 23, 0.4, 80));
-    joystick.leftTrigger().and(conveyorRunning).whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
+    // joystick.leftTrigger().whileTrue(new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 23, 0.4, 80));
+    // joystick.leftTrigger().and(conveyorRunning).whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
     
     //Passing
-    joystick.back().whileTrue(new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 80, 0.5, 60));
-    joystick.back().and(conveyorRunning).whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
+    joystick.leftTrigger().whileTrue(new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 80, 0.5, 60));
+    joystick.leftTrigger().and(conveyorRunning).whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
 
     //Passing Aim
     joystick.y().whileTrue(
@@ -266,9 +273,31 @@ public class RobotContainer {
         return m_intakePivot;
     }
 
+    final SwerveRequest.RobotCentric manualDrive = new SwerveRequest.RobotCentric()
+    .withVelocityX(1.0)
+    .withVelocityY(0.0)
+    .withRotationalRate(0.0);
+
+
+    final SwerveRequest.RobotCentric manualStop = new SwerveRequest.RobotCentric()
+    .withVelocityX(0.0)
+    .withVelocityY(0.0)
+    .withRotationalRate(0.0);
+
     public Command getAutonomousCommand() {
-        
-        return autoChooser.getSelected();
+        // PathPlannerAuto auto = new PathPlannerAuto("LesserMidAutoRed");
+        // Pose2d startPose = auto.getStartingPose();
+        // drivetrain.resetPose(startPose);
+        // return Commands.sequence(Commands.runOnce(() -> drivetrain.resetPose(startPose)),autoChooser.getSelected());
+
+        return new SequentialCommandGroup(
+            drivetrain.applyRequest(() -> manualDrive).withTimeout(1.0),
+            drivetrain.applyRequest(() -> manualStop).withTimeout(1.0),
+            new ParallelCommandGroup(
+                new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 80, 0.5, 40),
+                new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem))
+            );
+        // return autoChooser.getSelected();
         // return new ParallelCommandGroup(
         //    new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 80, 0.5, 40),
         //    new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));

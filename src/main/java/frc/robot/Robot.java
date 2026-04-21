@@ -5,6 +5,10 @@
 package frc.robot;
 
 import java.util.Optional;
+
+import org.littletonrobotics.junction.LoggedRobot;
+import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.photonvision.EstimatedRobotPose;
 
 import com.ctre.phoenix6.HootAutoReplay;
@@ -22,7 +26,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.subsystems.PivotSubsystem;
 
 @Logged
-public class Robot extends TimedRobot {
+public class Robot extends LoggedRobot {
     private Command m_autonomousCommand;
 
     private final RobotContainer m_robotContainer;
@@ -53,7 +57,9 @@ public class Robot extends TimedRobot {
         pivot = m_robotContainer.getPivotSubsystem();
 
         DataLogManager.start();
-        Epilogue.bind(this);
+        // Epilogue.bind(this);
+        Logger.addDataReceiver(new NT4Publisher());
+        Logger.start();
     }
 
     @Override
@@ -61,6 +67,7 @@ public class Robot extends TimedRobot {
         m_timeAndJoystickReplay.update();
         CommandScheduler.getInstance().run();
         Optional<EstimatedRobotPose> cam1Estimate = cameras.getEstimatedPoseCam1();
+        Logger.recordOutput("Robot Pose", m_robotContainer.getSwerveSubsystem().getPose2d());
         // Optional<EstimatedRobotPose> cam2Estimate = cameras.getEstimatedPoseCam2();
 
         if (cam1Estimate.isPresent()){

@@ -1,4 +1,5 @@
 package frc.robot.subsystems;
+import java.util.List;
 import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
@@ -58,13 +59,23 @@ public class ArduCams extends SubsystemBase{
     SmartDashboard.putNumber("TagCount", result.targets.size());
     SmartDashboard.putBoolean("HasMultiTagResult", result.getMultiTagResult().isPresent());
     
-    if(result.targets.size() >= 2){
+    if(result.targets.size() >= 2 && calculateAverageAmb(result.targets) < 0.3){
         return estimator.estimateCoprocMultiTagPose(result);
-    } else if (result.targets.size() == 1){
+    } else if (result.targets.size() == 1 && calculateAverageAmb(result.targets) < 0.3){
         return estimator.estimateLowestAmbiguityPose(result);
     }
     
     return Optional.empty();
+    }
+
+    public double calculateAverageAmb(List<PhotonTrackedTarget> targets){
+        double size = targets.size();
+        double sum = 0;
+        for(var target : targets){
+            sum += target.poseAmbiguity;
+        }
+        sum /= size;
+        return sum;
     }
 
     public Optional<EstimatedRobotPose> getEstimatedPoseCam1(){
