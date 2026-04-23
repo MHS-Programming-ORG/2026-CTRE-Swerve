@@ -68,6 +68,7 @@ public class ShooterSubsystem extends SubsystemBase {
     kickerConfig.Slot0.kS = kickerConfigVals[1];
     kickerConfig.Slot0.kV = kickerConfigVals[2];
     kickerConfig.Slot0.StaticFeedforwardSign = StaticFeedforwardSignValue.UseVelocitySign;
+    kickerConfig.Feedback.SensorToMechanismRatio = 4.0;
 
     var kickerLimitConfig = new CurrentLimitsConfigs();
     kickerLimitConfig.StatorCurrentLimit = 70;
