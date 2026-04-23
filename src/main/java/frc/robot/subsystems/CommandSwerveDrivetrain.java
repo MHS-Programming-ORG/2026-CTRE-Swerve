@@ -445,15 +445,13 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
      * @param yPose The Y coordinate of the target.
      * @return The angle of a robot to a given a coordinate target
      */
-    private double calculateAngle(double xPose, double yPose){ //FIXME robotic
+    private double calculateAngle(double xPose, double yPose){
         xDifference = xPose - getState().Pose.getX();
         yDifference = yPose - getState().Pose.getY();
         angleDifference = Math.atan2(yDifference, xDifference);
         
         return angleDifference;
     }
-
-
 
     public double calculatePassAngle(){
         double offset = 0;
@@ -493,76 +491,5 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
         return distance - 13.5; //swerve base is 27 inches subtract pose to pose by center of robot to shooter
     }
-
-    
-
-    
-
      
 }
-
-// public double getSwerveOmega(){
-//     return
-// }
-
-
-
-
-
-
-/*
- * [Verse 1]
-You're everything I'm thinking of
-From time to time, and dust to dust
-Whenever there's a lull between the void
-You fill the silence
-
-[Pre-Chorus]
-Languid on the couch
-Think I need to figure this one out
-I'm lost beneath your cloud
-Can I keep my two feet on the ground?
-
-[Chorus]
-Wake me, I'll love you tomorrow
-You leave me breathless and hollow
-Lately a tough pill to swallow
-But I'll try to compose
-I could be, I suppose, someone you should get to know
-I could be, I suppose, someone you should get to know
-
-[Verse 2]
-I could get lost in pillowed dreams
-Caught in a stitch of what could be
-Careful, our time's not what it seems
-So shake this one off and dance with me
-
-[Pre-Chorus]
-We're dancing through the house
-Think we need to figure this one out
-Shaking like a loose leaf from the spout
-Think we need to think on this one
-
-[Chorus]
-Wake me, I'll love you tomorrow
-You leave me breathless and hollow
-Lately a tough pill to swallow
-But I'll try to compose
-I could be, I suppose, someone you should get to know
-I could be, I suppose, someone you should get to know
-
-[Bridge]
-I could be someone you should get to know
-I could be someone you should get to know
-I could be someone you should get to know
-I could be someone you should get to know
-
-[Chorus]
-Wake me, I'll love you tomorrow
-You leave me breathless and hollow
-Lately a tough pill to swallow
-But I'll try to compose
-I could be, I suppose, someone you should get to know (I could be, I don't know, someone you should get to know)
-Oh, I could be, I suppose, someone you should get to know
-Someone you should get to know
- */
