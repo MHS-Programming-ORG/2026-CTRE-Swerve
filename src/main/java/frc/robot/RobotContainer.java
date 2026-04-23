@@ -85,7 +85,6 @@ public class RobotContainer {
 
     Trigger conveyorRunning = new Trigger(() -> m_ConveyorSubsystem.isRunning());
     Trigger outtakeTrigger = new Trigger(() -> networkingPython.outtakePressed());
-    // Trigger agitateTrigger = new Trigger(() -> networkingPython.agitatePressed());
     Trigger weWinTrigger = new Trigger(() -> networkingPython.weWinPressed());
     Trigger fastRevTrigger = new Trigger(() -> networkingPython.fastRevPressed());
 
@@ -94,24 +93,11 @@ public class RobotContainer {
         drivetrain.getPose2d().getX() >= 11.915
         );
 
-    // double turnOuput = pid.calculate(camera.getYaw(), 0);
-    
-    //double hubPoseX = (11.920+0.5969);
-    //double hubPoseX = DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Blue ? (11.920+0.5969) : (4.635-0.5969);
-    //double hubPoseY = 0;
-    //double hubPoseY = 4.040; 
-
-
     public RobotContainer() {
         registerNamedCommands();
-
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
         SmartDashboard.putBoolean("Conveyor Trigger", conveyorRunning.getAsBoolean());
-
-        // CameraServer.startAutomaticCapture();
-        
-
         pid.enableContinuousInput(-Math.PI, Math.PI);
         configureBindings();
     }
@@ -125,15 +111,10 @@ public class RobotContainer {
         NamedCommands.registerCommand("TrenchSHOT", new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 50, 0.5, 50));
         NamedCommands.registerCommand("CloseSHOT", new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 80, 0.5, 40));
         NamedCommands.registerCommand("MidishSHOT", new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 50, 0.5, 45));
-        NamedCommands.registerCommand("MidishSHOT", new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 50, 0.5, 45));
-
-        // NamedCommands.registerCommand("Reset Mid Auto", new InstantCommand(() -> drivetrain.resetPose(new Pose2d(3.505, 4.025, new Rotation2d(0)))));
+        NamedCommands.registerCommand("FarSHOT", new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 50, 0.5, 45));
         NamedCommands.registerCommand("AimToHub", drivetrain.applyRequest(() -> 
                 driveFacing
                 .withTargetDirection(Rotation2d.fromRadians(drivetrain.calculateHubAngle()))));
-
-    
-        
      }
 
     
@@ -165,9 +146,6 @@ public class RobotContainer {
                 .withVelocityX(-joystick.getLeftY() * MaxSpeed)
                 .withVelocityY(-joystick.getLeftX() * MaxSpeed)
                 .withTargetDirection(Rotation2d.fromRadians(drivetrain.calculateHubAngle()))));
-
-        // joystick.start().whileTrue(new runIntakeCommand(m_intakePivot, m_intakeSubsystem));
-        // joystick.start().whileTrue(new CalculateShootCommand(shooterSubsystem, m_ConveyorSubsystem, 0.5, () -> drivetrain.calculateDistance()));
         
         // // Idle while the robot is disabled. This ensures the configured
         // neutral mode is applied to the drive motors while disabled.
@@ -182,16 +160,6 @@ public class RobotContainer {
 
         // drivetrain.registerTelemetry(logger::telemeterize);
 
-  
-    // joystick.b().onTrue(
-    //     AutoBuilder.pathfindToPose( // used to
-    // test after DriveF2Meters on red side
-    //     new Pose2d(13.7, 5.0, Rotation2d.fromDegrees(180)), 
-    //     constraints,
-    //     0.0 // Goal end velocity
-    // ));
-
-
     ////////////////////////////////////
     ///           OPERATOR           ///
     /// ////////////////////////////////
@@ -199,24 +167,11 @@ public class RobotContainer {
 
     // Shooting with Agitate
     joystick.rightBumper().whileTrue(new runIntakeCommand(m_intakePivot, m_intakeSubsystem));
-    joystick.rightBumper().whileFalse(new InstantCommand(() -> m_intakeSubsystem.setSpeed(0)));
-    // joystick.rightBumper().whileTrue(
-    //     drivetrain.applyRequest(() ->
-    //             drive.withVelocityX(-joystick.getLeftY() * MaxSpeed * 0.26385224274) 
-    //                 .withVelocityY(-joystick.getLeftX() * MaxSpeed * 0.26385224274)
-    //                 .withRotationalRate(-joystick.getRightX() * MaxAngularRate)
-    //         ));
-    //multiply by 0.26385224274 to allegedly drive 1 m/s
-    
+    joystick.rightBumper().whileFalse(new InstantCommand(() -> m_intakeSubsystem.setSpeed(0)));    
     
     //Shooting
-    // joystick2.a().whileTrue(new InstantCommand(() -> m_ConveyorSubsystem.setConveyorSpeed(0.3)));//FIXME TESTING
     joystick.leftBumper().whileTrue(new CalculateShootCommand(shooterSubsystem, m_ConveyorSubsystem, 0.5, () -> drivetrain.calculateDistance2Hub()));    
     joystick.leftBumper().and(conveyorRunning).whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
-
-    //Pit Check 
-    //joystick.leftBumper().whileTrue(new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 10, 0.1, 10));
-    // joystick.leftBumper().whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
 
     //Trench Shooting
     joystick.rightTrigger().whileTrue(new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 50, 0.5, 49));
@@ -241,6 +196,8 @@ public class RobotContainer {
     //Near Hub Shooting
     joystick.a().whileTrue(new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 80, 0.5, 40));
     joystick.a().whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
+
+    //Pit Check 
 
     // joystick2.b().whileTrue(new InstantCommand(() -> m_intakeSubsystem.setSpeed(0.5)));
     // joystick2.b().whileFalse(new InstantCommand(() -> m_intakeSubsystem.setSpeed(0)));
@@ -285,10 +242,6 @@ public class RobotContainer {
     .withRotationalRate(0.0);
 
     public Command getAutonomousCommand() {
-        // PathPlannerAuto auto = new PathPlannerAuto("LesserMidAutoRed");
-        // Pose2d startPose = auto.getStartingPose();
-        // drivetrain.resetPose(startPose);
-        // return Commands.sequence(Commands.runOnce(() -> drivetrain.resetPose(startPose)),autoChooser.getSelected());
 
         return new SequentialCommandGroup(
             drivetrain.applyRequest(() -> manualDrive).withTimeout(1.0),
@@ -297,10 +250,5 @@ public class RobotContainer {
                 new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 80, 0.5, 40),
                 new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem))
             );
-        // return autoChooser.getSelected();
-        // return new ParallelCommandGroup(
-        //    new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 80, 0.5, 40),
-        //    new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
     }
-
 }
