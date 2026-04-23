@@ -243,12 +243,14 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
 
-        return new SequentialCommandGroup(
-            drivetrain.applyRequest(() -> manualDrive).withTimeout(1.0),
-            drivetrain.applyRequest(() -> manualStop).withTimeout(1.0),
-            new ParallelCommandGroup(
-                new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 80, 0.5, 40),
-                new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem))
-            );
+        // return new SequentialCommandGroup(
+        //     drivetrain.applyRequest(() -> manualDrive).withTimeout(1.0),
+        //     drivetrain.applyRequest(() -> manualStop).withTimeout(1.0),
+        //     new ParallelCommandGroup(
+        //         new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 80, 0.5, 40),
+        //         new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem))
+        //     );
+
+        return autoChooser.getSelected();
     }
 }
