@@ -64,6 +64,8 @@ public class RobotContainer {
     .withHeadingPID(5,0,0)// Placeholder
     .withDeadband(MaxSpeed * 0.1);
 
+    private final SwerveRequest defenseX = new SwerveRequest.SwerveDriveBrake();
+
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private final CommandXboxController joystick = new CommandXboxController(0);

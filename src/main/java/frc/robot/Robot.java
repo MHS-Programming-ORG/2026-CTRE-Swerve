@@ -57,7 +57,6 @@ public class Robot extends LoggedRobot {
         pivot = m_robotContainer.getPivotSubsystem();
 
         DataLogManager.start();
-        // Epilogue.bind(this);
         Logger.addDataReceiver(new NT4Publisher());
         Logger.start();
     }
