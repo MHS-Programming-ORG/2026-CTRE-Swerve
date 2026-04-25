@@ -89,12 +89,6 @@
                       }
                     },
                     {
-                      "type": "named",
-                      "data": {
-                        "name": "AimToHub"
-                      }
-                    },
-                    {
                       "type": "sequential",
                       "data": {
                         "commands": [
@@ -111,6 +105,12 @@
                             }
                           }
                         ]
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AimToHub"
                       }
                     }
                   ]

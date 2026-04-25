@@ -158,6 +158,8 @@ public class RobotContainer {
 
         // joystick.x().whileTrue(new InstantCommand(() -> shooterSubsystem.setVoltage(6)));
         // joystick.x().whileFalse(new InstantCommand(() -> shooterSubsystem.setVoltage(0.0)));
+        joystick.x().whileTrue(drivetrain.applyRequest(() -> defenseX));
+
         joystick.start().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         // drivetrain.registerTelemetry(logger::telemeterize);
