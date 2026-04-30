@@ -180,7 +180,7 @@ public class RobotContainer {
     joystick.leftBumper().and(conveyorRunning).whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
 
     //Trench Shooting
-    joystick.rightTrigger().whileTrue(new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 25*0.75, 0.5, 60)); //kicker vel: 60 | 49
+    joystick.rightTrigger().whileTrue(new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 25*0.9, 0.5, 60)); //kicker vel: 60 | 49
     joystick.rightTrigger().and(conveyorRunning).whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
      
     //Tower Shooting
@@ -188,7 +188,7 @@ public class RobotContainer {
     // joystick.leftTrigger().and(conveyorRunning).whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
     
     //Passing
-    joystick.leftTrigger().whileTrue(new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 25*0.75, 0.5, 60)); //run kicker at 75% //kicker vel: 80 
+    joystick.leftTrigger().whileTrue(new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 25*0.9, 0.5, 60)); //run kicker at 75% //kicker vel: 80 
     joystick.leftTrigger().and(conveyorRunning).whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
 
     //Passing Aim
@@ -200,7 +200,7 @@ public class RobotContainer {
             .withTargetDirection(Rotation2d.fromRadians(drivetrain.calculatePassAngle()))));
 
     //Near Hub Shooting
-    joystick.a().whileTrue(new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 25*0.75, 0.5, 40)); //kicker vel: 80
+    joystick.a().whileTrue(new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 25*0.9, 0.5, 40)); //kicker vel: 80
     joystick.a().whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
 
     //Pit Check 
