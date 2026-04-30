@@ -32,8 +32,8 @@ public class ShooterCalcV2 {
         {43, (12 * 5) * INCH_TO_METER},
         {48, (12 * 6) * INCH_TO_METER},
         {49, (12 * 7) * INCH_TO_METER},
-        {50, (12 * 8) * INCH_TO_METER},
-        {55, (12 * 9) * INCH_TO_METER},
+        {52, (12 * 8) * INCH_TO_METER},
+        {53, (12 * 9) * INCH_TO_METER},
         {73, (12 * 10) * INCH_TO_METER},
         {73, (12 * 11) * INCH_TO_METER}, //These are caution  NOT ACCURATE just a guess
         {73.5, (12 * 12) * INCH_TO_METER},

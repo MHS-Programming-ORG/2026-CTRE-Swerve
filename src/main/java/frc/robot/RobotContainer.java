@@ -200,7 +200,7 @@ public class RobotContainer {
             .withTargetDirection(Rotation2d.fromRadians(drivetrain.calculatePassAngle()))));
 
     //Near Hub Shooting
-    joystick.a().whileTrue(new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 25*0.8, 0.5, 50)); //kicker vel: 80
+    joystick.a().whileTrue(new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 25*0.8, 0.5, 49)); //kicker vel: 80
     joystick.a().whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
 
     //Pit Check 
