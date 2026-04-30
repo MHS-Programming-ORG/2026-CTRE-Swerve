@@ -159,7 +159,7 @@ public class RobotContainer {
         // joystick.x().whileTrue(new InstantCommand(() -> shooterSubsystem.setVoltage(6)));
         // joystick.x().whileFalse(new InstantCommand(() -> shooterSubsystem.setVoltage(0.0)));
         // joystick.x().whileTrue(drivetrain.applyRequest(() -> defenseX));
-        joystick.x().whileTrue(new runOuttakeCommand(m_intakeSubsystem, m_intakePivot, m_ConveyorSubsystem));
+        joystick.x().whileTrue(new InstantCommand(() -> m_intakeSubsystem.setSpeed(-0.4)));
         
 
         joystick.start().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));

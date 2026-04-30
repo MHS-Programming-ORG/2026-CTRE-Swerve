@@ -131,8 +131,7 @@ public class PivotSubsystem extends SubsystemBase {
     if(DriverStation.isDisabled()){
       if(isPressed()){
         pivotMotor.setPosition(0);
-      }
-      
+      } 
       pivotMotor.setNeutralMode(NeutralModeValue.Coast);
     }
     else{

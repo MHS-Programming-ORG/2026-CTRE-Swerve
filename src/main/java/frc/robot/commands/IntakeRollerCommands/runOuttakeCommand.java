@@ -28,7 +28,7 @@ ConveyorSubsystem conveyor;
   @Override
   public void execute() {
     Outtake.setSpeed(-0.45);
-    conveyor.setConveyorSpeed(-0.1);
+    conveyor.setConveyorSpeed(-0.4);
   }
 
   @Override
