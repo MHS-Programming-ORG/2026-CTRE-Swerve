@@ -367,7 +367,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         // SmartDashboard.putNumber("xDifference", xDifference);
         // SmartDashboard.putNumber("yDifference", yDifference);
         // SmartDashboard.putNumber("angleDifference", angleDifference);
-        SmartDashboard.putNumber("distanceDifference", distance*3.28);
+        SmartDashboard.putNumber("distDifferenceFeet", distance*3.28);
+        SmartDashboard.putNumber("distDifferenceMeter", distance);
 
         // SmartDashboard.putString("Module States",  getState().ModuleStates.toString());
 
