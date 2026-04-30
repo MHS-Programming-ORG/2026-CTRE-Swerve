@@ -158,7 +158,9 @@ public class RobotContainer {
 
         // joystick.x().whileTrue(new InstantCommand(() -> shooterSubsystem.setVoltage(6)));
         // joystick.x().whileFalse(new InstantCommand(() -> shooterSubsystem.setVoltage(0.0)));
-        joystick.x().whileTrue(drivetrain.applyRequest(() -> defenseX));
+        // joystick.x().whileTrue(drivetrain.applyRequest(() -> defenseX));
+        joystick.x().whileTrue(new runOuttakeCommand(m_intakeSubsystem, m_intakePivot, m_ConveyorSubsystem));
+        
 
         joystick.start().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
@@ -178,7 +180,7 @@ public class RobotContainer {
     joystick.leftBumper().and(conveyorRunning).whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
 
     //Trench Shooting
-    joystick.rightTrigger().whileTrue(new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 50, 0.5, 60)); //49
+    joystick.rightTrigger().whileTrue(new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 25*0.75, 0.5, 60)); //kicker vel: 60 | 49
     joystick.rightTrigger().and(conveyorRunning).whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
      
     //Tower Shooting
@@ -186,7 +188,7 @@ public class RobotContainer {
     // joystick.leftTrigger().and(conveyorRunning).whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
     
     //Passing
-    joystick.leftTrigger().whileTrue(new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 80, 0.5, 60));
+    joystick.leftTrigger().whileTrue(new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 25*0.75, 0.5, 60)); //run kicker at 75% //kicker vel: 80 
     joystick.leftTrigger().and(conveyorRunning).whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
 
     //Passing Aim
@@ -198,7 +200,7 @@ public class RobotContainer {
             .withTargetDirection(Rotation2d.fromRadians(drivetrain.calculatePassAngle()))));
 
     //Near Hub Shooting
-    joystick.a().whileTrue(new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 80, 0.5, 40));
+    joystick.a().whileTrue(new FixedShootCommand(shooterSubsystem, m_ConveyorSubsystem, 25*0.75, 0.5, 40)); //kicker vel: 80
     joystick.a().whileTrue(new AgitatePivotCommand(m_intakePivot, m_intakeSubsystem));
 
     //Pit Check 
