@@ -40,7 +40,7 @@ public class ConveyorSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Conveyor Current Amps", conveyorMotor.getSupplyCurrent().getValueAsDouble());
-        SmartDashboard.putNumber("Indexer Current Amps", indexer.getSupplyCurrent().getValueAsDouble());
+        // SmartDashboard.putNumber("Conveyor Current Amps", conveyorMotor.getSupplyCurrent().getValueAsDouble());
+        // SmartDashboard.putNumber("Indexer Current Amps", indexer.getSupplyCurrent().getValueAsDouble());
     }
 }

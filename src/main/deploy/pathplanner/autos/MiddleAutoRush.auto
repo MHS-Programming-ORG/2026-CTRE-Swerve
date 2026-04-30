@@ -43,12 +43,6 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Middle3"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [

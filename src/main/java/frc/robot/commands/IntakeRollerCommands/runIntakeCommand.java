@@ -17,7 +17,7 @@ public class runIntakeCommand extends Command {
 
   @Override
   public void initialize() {
-    pivot.setSetPoint(28);
+    pivot.setSetPoint(28); //28
   }
 
   @Override

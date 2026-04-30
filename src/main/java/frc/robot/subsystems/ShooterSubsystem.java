@@ -68,7 +68,7 @@ public class ShooterSubsystem extends SubsystemBase {
     kickerConfig.Slot0.kS = kickerConfigVals[1];
     kickerConfig.Slot0.kV = kickerConfigVals[2];
     kickerConfig.Slot0.StaticFeedforwardSign = StaticFeedforwardSignValue.UseVelocitySign;
-    kickerConfig.Feedback.SensorToMechanismRatio = 4.0;
+    kickerConfig.Feedback.SensorToMechanismRatio = 1.0;
 
     var kickerLimitConfig = new CurrentLimitsConfigs();
     kickerLimitConfig.StatorCurrentLimit = 70;
@@ -177,19 +177,19 @@ public class ShooterSubsystem extends SubsystemBase {
   public void periodic() {
     // add speed limit here
     
-    SmartDashboard.putBoolean("Camera Visable", camera.cameraVisable());
+    // SmartDashboard.putBoolean("Camera Visable", camera.cameraVisable());
     SmartDashboard.putNumber("[Shooter] Velocity RPS", getShooterVelocity());
-    SmartDashboard.putNumber("[Shooter] Velocity RPS 2", getShooterVelocity2());
-    SmartDashboard.putNumber("[S] Current ", shooterMotor1.getStatorCurrent().getValueAsDouble());
+    // SmartDashboard.putNumber("[Shooter] Velocity RPS 2", getShooterVelocity2());
+    // SmartDashboard.putNumber("[S] Current ", shooterMotor1.getStatorCurrent().getValueAsDouble());
     SmartDashboard.putNumber("[Shooter] Kicker", kickerMotor.getVelocity().getValueAsDouble());
     SmartDashboard.putNumber("ArduCam", camera.getX(0.0));
-    SmartDashboard.putNumber("Rotor RPS",shooterMotor1.getRotorVelocity().getValueAsDouble());
-    SmartDashboard.putNumber("Shooter Accel", shooterMotor1.getAcceleration().getValueAsDouble());
+    // SmartDashboard.putNumber("Rotor RPS",shooterMotor1.getRotorVelocity().getValueAsDouble());
+    // SmartDashboard.putNumber("Shooter Accel", shooterMotor1.getAcceleration().getValueAsDouble());
     SmartDashboard.putNumber("Mechanism RPS",shooterMotor1.getVelocity().getValueAsDouble());
-    SmartDashboard.putNumber("Velocity Error", shooterMotor1.getClosedLoopError().getValueAsDouble());
+    // SmartDashboard.putNumber("Velocity Error", shooterMotor1.getClosedLoopError().getValueAsDouble());
     SmartDashboard.putNumber("RPS", shooterCalcV2.getRPSForDistance(camera.getX(distance)));
-    SmartDashboard.putNumber("Accel", shooterMotor1.getAcceleration().getValueAsDouble());
-    SmartDashboard.putNumber("Shooter Current Amps", shooterMotor1.getSupplyCurrent().getValueAsDouble());
-    SmartDashboard.putNumber("Kicker Current Amps", kickerMotor.getSupplyCurrent().getValueAsDouble());
+    // SmartDashboard.putNumber("Accel", shooterMotor1.getAcceleration().getValueAsDouble());
+    // SmartDashboard.putNumber("Shooter Current Amps", shooterMotor1.getSupplyCurrent().getValueAsDouble());
+    // SmartDashboard.putNumber("Kicker Current Amps", kickerMotor.getSupplyCurrent().getValueAsDouble());
   }
 }

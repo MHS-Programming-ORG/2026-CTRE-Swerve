@@ -352,24 +352,24 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         SmartDashboard.putNumber("Module3 Angle", module3);
         
 
-        SmartDashboard.putString("POSE", getState().Pose.toString());
-        SmartDashboard.putString("AB-POSE", AutoBuilder.getCurrentPose().toString());
+        // SmartDashboard.putString("POSE", getState().Pose.toString());
+        // SmartDashboard.putString("AB-POSE", AutoBuilder.getCurrentPose().toString());
         
-        SmartDashboard.putNumber("xCoord", xCord);
-        SmartDashboard.putNumber("yCoord", yCord);
-        SmartDashboard.putNumber("heading", theta);
+        // SmartDashboard.putNumber("xCoord", xCord);
+        // SmartDashboard.putNumber("yCoord", yCord);
+        // SmartDashboard.putNumber("heading", theta);
 
 
 
         SmartDashboard.putNumber("TargetX", hubPoseX);
         SmartDashboard.putNumber("TargetY", hubPoseY);
 
-        SmartDashboard.putNumber("xDifference", xDifference);
-        SmartDashboard.putNumber("yDifference", yDifference);
-        SmartDashboard.putNumber("angleDifference", angleDifference);
+        // SmartDashboard.putNumber("xDifference", xDifference);
+        // SmartDashboard.putNumber("yDifference", yDifference);
+        // SmartDashboard.putNumber("angleDifference", angleDifference);
         SmartDashboard.putNumber("distanceDifference", distance);
 
-        SmartDashboard.putString("Module States",  getState().ModuleStates.toString());
+        // SmartDashboard.putString("Module States",  getState().ModuleStates.toString());
 
         field.setRobotPose(odometryPose);
     }

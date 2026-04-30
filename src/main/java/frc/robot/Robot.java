@@ -70,8 +70,8 @@ public class Robot extends LoggedRobot {
         // Optional<EstimatedRobotPose> cam2Estimate = cameras.getEstimatedPoseCam2();
 
         if (cam1Estimate.isPresent()){
-            SmartDashboard.putNumber("EstPoseX", cam1Estimate.get().estimatedPose.toPose2d().getX());
-            SmartDashboard.putNumber("EstPoseY", cam1Estimate.get().estimatedPose.toPose2d().getY());
+            // SmartDashboard.putNumber("EstPoseX", cam1Estimate.get().estimatedPose.toPose2d().getX());
+            // SmartDashboard.putNumber("EstPoseY", cam1Estimate.get().estimatedPose.toPose2d().getY());
             swerve.addVisionMeasurement(
                 cam1Estimate.get().estimatedPose.toPose2d(), 
                 cam1Estimate.get().timestampSeconds

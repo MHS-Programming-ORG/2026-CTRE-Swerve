@@ -118,15 +118,16 @@ public class PivotSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Intake-Pivot Encoders", getPivotEncoder());
-    SmartDashboard.putNumber("Intake-Pivot Setpoint", setPoint);
+    // SmartDashboard.putNumber("Intake-Pivot Setpoint", setPoint);
     SmartDashboard.putBoolean("Pivot Limit Switch", isPressed());
-    SmartDashboard.putNumber("PIVIOT Current", pivotMotor.getSupplyCurrent().getValueAsDouble());
-    SmartDashboard.putNumber("PIVIOT lastSetpoint", lastSetpoint);
+    // SmartDashboard.putNumber("PIVIOT Current", pivotMotor.getSupplyCurrent().getValueAsDouble());
+    // SmartDashboard.putNumber("PIVIOT lastSetpoint", lastSetpoint);
 
 
     pivotMotor.setControl(request.withPosition(setPoint));
     // pivotMotor.setControl(voltageReq.withOutput(voltageSet));
 
+    //FIXME
     if(DriverStation.isDisabled()){
       if(isPressed()){
         pivotMotor.setPosition(0);

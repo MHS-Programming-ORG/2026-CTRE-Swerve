@@ -65,8 +65,8 @@ private TalonFXConfiguration followerConfigs;
 
   @Override
   public void periodic() {
-   SmartDashboard.putNumber("IntakeVelocity", intakeMotor.getVelocity().getValueAsDouble());
-   SmartDashboard.putNumber("Intake Leader Current", intakeMotor.getSupplyCurrent().getValueAsDouble());
-   SmartDashboard.putNumber("Intake Follower Current", intakeFollower.getSupplyCurrent().getValueAsDouble());
+  //  SmartDashboard.putNumber("IntakeVelocity", intakeMotor.getVelocity().getValueAsDouble());
+  //  SmartDashboard.putNumber("Intake Leader Current", intakeMotor.getSupplyCurrent().getValueAsDouble());
+  //  SmartDashboard.putNumber("Intake Follower Current", intakeFollower.getSupplyCurrent().getValueAsDouble());
   }
 }
